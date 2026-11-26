@@ -45,6 +45,19 @@ SOURCE = {
 ATTRIBUTION = "出典：国土交通省「国土数値情報（行政区域データ）」（令和8年1月1日時点）を加工して作成"
 DEFAULTS = {"interval_m": 200, "min_island_km2": 2, "quantization": 100000}
 LAYERS = ("municipality_ward", "municipality", "koso_kuiki", "prefecture")
+# 指標の集計単位（unit_of_analysis）ごとに、地図に使える層。サイトと chiiki-od check が同じ表を使う。
+# ここにない単位（二次医療圏・医療機関・病棟）は地図を出さない。二次医療圏は構想区域とコードの多くが
+# 同じだが境界が違う地域があるため、構想区域の層で代用しない
+UNIT_LAYERS = {
+    "municipality": ["municipality", "municipality_ward"],
+    "designated_city_ward": ["municipality_ward"],
+    "koso_kuiki": ["koso_kuiki"],
+    "prefecture": ["prefecture"],
+}
+# 結果の地域コードのうち、この割合以上が境界にあれば地図を出す（サイトと同じ基準）
+MIN_MATCH = 0.9
+UNIT_NAMES = {"municipality": "市区町村", "designated_city_ward": "政令市の区", "secondary_medical_area": "二次医療圏",
+              "koso_kuiki": "構想区域", "prefecture": "都道府県", "facility": "医療機関", "ward_unit": "病棟"}
 
 
 def mapshaper_cmd() -> list[str]:
@@ -226,5 +239,34 @@ def load_index(site_dir: Path | None = None) -> list[dict]:
     out = []
     for p in sorted(d.glob("*.meta.json"), reverse=True):
         m = json.loads(p.read_text(encoding="utf-8"))
-        out.append({k: m[k] for k in ("name", "path", "source", "attribution", "layers", "notes", "generated_at") if k in m})
+        entry = {k: m[k] for k in ("name", "path", "source", "attribution", "layers", "notes", "generated_at") if k in m}
+        entry["unit_layers"] = UNIT_LAYERS
+        entry["min_match"] = MIN_MATCH
+        out.append(entry)
     return out
+
+
+def layer_codes(site_dir: Path | None = None) -> dict[str, set[str]]:
+    """いちばん新しい境界（site/geo/*.topo.json）の、層ごとの地域コード。境界がなければ空。"""
+    index = load_index(site_dir)
+    if not index:
+        return {}
+    topo = json.loads((Path(site_dir or paths.SITE) / index[0]["path"]).read_text(encoding="utf-8"))
+    return {k: {g["properties"]["code"] for g in o["geometries"]} for k, o in topo["objects"].items()}
+
+
+def map_coverage(unit: str, area_codes: list[str], layers: dict[str, set[str]]) -> dict:
+    """結果の地域コードが地図の境界にどれだけあるか。サイトが地図を出すかどうかと同じ判定をする。
+
+    返す値：{"layer": 使う層（なければ None）, "shown": 地図を出すか, "missing": 境界にないコード, "reason": 出さない理由}
+    """
+    allowed = UNIT_LAYERS.get(unit)
+    name = UNIT_NAMES.get(unit, unit)
+    if not allowed:
+        return {"layer": None, "shown": False, "missing": [], "reason": f"集計単位（{name}）の地図の境界はまだありません"}
+    codes_ = set(area_codes)
+    best = max(allowed, key=lambda k: len(codes_ & layers.get(k, set())))
+    missing = sorted(codes_ - layers.get(best, set()))
+    shown = bool(codes_) and (len(codes_) - len(missing)) >= len(codes_) * MIN_MATCH
+    reason = "" if shown else f"地域コードの{len(missing)}/{len(codes_)}件が地図の境界（{best}）にありません"
+    return {"layer": best, "shown": shown, "missing": missing, "reason": reason}

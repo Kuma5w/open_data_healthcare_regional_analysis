@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-26T04:59:39+00:00",
+  "generated_at": "2026-11-26T05:08:41+00:00",
   "repo_url": "https://github.com/Kuma5w/open_data_healthcare_regional_analysis",
   "pages_url": "https://kuma5w.github.io/open_data_healthcare_regional_analysis/",
   "indicators": [
@@ -742,7 +742,23 @@
         "北方領土の6村は市区町村の層にはあるが、構想区域がないため構想区域の層にはない。",
         "構想区域は reference/koso_kuiki.csv（令和7年度病床機能報告の構想区域マスタ）で市区町村（政令市は区）をまとめた。"
       ],
-      "generated_at": "2026-11-26T04:34:16+00:00"
+      "generated_at": "2026-11-26T04:34:16+00:00",
+      "unit_layers": {
+        "municipality": [
+          "municipality",
+          "municipality_ward"
+        ],
+        "designated_city_ward": [
+          "municipality_ward"
+        ],
+        "koso_kuiki": [
+          "koso_kuiki"
+        ],
+        "prefecture": [
+          "prefecture"
+        ]
+      },
+      "min_match": 0.9
     }
   ]
 }

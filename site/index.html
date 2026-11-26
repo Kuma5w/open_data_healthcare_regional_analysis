@@ -571,15 +571,19 @@ function prefFrame(code, all) {
   while (added) { added = false; rs.forEach((r, i) => { if (!used.has(i) && gapOf(b, r.b) <= 0.6) { b = [Math.min(b[0], r.b[0]), Math.min(b[1], r.b[1]), Math.max(b[2], r.b[2]), Math.max(b[3], r.b[3])]; used.add(i); added = true; } }); }
   return b;
 }
-// 結果の地域コードが最も多く一致する層を使う（9割に満たなければ地図は出さない）
-function mapLayer(doc) {
+// 指標の集計単位で使える層（catalog.json の geo.unit_layers。chiiki_od.boundaries.UNIT_LAYERS と同じ表）のうち、
+// 結果の地域コードが最も多く一致する層を使う。単位に層がない（二次医療圏など）か、一致が9割に満たなければ地図は出さない
+function mapLayer(doc, unit) {
+  const g = CAT.geo[0], allowed = g.unit_layers?.[unit] || [], min = g.min_match ?? 0.9;
   const { CODE } = areaIx(doc); let best = null;
-  for (const name of ["municipality", "municipality_ward", "koso_kuiki", "prefecture"]) {
+  for (const name of allowed) {
     const L = GEO.layers[name]; if (!L) continue;
     const n = doc.rows.filter((r) => L.byCode.has(r[CODE])).length;
     if (!best || n > best.n) best = { name, n };
   }
-  return best && best.n >= doc.rows.length * 0.9 ? best.name : null;
+  if (!allowed.length) return { layer: null, why: `この指標の集計単位（${UNIT[unit] || unit}）の地図の境界はまだないため、地図は出していません。値は下のグラフと表にあります。` };
+  if (!best || best.n < doc.rows.length * min) return { layer: null, why: "地域コードの多くが地図の境界（令和8年1月1日の市区町村・令和7年度の構想区域）と一致しないため、地図は出していません。値は下のグラフと表にあります。" };
+  return { layer: best.name };
 }
 
 async function drawMap(v) {
@@ -589,8 +593,8 @@ async function drawMap(v) {
   catch (_) { GEO_P = null; box.innerHTML = `<p class="msg">地図の境界（${esc(CAT.geo[0].path)}）を読み込めませんでした。</p>`; return; }
   if (token !== resToken || RS !== state || !$("map")) return;
   const { doc, pref } = RS, s = doc.summary, d = v.d, o = v.o;
-  const layer = mapLayer(doc);
-  if (!layer) { $("mapw").hidden = true; return; }
+  const { layer, why } = mapLayer(doc, RS.c.unit_of_analysis);
+  if (!layer) { box.innerHTML = `<p class="msg">${esc(why)}</p>`; $("legend").innerHTML = ""; $("maptools").innerHTML = ""; return; }
   const L = GEO.layers[layer];
   const rowOf = new Map(doc.rows.map((r) => [r[v.CODE], r]));
   const cls = (x) => (x === null || x === undefined ? "nod" : x <= s.p25 ? "q1" : x <= s.median ? "q2" : x <= s.p75 ? "q3" : "q4");

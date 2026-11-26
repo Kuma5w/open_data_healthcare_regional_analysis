@@ -16,6 +16,7 @@
 | `interpretation` | 値が大きい・小さいときに言えること、言えないこと |
 | `caveats` | データの限界、時点のずれ、小地域での不安定さ、コードの扱い |
 | `alternatives` | 関連する別の指標と、どういうときにそちらを使うか |
+| `output` | 計算結果の表の読み方（サイトの「結果を見る」で使う） |
 
 ## よい `intent` と、足りない `intent`
 
@@ -46,3 +47,28 @@
 - コードの扱い（政令市の区、都道府県コードの行、市町村合併）
 - 欠損の扱い（「未報告又はデータ不備」「－」をゼロにしていないこと）
 - 定義の変更（年度によって報告項目や選択肢が変わる）
+
+## `output`：結果の表の読み方
+
+サイトの「結果を見る」は、この欄を使って表・グラフ・CSVを出します。計算スクリプトが返す表の**すべての列**を `columns` に書きます（書き漏れがあると `chiiki-od results` がエラーにします）。
+
+```yaml
+output:
+  area_code: municipality_code5     # 地域コードの列（先頭2桁が都道府県コード、文字列）
+  area_name: municipality_name      # 地域名の列
+  value: offices_per_10k_65plus     # 指標の値の列
+  numerator: offices                # 分子の列（都道府県計・全国計に使う）
+  denominator: pop_65plus           # 分母の列
+  scale: 10000                      # 分子÷分母に掛ける数
+  digits: 3                         # 値を表示する小数点以下の桁数
+  unit: 事業所／65歳以上人口1万人
+  columns:
+    - {name: municipality_code5, label: 市区町村コード}
+    - {name: municipality_name, label: 市区町村名}
+    - {name: offices, label: 訪問介護事業所数, unit: 事業所}
+    - {name: pop_65plus, label: 65歳以上人口, unit: 人}
+    - {name: offices_per_10k_65plus, label: 65歳以上人口1万人あたり事業所数, unit: 事業所／1万人}
+```
+
+- `numerator`・`denominator`・`scale` を書くと、都道府県計と全国計（分子の合計 ÷ 分母の合計 × scale）を出します。割合や人口あたりの指標では書いてください。書かない場合は中央値だけを出します。
+- `label` はCSVの見出しにもなります。単位は `unit` に分けて書きます。

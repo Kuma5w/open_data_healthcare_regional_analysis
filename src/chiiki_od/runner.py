@@ -28,8 +28,8 @@ def load_module(card_id: str):
     return mod
 
 
-def run(card_id: str, sample: bool = False, **options) -> tuple[pd.DataFrame, list[str], Path]:
-    card = specs.load_card(card_id)
+def execute(card_id: str, sample: bool = False, **options) -> tuple[pd.DataFrame, list[str], dict]:
+    """指標を計算して（結果の表, 注記, 実際に渡したオプション）を返す。ファイルには書かない。"""
     mod = load_module(card_id)
     inputs = mod.load_inputs(sample=sample)
     params = inspect.signature(mod.compute).parameters
@@ -38,6 +38,12 @@ def run(card_id: str, sample: bool = False, **options) -> tuple[pd.DataFrame, li
         raise ValueError(f"{card_id} はオプション {', '.join(unsupported)} に対応していません")
     options = {k: v for k, v in options.items() if k in params}
     result, notes = mod.compute(**inputs, **options)
+    return result, notes, options
+
+
+def run(card_id: str, sample: bool = False, **options) -> tuple[pd.DataFrame, list[str], Path]:
+    card = specs.load_card(card_id)
+    result, notes, options = execute(card_id, sample=sample, **options)
 
     paths.OUTPUTS.mkdir(parents=True, exist_ok=True)
     stem = card_id + ("_sample" if sample else "") + "".join(f"_{k}" for k, v in options.items() if v)

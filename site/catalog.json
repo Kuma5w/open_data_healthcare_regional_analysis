@@ -1,6 +1,7 @@
 {
-  "generated_at": "2026-11-26T03:18:17+00:00",
+  "generated_at": "2026-11-26T03:48:13+00:00",
   "repo_url": "https://github.com/Kuma5w/open_data_healthcare_regional_analysis",
+  "pages_url": "https://kuma5w.github.io/open_data_healthcare_regional_analysis/",
   "indicators": [
     {
       "id": "homecare_offices_per_65plus",
@@ -54,6 +55,41 @@
         }
       ],
       "script": "indicators/homecare_offices_per_65plus.py",
+      "output": {
+        "area_code": "municipality_code5",
+        "area_name": "municipality_name",
+        "value": "offices_per_10k_65plus",
+        "numerator": "offices",
+        "denominator": "pop_65plus",
+        "scale": 10000,
+        "digits": 3,
+        "unit": "事業所／65歳以上人口1万人",
+        "columns": [
+          {
+            "name": "municipality_code5",
+            "label": "市区町村コード"
+          },
+          {
+            "name": "municipality_name",
+            "label": "市区町村名"
+          },
+          {
+            "name": "offices",
+            "label": "訪問介護事業所数",
+            "unit": "事業所"
+          },
+          {
+            "name": "pop_65plus",
+            "label": "65歳以上人口",
+            "unit": "人"
+          },
+          {
+            "name": "offices_per_10k_65plus",
+            "label": "65歳以上人口1万人あたり事業所数",
+            "unit": "事業所／1万人"
+          }
+        ]
+      },
       "references": [
         {
           "title": "介護サービス情報の公表システムデータのオープンデータ（厚生労働省）",
@@ -123,6 +159,65 @@
         }
       ],
       "script": "indicators/recovery_bed_share_koso.py",
+      "output": {
+        "area_code": "koso_kuiki_code",
+        "area_name": "koso_kuiki_name",
+        "value": "recovery_share_pct",
+        "numerator": "beds_recovery",
+        "denominator": "beds_active",
+        "scale": 100,
+        "digits": 1,
+        "unit": "％",
+        "columns": [
+          {
+            "name": "pref_code",
+            "label": "都道府県コード"
+          },
+          {
+            "name": "koso_kuiki_code",
+            "label": "構想区域コード"
+          },
+          {
+            "name": "koso_kuiki_name",
+            "label": "構想区域名"
+          },
+          {
+            "name": "beds_high_acute",
+            "label": "高度急性期の許可病床数",
+            "unit": "床"
+          },
+          {
+            "name": "beds_acute",
+            "label": "急性期の許可病床数",
+            "unit": "床"
+          },
+          {
+            "name": "beds_recovery",
+            "label": "回復期の許可病床数",
+            "unit": "床"
+          },
+          {
+            "name": "beds_chronic",
+            "label": "慢性期の許可病床数",
+            "unit": "床"
+          },
+          {
+            "name": "beds_active",
+            "label": "4機能の許可病床数の合計（休棟を除く）",
+            "unit": "床"
+          },
+          {
+            "name": "beds_closed",
+            "label": "休棟中の許可病床数",
+            "unit": "床"
+          },
+          {
+            "name": "recovery_share_pct",
+            "label": "回復期の割合",
+            "unit": "％"
+          }
+        ]
+      },
       "references": [
         {
           "title": "令和7年度病床機能報告公表データ（厚生労働省）",
@@ -191,6 +286,45 @@
         }
       ],
       "script": "indicators/recovery_beds_per_100k_75plus_koso.py",
+      "output": {
+        "area_code": "koso_kuiki_code",
+        "area_name": "koso_kuiki_name",
+        "value": "recovery_beds_per_100k_75plus",
+        "numerator": "beds_recovery",
+        "denominator": "pop_75plus",
+        "scale": 100000,
+        "digits": 1,
+        "unit": "床／75歳以上人口10万人",
+        "columns": [
+          {
+            "name": "pref_code",
+            "label": "都道府県コード"
+          },
+          {
+            "name": "koso_kuiki_code",
+            "label": "構想区域コード"
+          },
+          {
+            "name": "koso_kuiki_name",
+            "label": "構想区域名"
+          },
+          {
+            "name": "beds_recovery",
+            "label": "回復期の許可病床数",
+            "unit": "床"
+          },
+          {
+            "name": "pop_75plus",
+            "label": "75歳以上人口",
+            "unit": "人"
+          },
+          {
+            "name": "recovery_beds_per_100k_75plus",
+            "label": "75歳以上人口10万人あたり回復期病床数",
+            "unit": "床／10万人"
+          }
+        ]
+      },
       "references": [
         {
           "title": "令和7年度病床機能報告公表データ（厚生労働省）",
@@ -495,5 +629,80 @@
       ],
       "codebook": null
     }
-  ]
+  ],
+  "results": {
+    "homecare_offices_per_65plus": {
+      "path": "results/homecare_offices_per_65plus.json",
+      "csv": "results/homecare_offices_per_65plus.csv",
+      "generated_at": "2026-11-26T03:40:12+00:00",
+      "card_version": "0.2.0",
+      "rows": 1741,
+      "stale": []
+    },
+    "recovery_bed_share_koso": {
+      "path": "results/recovery_bed_share_koso.json",
+      "csv": "results/recovery_bed_share_koso.csv",
+      "generated_at": "2026-11-26T03:40:12+00:00",
+      "card_version": "0.1.0",
+      "rows": 339,
+      "stale": []
+    },
+    "recovery_beds_per_100k_75plus_koso": {
+      "path": "results/recovery_beds_per_100k_75plus_koso.json",
+      "csv": "results/recovery_beds_per_100k_75plus_koso.csv",
+      "generated_at": "2026-11-26T03:40:13+00:00",
+      "card_version": "0.1.0",
+      "rows": 339,
+      "stale": []
+    }
+  },
+  "prefectures": {
+    "01": "北海道",
+    "02": "青森県",
+    "03": "岩手県",
+    "04": "宮城県",
+    "05": "秋田県",
+    "06": "山形県",
+    "07": "福島県",
+    "08": "茨城県",
+    "09": "栃木県",
+    "10": "群馬県",
+    "11": "埼玉県",
+    "12": "千葉県",
+    "13": "東京都",
+    "14": "神奈川県",
+    "15": "新潟県",
+    "16": "富山県",
+    "17": "石川県",
+    "18": "福井県",
+    "19": "山梨県",
+    "20": "長野県",
+    "21": "岐阜県",
+    "22": "静岡県",
+    "23": "愛知県",
+    "24": "三重県",
+    "25": "滋賀県",
+    "26": "京都府",
+    "27": "大阪府",
+    "28": "兵庫県",
+    "29": "奈良県",
+    "30": "和歌山県",
+    "31": "鳥取県",
+    "32": "島根県",
+    "33": "岡山県",
+    "34": "広島県",
+    "35": "山口県",
+    "36": "徳島県",
+    "37": "香川県",
+    "38": "愛媛県",
+    "39": "高知県",
+    "40": "福岡県",
+    "41": "佐賀県",
+    "42": "長崎県",
+    "43": "熊本県",
+    "44": "大分県",
+    "45": "宮崎県",
+    "46": "鹿児島県",
+    "47": "沖縄県"
+  }
 }

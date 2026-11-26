@@ -52,6 +52,36 @@
       }
     },
     "script": {"type": "string", "pattern": "^indicators/[a-z0-9_]+\\.py$"},
+    "output": {
+      "type": "object",
+      "description": "計算結果の表の読み方。サイトの「結果を見る」はこの欄を使って表・グラフ・CSVを出す",
+      "additionalProperties": false,
+      "required": ["area_code", "area_name", "value", "columns"],
+      "properties": {
+        "area_code": {"type": "string", "description": "地域コードの列。先頭2桁が都道府県コードであること"},
+        "area_name": {"type": "string", "description": "地域名の列"},
+        "value": {"type": "string", "description": "指標の値の列"},
+        "numerator": {"type": "string", "description": "分子の列。分母の列・scale と合わせて、都道府県計・全国計を計算する"},
+        "denominator": {"type": "string", "description": "分母の列"},
+        "scale": {"type": "number", "exclusiveMinimum": 0, "description": "分子÷分母に掛ける数（1万人あたりなら10000、％なら100）"},
+        "digits": {"type": "integer", "minimum": 0, "maximum": 6, "description": "値を表示する小数点以下の桁数"},
+        "unit": {"type": "string", "description": "値の単位（例：事業所／65歳以上1万人）"},
+        "columns": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["name", "label"],
+            "properties": {
+              "name": {"type": "string", "description": "計算スクリプトが返す表の列名"},
+              "label": {"type": "string", "description": "サイトとCSVで使う日本語の見出し"},
+              "unit": {"type": "string"}
+            }
+          }
+        }
+      }
+    },
     "references": {
       "type": "array",
       "items": {

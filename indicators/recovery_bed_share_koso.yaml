@@ -39,6 +39,26 @@ authors:
 - name: （作成者名）
   affiliation: （所属）
 script: indicators/recovery_bed_share_koso.py
+output:
+  area_code: koso_kuiki_code
+  area_name: koso_kuiki_name
+  value: recovery_share_pct
+  numerator: beds_recovery
+  denominator: beds_active
+  scale: 100
+  digits: 1
+  unit: ％
+  columns:
+  - {name: pref_code, label: 都道府県コード}
+  - {name: koso_kuiki_code, label: 構想区域コード}
+  - {name: koso_kuiki_name, label: 構想区域名}
+  - {name: beds_high_acute, label: 高度急性期の許可病床数, unit: 床}
+  - {name: beds_acute, label: 急性期の許可病床数, unit: 床}
+  - {name: beds_recovery, label: 回復期の許可病床数, unit: 床}
+  - {name: beds_chronic, label: 慢性期の許可病床数, unit: 床}
+  - {name: beds_active, label: 4機能の許可病床数の合計（休棟を除く）, unit: 床}
+  - {name: beds_closed, label: 休棟中の許可病床数, unit: 床}
+  - {name: recovery_share_pct, label: 回復期の割合, unit: ％}
 references:
 - title: 令和7年度病床機能報告公表データ（厚生労働省）
   url: https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/open_data_00020.html

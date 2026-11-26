@@ -18,3 +18,7 @@ def test_catalog_and_search_index(tmp_path, monkeypatch):
     # 列は項目名（見出しの最後の段）で検索できる
     m088 = next(c for c in cols if c["id"] == "col:bed_function_report_r7_form2_annual.m088")
     assert m088["item"] == "手術総数"
+    # 都道府県名と、site/results にある結果の一覧
+    assert cat["prefectures"]["43"] == "熊本県" and len(cat["prefectures"]) == 47
+    for cid, r in cat["results"].items():
+        assert cid in ids and r["path"] == f"results/{cid}.json"

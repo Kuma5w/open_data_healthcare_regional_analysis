@@ -13,3 +13,4 @@
 - `bfr_ward_sample.csv`：変換後の病床機能報告 病棟票と同じ列（一部）。休棟中の病棟や、回復期のない構想区域を含めています。
 - `medical_facility_survey_sample.csv`：変換後の医療施設調査（市区町村・政令市の区ごとの施設数）と同じ列。
 - `medical_facility_survey_table2_raw_sample.csv`：医療施設調査 第2表の元の形（Shift_JIS、都道府県・二次医療圏・市区町村の3段の行、記号「-」）を小さくまねたもの。パーサーのテストに使う。
+- `zaitaku_psc_*_sample.csv`（facility・wards・form2・outpatient・filings）：在宅医療等連携機能のP・S・C判定の合成サンプル。基準ちょうどの値、割合の条件、名称での照合、外来機能報告とつながらない病院、1床当たりの患者数が桁違いの病院、一般・療養病床のない病院を含めています（tests/test_zaitaku_psc.py の冒頭に一覧）。

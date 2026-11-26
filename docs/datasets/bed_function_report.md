@@ -1,0 +1,108 @@
+# 病床機能報告（令和7年度）の使い方
+
+厚生労働省「令和7年度病床機能報告公表データ」を Parquet にしたものの使い方と注意点です。根拠は公表ページの留意事項（`令和７年度病床機能報告留意事項.pdf`）とデータ定義（別紙１）です。
+
+## 表の種類
+
+| データセットid | 公表ファイル | 1行の単位 | 時点・期間 | 状態 |
+|---|---|---|---|---|
+| `bed_function_report_r7_facility` | 施設票（様式1・病院） 001717798 | 1病院 | 令和7年7月1日時点（実績は令和6年4月〜令和7年3月） | 変換済み |
+| `bed_function_report_r7_clinic` | 診療所票（有床診療所） 001717799 | 1有床診療所 | 同上 | 変換済み |
+| `bed_function_report_r7_ward` | 病棟票（様式1） 001717800〜806 | 1病棟 | 同上 | ファイル待ち |
+| `bed_function_report_r7_form2_monthly` | 様式2病棟票（月別） 001717808〜814 | 1病棟×1か月 | 令和6年4月〜令和7年3月診療分 | 変換済み |
+
+病棟の医療機能（高度急性期・急性期・回復期・慢性期）や機能別の病床数は、様式1の**病棟票**にあります。様式2は、病棟ごとの診療の実績（算定入院料、手術、救急など）です。
+
+## 取り込みと変換
+
+```bash
+# 公表元から取得する場合
+chiiki-od fetch bed_function_report_r7_facility
+# 手元に保存した公表ファイル（001717798.xlsx などファイル名はそのまま）から取り込む場合
+chiiki-od fetch bed_function_report_r7_facility --from-dir ~/Downloads/R7_hosp
+
+chiiki-od convert bed_function_report_r7_facility
+```
+
+留意事項ZIP（001717797.zip）も同じフォルダに置いてください。列の意味はZIP内のデータ定義から読み取ります。
+
+変換すると次の3つができます。
+
+- `data/processed/<id>.parquet`：本体
+- `data/processed/<id>__flags.parquet`：数値の代わりに記号が入っていたセル（`row_id`・`column`・`token`）
+- `codebooks/<id>.csv`：列の対応表（リポジトリに含まれる）
+
+## 列名とコードブック
+
+先頭の識別列は英字にしています。
+
+`od_facility_code`（オープンデータ医療機関コード）、`facility_name`、`pref_code`、`secondary_area_code`、`secondary_area_name`、`koso_kuiki_code`、`koso_kuiki_name`、`municipality_code`、`municipality_name`、`medical_code_ika`、`medical_code_shika`、`od_ward_code`（オープンデータ病棟コード）、`ward_name`、`report_month`
+
+それ以外の列は、表の種類を表す1文字（施設票 `f`、診療所票 `c`、病棟票 `w`、様式2 `m`）と、公表ファイルでの列の位置（3桁）で名前を付けています（例：`m088`＝様式2の88列目＝手術総数）。各列の意味は `codebooks/<id>.csv` にあります。
+
+| コードブックの列 | 内容 |
+|---|---|
+| `label` | 表頭4段と項目名をつないだ見出し |
+| `required` | 必須区分（必須項目・任意項目・条件付き必須項目・年間必須・月別必須） |
+| `secret` | 秘匿化の対象になりうる列か（定義書の「※」） |
+| `zero_if_blank` | 未回答のとき0が入る列か（定義書の「○」） |
+| `n_value`・`n_zero`・`n_secret_1_9`・`n_dash`・`n_unreported` | 実際のデータで、値・0・各記号が何セルあったか |
+
+## 記号の扱い
+
+数値の列に入っている記号は欠損（NA）にし、元の記号は flags の表に残しています。
+
+| 記号 | 意味（留意事項より） |
+|---|---|
+| `*` | 月別の件数が1〜9件のため秘匿 |
+| `-` | 任意項目の未報告、条件付き項目の非該当、データ不備 |
+| `未報告又はデータ不備` | 必須項目の未報告、データ不備（令和7年度の公表ファイルでは見当たらなかった） |
+
+**0にも注意が必要です。** 職員数、入院患者数、算定入院料などの項目では、調査時に「空欄は0とみなす」と周知されていたため、無回答が0として入っています（コードブックの `zero_if_blank` が True の列）。0は「0件」と「無回答」を区別できません。
+
+### 秘匿された件数を含む合計
+
+秘匿セルは1〜9件なので、合計の下限と上限を出せます。
+
+```sql
+-- 構想区域ごとの手術総数（m088）：分かっている合計と、秘匿セルの数
+WITH s AS (
+  SELECT row_id FROM 'data/processed/bed_function_report_r7_form2_monthly__flags.parquet'
+  WHERE "column" = 'm088' AND token = '*'
+)
+SELECT m.koso_kuiki_code, m.koso_kuiki_name,
+       sum(m.m088)                         AS known_total,
+       count(s.row_id)                     AS suppressed_cells,
+       sum(m.m088) + 1 * count(s.row_id)   AS lower_bound,
+       sum(m.m088) + 9 * count(s.row_id)   AS upper_bound
+FROM 'data/processed/bed_function_report_r7_form2_monthly.parquet' m
+LEFT JOIN s USING (row_id)
+GROUP BY 1, 2 ORDER BY 1;
+```
+
+年間の合計を使う分析では、様式2の年間合計ファイル（001717807）を使うと、月別の秘匿の影響を受けにくくなります（取り込みは今後対応）。
+
+## そのほかの注意
+
+- **時点**：施設の状況は令和7年7月1日時点、通年の実績は令和6年4月1日〜令和7年3月31日。
+- **report_month**：暦月（1〜12）。令和6年4月〜令和7年3月診療分なので、1〜3月は令和7年、4〜12月は令和6年。
+- **診療報酬改定**：令和6年度から改定の施行月が6月になったため、4月・5月だけの項目、6月以降だけの項目がある。
+- **コードの継続性**：オープンデータ医療機関コードは前年度と同じ医療機関に同じコードが付く（名称変更・移転で変わる場合あり）。オープンデータ病棟コードは前年度と変わる場合がある。
+- **医療機関コード（医科・歯科）**：レセプト請求で使う医療機関コード（医療機関の報告どおり）。
+- **重複行**：様式2（月別）では、25の病棟コードで同じ月の行が複数ある（計684行）。完全に同じ行のほか、値の異なる行もある。病棟単位で集計するときは事前に確認する。
+- **更新**：都道府県が個別に情報を更新している場合がある。最新の報告内容は各都道府県のサイトで確認する。
+- **構想区域**：各票の `koso_kuiki_code` は都道府県に確認した構想区域。市区町村との対応は `reference/koso_kuiki.csv`。
+
+## 例：構想区域ごとの病院数と救急車の受入件数
+
+施設票の `f155`（救急車の受入件数、年間）は秘匿がありません。
+
+```sql
+SELECT koso_kuiki_code, koso_kuiki_name,
+       count(*)  AS hospitals,
+       sum(f155) AS ambulance_accepted
+FROM 'data/processed/bed_function_report_r7_facility.parquet'
+GROUP BY 1, 2 ORDER BY 1;
+```
+
+出典表記の例：出典：厚生労働省「令和7年度病床機能報告公表データ」を加工して作成

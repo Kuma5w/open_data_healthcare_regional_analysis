@@ -29,6 +29,10 @@ def build() -> dict:
                     for c in d.get("columns", [])
                 ],
                 "notes": d.get("notes", []),
+                "related": d.get("related", []),
+                "codebook": (
+                    f"codebooks/{d['id']}.csv" if (paths.CODEBOOKS / f"{d['id']}.csv").exists() else None
+                ),
             }
         )
     catalog = {"generated_at": manifest.now(), "indicators": cards, "datasets": datasets}

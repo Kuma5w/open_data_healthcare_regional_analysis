@@ -17,6 +17,7 @@ INDICATORS = ROOT / "indicators"
 REFERENCE = ROOT / "reference"
 SCHEMAS = ROOT / "schemas"
 MANIFESTS = ROOT / "manifests"
+CODEBOOKS = ROOT / "codebooks"
 SITE = ROOT / "site"
 FIXTURES = ROOT / "tests" / "fixtures"
 

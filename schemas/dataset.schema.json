@@ -25,6 +25,8 @@
     "verified": {"type": "boolean", "description": "実ファイルで列構成を確認済みか"},
     "verified_note": {"type": "string"},
     "parser": {"type": "string", "description": "汎用の読み込みで足りない場合の専用パーサー名（chiiki_od.parsers）"},
+    "parser_options": {"type": "object", "description": "専用パーサーに渡す設定"},
+    "related": {"type": "array", "items": {"type": "string"}, "description": "一緒に使うデータセットのid"},
     "files": {
       "type": "array",
       "items": {

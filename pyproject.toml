@@ -22,7 +22,7 @@ dependencies = [
 Repository = "https://github.com/Kuma5w/open_data_healthcare_regional_analysis"
 
 [project.optional-dependencies]
-dev = ["pytest>=8", "ruff>=0.5"]
+dev = ["pytest>=8", "ruff>=0.5", "openpyxl>=3.1"]
 
 [project.scripts]
 chiiki-od = "chiiki_od.cli:main"

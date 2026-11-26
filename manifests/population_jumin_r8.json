@@ -1,0 +1,78 @@
+{
+  "dataset": "population_jumin_r8",
+  "files": {
+    "main": {
+      "url": "https://www.soumu.go.jp/main_content/000892953.xlsx",
+      "as_of": "令和8年1月1日",
+      "raw_path": "data/raw/population_jumin_r8/main.xlsx",
+      "bytes": 889698,
+      "sha256": "574ea5660baec38991875d032dab299ca7aac772b85760ab4385ae0d7b931491",
+      "fetched_at": "2026-11-26T02:49:01+00:00",
+      "obtained": "local_copy"
+    }
+  },
+  "output": {
+    "path": "data/processed/population_jumin_r8.parquet",
+    "rows": 6822,
+    "columns": [
+      "municipality_code",
+      "pref_name",
+      "municipality_name",
+      "sex",
+      "level",
+      "pop_total",
+      "age_00_04",
+      "age_05_09",
+      "age_10_14",
+      "age_15_19",
+      "age_20_24",
+      "age_25_29",
+      "age_30_34",
+      "age_35_39",
+      "age_40_44",
+      "age_45_49",
+      "age_50_54",
+      "age_55_59",
+      "age_60_64",
+      "age_65_69",
+      "age_70_74",
+      "age_75_79",
+      "age_80_84",
+      "age_85_89",
+      "age_90_94",
+      "age_95_99",
+      "age_100plus",
+      "pop_0_14",
+      "pop_15_64",
+      "pop_65plus",
+      "pop_75plus",
+      "age_sum_gap",
+      "as_of"
+    ],
+    "converted_at": "2026-11-26T02:49:02+00:00",
+    "converter_version": "0.1.0",
+    "extras": {},
+    "report": {
+      "as_of": "令和8年1月1日",
+      "rows": 6822,
+      "levels": {
+        "municipality": 1727,
+        "county": 307,
+        "ward": 171,
+        "prefecture": 47,
+        "designated_city": 20,
+        "national": 1,
+        "islands": 1
+      },
+      "national_total": 123767642,
+      "sum_of_units": 123767642,
+      "rows_with_age_sum_gap": 1233,
+      "max_age_sum_gap": 1258,
+      "footnotes": [
+        "注1：外国人住民の「男性総数が１～９人」「女性総数が１～９人」「男女計総数が49人以下」のいずれかに該当する市区町村における５歳ごと等の内訳は、非公表である",
+        "注2：注1に該当する市区町村を含む都道府県等における５歳ごと等の内訳は、非公表の市区町村分を含まないため、総数と５歳ごと等の内訳の合計が合わない",
+        "注3：外国人住民のうち、在留カードの性別欄が空欄のため、住民票の性別を男女のいずれにも該当しないものとしている者については、表の男女のいずれにも計上せず、総計においてのみ計上している。"
+      ]
+    }
+  }
+}

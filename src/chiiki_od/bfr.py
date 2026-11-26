@@ -271,3 +271,38 @@ def koso_kuiki_reference(zip_path: Path, member: str) -> pd.DataFrame:
     m.columns = ["pref_code", "municipality_code5", "municipality_name", "koso_kuiki_code",
                  "koso_kuiki_name", "secondary_area_code", "secondary_area_name"]
     return m.map(_clean)
+
+
+# ---- 病棟票の集計 ------------------------------------------------------------
+
+FUNCTIONS = {"高度急性期": "high_acute", "急性期": "acute", "回復期": "recovery", "慢性期": "chronic"}
+CLOSED_PREFIX = "休棟中"
+
+
+def beds_by_koso_function(wards: pd.DataFrame, function_col: str = "w016") -> tuple[pd.DataFrame, list[str]]:
+    """病棟票から、構想区域ごと・医療機能ごとの許可病床数（一般 w019 ＋ 療養 w023）を出す。
+
+    休棟中の病棟は beds_closed にまとめ、稼働中の4機能の合計（beds_active）には含めない。
+    """
+    notes = []
+    w = wards.copy()
+    na = w["w019"].isna() | w["w023"].isna()
+    if na.any():
+        notes.append(f"許可病床数が欠損の病棟 {int(na.sum())} 件は、欠損を0として数えた")
+    w["beds"] = w["w019"].fillna(0) + w["w023"].fillna(0)
+    func = w[function_col].astype("string")
+    w["fn"] = func.map(FUNCTIONS)
+    w.loc[func.str.startswith(CLOSED_PREFIX, na=False), "fn"] = "closed"
+    other = w["fn"].isna()
+    if other.any():
+        notes.append(f"医療機能が4機能・休棟中以外の病棟 {int(other.sum())} 件（{', '.join(func[other].dropna().unique()[:3])}）は除外")
+    w = w[~other]
+    keys = ["pref_code", "koso_kuiki_code", "koso_kuiki_name"]
+    t = w.pivot_table(index=keys, columns="fn", values="beds", aggfunc="sum", fill_value=0).reset_index()
+    for f in [*FUNCTIONS.values(), "closed"]:
+        if f not in t.columns:
+            t[f] = 0
+    t = t.rename(columns={f: f"beds_{f}" for f in [*FUNCTIONS.values(), "closed"]})
+    t["beds_active"] = t[[f"beds_{f}" for f in FUNCTIONS.values()]].sum(axis=1)
+    t.columns.name = None
+    return t, notes

@@ -1,5 +1,5 @@
 id: homecare_offices_per_65plus
-version: 0.1.0
+version: 0.1.1
 status: draft
 name: 65歳以上人口1万人あたり訪問介護事業所数
 short_description: 高齢者人口に対する訪問介護の拠点の多さを、市区町村ごとに同じ方法で比べる入口の指標
@@ -14,7 +14,7 @@ numerator:
   as_of: 2026年6月末
 denominator:
   description: 65歳以上人口（総計＝日本人住民＋外国人住民）
-  dataset: population_65plus
+  dataset: population_jumin_r8
   as_of: 2026年1月1日
 formula: 訪問介護事業所数 ÷ 65歳以上人口 × 10,000
 
@@ -65,4 +65,4 @@ references:
     url: https://www.soumu.go.jp/main_sosiki/jichi_gyousei/daityo/jinkou_jinkoudoutai-setaisuu.html
 
 created: "2026-11-26"
-updated: "2026-11-26"
+updated: "2026-11-26"  # 分母のデータセットを population_jumin_r8 に変更（計算は同じ）

@@ -4,7 +4,15 @@
 
 データや生成AIへの慣れは人によって違います。そこで、指標ごとに「作成者がどんな意図でその指標を作ったのか」を**指標カード**に書き残し、計算はスクリプトで再現できるようにしています。サイトに置く解説チャットボットは、この指標カードを根拠に質問に答えます。
 
-> 状態：v0.3。病床機能報告（令和7年度）の施設票・診療所票・病棟票・様式2（月別・年間合計）を変換できます。見本の指標は1つです。
+> 状態：v0.4。病床機能報告（令和7年度）の全5表と、住民基本台帳の年齢階級別人口（令和7年・令和8年）を変換できます。見本の指標は3つです。
+
+## 見本の指標
+
+| 指標 | 単位 | 使うデータ |
+|---|---|---|
+| [65歳以上人口1万人あたり訪問介護事業所数](indicators/homecare_offices_per_65plus.yaml) | 市区町村 | 介護サービス事業所（訪問介護）、住民基本台帳人口（令和8年） |
+| [構想区域ごとの回復期病床の割合](indicators/recovery_bed_share_koso.yaml) | 構想区域 | 病床機能報告 病棟票（令和7年度） |
+| [構想区域ごとの75歳以上人口10万人あたり回復期病床数](indicators/recovery_beds_per_100k_75plus_koso.yaml) | 構想区域 | 病床機能報告 病棟票、住民基本台帳人口（令和7年） |
 
 ## 3つの約束
 
@@ -51,7 +59,7 @@ chiiki-od convert kaigo_jigyosho_110    # data/processed/ に Parquet で保存
 chiiki-od run homecare_offices_per_65plus
 ```
 
-現時点では、人口データ（`population_65plus`）の専用パーサーが未実装のため、見本指標は実データでは最後まで動きません。人口データは作業手順の2番目で対応します。
+訪問介護の指標には、人口データ（`population_jumin_r8`）の取り込みも必要です。
 
 ### 手元に保存した公表ファイルから取り込む
 
@@ -62,7 +70,7 @@ chiiki-od fetch bed_function_report_r7_form2_monthly --from-dir ~/Downloads/R7_h
 chiiki-od convert bed_function_report_r7_form2_monthly
 ```
 
-病床機能報告の使い方と注意点（記号の扱い、秘匿、0の意味など）は [docs/datasets/bed_function_report.md](docs/datasets/bed_function_report.md) にあります。
+データセットごとの使い方と注意点は docs/datasets/ にあります（[病床機能報告](docs/datasets/bed_function_report.md)、[住民基本台帳人口](docs/datasets/population_jumin.md)）。
 
 ### 変換後のデータを直接使う
 
@@ -89,8 +97,8 @@ df <- read_parquet("data/processed/kaigo_jigyosho_110.parquet")
 ## 作業の進め方
 
 1. 雛形：構成・指標カードの型・共通対応表（済）
-2. データ3種（病床機能報告・介護事業所・人口）の変換と、見本の指標を3つ ← いまここ（病床機能報告は全5表を変換済み、人口データが未）
-3. 指標カタログのサイトと解説チャットボット
+2. データ3種（病床機能報告・介護事業所・人口）の変換と、見本の指標を3つ （病床機能報告・人口は済。介護事業所は実データでの変換が未）
+3. 指標カタログのサイトと解説チャットボット ← 次
 4. ボタン出力（登録済み指標×地域×年度を選んで、表・地図・CSV・再現コードを出す）
 5. 公開して、プルリクエストの受け付けを始める
 

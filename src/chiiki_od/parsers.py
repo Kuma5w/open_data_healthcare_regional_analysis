@@ -7,21 +7,12 @@ extras の各表は data/processed/<output>__<名前>.parquet に、"__codebook_
 
 from __future__ import annotations
 
-import pandas as pd
 
+def parse_population_jumin_age(ds: dict):
+    """住民基本台帳 年齢階級別人口（市区町村別）。詳細は chiiki_od.jumin。"""
+    from .jumin import parse_dataset
 
-def parse_population_jumin_age(ds: dict) -> tuple[pd.DataFrame, dict]:
-    """住民基本台帳 年齢階級別人口（市区町村別）→ 1行＝1市区町村の表。
-
-    未実装。実ファイルの表構成（見出しが何行目か、年齢階級の列、政令市の合計行の扱い）を
-    確認してから実装する。返す列: municipality_code（5桁）, municipality_name,
-    pop_total, pop_65plus, as_of
-    """
-    raise NotImplementedError(
-        "population_65plus の専用パーサーは未実装です。"
-        "総務省のExcelの表構成を確認して src/chiiki_od/parsers.py に実装してください。"
-        "それまでは `chiiki-od run <指標> --sample` でサンプルデータを使って試せます。"
-    )
+    return parse_dataset(ds)
 
 
 def parse_bed_function_report(ds: dict):

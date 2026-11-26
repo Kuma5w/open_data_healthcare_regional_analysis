@@ -1,0 +1,11 @@
+﻿municipality_code,municipality_name,sex,level,pop_total,pop_65plus,pop_75plus,as_of
+43000,熊本県,total,prefecture,100000,30000,18000,合成サンプル
+01100,札幌市,total,designated_city,50000,10000,6000,合成サンプル
+01101,札幌市中央区,total,ward,15000,3000,1800,合成サンプル
+01102,札幌市北区,total,ward,20000,4000,2200,合成サンプル
+43101,熊本市中央区,total,ward,6000,1500,900,合成サンプル
+43103,熊本市西区,total,ward,5000,1200,700,合成サンプル
+43202,八代市,total,municipality,10000,2000,1200,合成サンプル
+43203,人吉市,total,municipality,5000,1000,600,合成サンプル
+43500,球磨郡,total,county,9999,9999,9999,合成サンプル
+43202,八代市,male,municipality,4800,900,500,合成サンプル

@@ -41,7 +41,9 @@
           "encoding": {"type": "string"},
           "sheet": {"type": ["string", "integer"]},
           "header": {"oneOf": [{"type": "integer"}, {"type": "array", "items": {"type": "integer"}}]},
-          "na_values": {"type": "array", "items": {"type": "string"}}
+          "na_values": {"type": "array", "items": {"type": "string"}},
+          "local_name": {"type": "string", "description": "--from-dir で探すファイル名（公表元URLの末尾と違う場合）"},
+          "manual_download": {"type": "boolean", "description": "URLが案内ページで、ファイルを直接ダウンロードできない"}
         }
       }
     },

@@ -17,3 +17,12 @@ def test_template_matches_schema_shape():
     tpl["script"] = "indicators/example_indicator.py"
     errors = specs._schema_errors(tpl, "indicator_card.schema.json", "_template.yaml")
     assert not errors, "\n".join(errors)
+
+
+def test_dataset_template_matches_schema():
+    # データセット定義のひな形も、そのままでスキーマを満たすこと（docs/data_conversion.md から案内している）
+    with open(paths.DATASETS / "_template.yaml", encoding="utf-8") as f:
+        tpl = yaml.safe_load(f)
+    errors = specs._schema_errors(tpl, "dataset.schema.json", "datasets/_template.yaml")
+    assert not errors, "\n".join(errors)
+    assert tpl["id"] == tpl["output"]

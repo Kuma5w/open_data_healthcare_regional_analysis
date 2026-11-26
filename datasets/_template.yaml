@@ -1,0 +1,45 @@
+# データセット定義のひな形。コピーして datasets/<id>.yaml を作る（id とファイル名を同じにする）。
+# 書き方と変換の決まりは docs/data_conversion.md、項目の形は schemas/dataset.schema.json にある。
+# 使わない行は消してかまわない。「# 」で始まる行は、必要なときだけ「# 」を外して使う。
+
+id: example_dataset_r8 # 英小文字・数字・_ だけ。時点を末尾に付ける（_r7、_r8 など）
+title: 〇〇調査 令和8年 市区町村別の〇〇
+publisher: 〇〇省（〇〇調査）
+source_page: https://www.example.go.jp/toukei/ # 公表ページ（ファイルの一覧があるページ）
+license:
+  terms_url: https://www.example.go.jp/terms/ # 利用規約のページ
+  attribution: 出典：〇〇省「〇〇調査」（令和8年〇月〇日現在）を加工して作成
+  notes: 利用条件で気をつけること（利用の連絡の依頼、転載の可否など）。なければこの行を消す
+update_frequency: 年1回（〇月〇日現在）
+verified: false # 実ファイルで列を確かめたら true にし、verified_note を書き直す
+verified_note: 未確認。確かめたら「2026-12-01に xxxx.csv（2,000行×12列、Shift_JIS）で確認。市区町村1,892、都道府県計は市区町村の合計と一致」のように書く
+
+files:
+- key: main # 取り込むと data/raw/<id>/<key>.<拡張子> に置かれる。ファイルが複数なら key を変えて並べる
+  url: https://www.example.go.jp/files/xxxx.csv # ファイルを直接取れるURL（取れないときは公表ページ）
+  as_of: 令和8年〇月〇日 # データの時点
+  format: csv # csv・xlsx・zip
+  encoding: utf-8-sig # csv のとき。Shift_JIS のファイルは cp932
+  # local_name: xxxx.csv       # --from-dir で探すファイル名（URL の末尾と違うとき）
+  # manual_download: true      # URL が案内ページで、手作業でダウンロードするとき
+  # sheet: 0                   # xlsx のシート（シート名か、0から数えた番号）
+  # header: 0                  # 見出しの行（0から数える。2段なら [2, 3]）
+  # na_values: ['-', '*']      # 欠損にする記号。0にはしない
+
+# 元の見出し（source）→ 変換後の列名（name）と型（type：str・int・float）。
+# コードや番号は先頭の0を保つため str。地域・医療機関の列名は docs/data_conversion.md の表にそろえる。
+columns:
+- {source: 市区町村コード, name: municipality_code, type: str, description: 5桁（検査数字なし）。政令市は区のコード}
+- {source: 市区町村名, name: municipality_name, type: str}
+- {source: 〇〇数, name: example_count, type: int, description: 何を数えたか、単位}
+
+# 1行の見出しで読めない表（見出しが何段もある、合計行や注記が混ざる、シートが複数）は、
+# src/chiiki_od/parsers.py に専用パーサーを足し、その名前を書く。
+# parser: example
+# parser_options: {}
+
+related: # 一緒に使うデータセットの id。なければ消す
+- population_jumin_r8
+output: example_dataset_r8 # data/processed/<output>.parquet になる。ふつうは id と同じ
+notes:
+- 表の形や使うときの注意（集計行の有無、時点のずれ、記号の意味など）を1行ずつ書く

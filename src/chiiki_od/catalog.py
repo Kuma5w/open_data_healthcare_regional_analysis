@@ -19,7 +19,7 @@ REPO_URL = "https://github.com/Kuma5w/open_data_healthcare_regional_analysis"
 PAGES_URL = "https://kuma5w.github.io/open_data_healthcare_regional_analysis/"
 
 # 検索対象にする文書（docs/datasets/*.md は自動で加える）
-DOCS = ["docs/indicator_card_guide.md", "reference/README.md", "docs/attribution.md", "docs/site.md"]
+DOCS = ["docs/indicator_card_guide.md", "docs/data_conversion.md", "reference/README.md", "docs/attribution.md", "docs/site.md"]
 
 
 def _dataset_entry(d: dict) -> dict:

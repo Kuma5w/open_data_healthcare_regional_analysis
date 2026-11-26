@@ -161,11 +161,15 @@ details.rd summary{cursor:pointer;min-height:44px;display:flex;align-items:cente
 .maptools{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;margin:6px 0 0;font-size:13px;color:var(--mut)}
 .maptools button{font-size:13px;min-height:36px}
 @media(max-width:600px){.res{padding:4px 12px 14px}.br{grid-template-columns:minmax(4em,6.5em) minmax(0,1fr) 4.6em;gap:0 6px}.bars .gap{padding-left:4px}}
+/* 印刷・PDF：A4、余白は上下18mm・左20mm・右16mm（ブラウザの「既定」の余白ではこの値が使われる） */
+@page{size:A4;margin:18mm 16mm 18mm 20mm}
 @media print{
   body{font-size:11pt}.wrap{max-width:none;padding:0}
   nav,.chat,.back,.res-tools,.actions,#ask-card,.tip,.np,details.rd:not(.pr){display:none!important}
   .grid{display:block;margin-top:12px}header{padding-bottom:8px}
   .res{border-width:1px;break-inside:auto}.br,.rt tr{break-inside:avoid}
+  .mapw,.kpis{break-inside:avoid}.ch,h3,h4{break-after:avoid}.map{print-color-adjust:exact;-webkit-print-color-adjust:exact}
+  .map svg{max-height:150mm}
   .intent{print-color-adjust:exact;-webkit-print-color-adjust:exact}
   details.rd summary{min-height:0}.print-only{display:block}
   a{color:inherit}
@@ -244,6 +248,8 @@ const STATUS = { draft: "草案", reviewed: "レビュー済み", deprecated: "�
 let CAT = null, IDX = [], REPO = "";
 const toHash = (id) => id.replace(/_/g, "-");
 const fromHash = (h, list) => list.find((x) => toHash(x.id) === h);
+// サイトのファイルは毎回、新しい版があるか確かめて読む（GitHub Pages は最大10分キャッシュするため、公開直後に古い版が混ざるのを防ぐ）
+const getFile = (path) => fetch(path, { cache: "no-cache" });
 const gh = (path) => `${REPO}/blob/main/${path}`;
 const safeUrl = (u) => (/^https?:\/\//.test(u || "") ? u : null);
 
@@ -346,7 +352,7 @@ async function loadResult(c, params) {
     return;
   }
   try {
-    RES[c.id] ||= await fetch(meta.path).then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); });
+    RES[c.id] ||= await getFile(meta.path).then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); });
   } catch (_) {
     if (token === resToken) el.innerHTML = `<h3 id="res-h">結果を見る</h3><p class="note">結果のファイル（${esc(meta.path)}）を読み込めませんでした。</p>`;
     return;
@@ -515,7 +521,7 @@ function drawResult() {
   $("raw-csv").addEventListener("click", async (e) => {
     if (!DL) return;
     e.preventDefault();
-    try { saveFile(doc.csv.split("/").pop(), await fetch(doc.csv).then((r) => r.text())); } catch (_) { $("dl-st").textContent = "CSVを読み込めませんでした。"; }
+    try { saveFile(doc.csv.split("/").pop(), await getFile(doc.csv).then((r) => r.text())); } catch (_) { $("dl-st").textContent = "CSVを読み込めませんでした。"; }
   });
   $("ask-res").addEventListener("click", () => setFocus(c.id, true));
   $("hl-off")?.addEventListener("click", () => setResultState({ hl: [] }));
@@ -578,7 +584,7 @@ function mapLayer(doc) {
 async function drawMap(v) {
   const box = $("map"); if (!box) return;
   const token = resToken, state = RS;
-  try { GEO ||= await (GEO_P ||= fetch(CAT.geo[0].path).then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); }).then(decodeTopo)); }
+  try { GEO ||= await (GEO_P ||= getFile(CAT.geo[0].path).then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); }).then(decodeTopo)); }
   catch (_) { GEO_P = null; box.innerHTML = `<p class="msg">地図の境界（${esc(CAT.geo[0].path)}）を読み込めませんでした。</p>`; return; }
   if (token !== resToken || RS !== state || !$("map")) return;
   const { doc, pref } = RS, s = doc.summary, d = v.d, o = v.o;
@@ -1003,7 +1009,7 @@ const indName = (id) => CAT.indicators.find((x) => x.id === id)?.name || id;
 const currentInd = () => RS?.c.id || (focusId && CAT.results?.[focusId] ? focusId : null);
 async function docOf(id) {
   const meta = CAT.results?.[id]; if (!meta) return null;
-  try { RES[id] ||= await fetch(meta.path).then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); }); } catch (_) { return null; }
+  try { RES[id] ||= await getFile(meta.path).then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); }); } catch (_) { return null; }
   return RES[id];
 }
 async function resolveFor(p, id) {
@@ -1139,7 +1145,7 @@ dlg.addEventListener("close", () => {
 // ---- 起動 -------------------------------------------------------------------
 (async () => {
   try {
-    const [c, s] = await Promise.all([fetch("catalog.json").then((r) => r.json()), fetch("search_index.json").then((r) => r.json())]);
+    const [c, s] = await Promise.all([getFile("catalog.json").then((r) => r.json()), getFile("search_index.json").then((r) => r.json())]);
     CAT = c; IDX = s.items || []; REPO = CAT.repo_url || "";
   } catch (e) {
     $("view").innerHTML = `<p>カタログを読み込めませんでした。<code>chiiki-od catalog</code> で site/catalog.json を作ってください。</p>`;

@@ -50,6 +50,10 @@ KEY_COLUMNS = {
     "市区町村名称": "municipality_name",
     "医療機関コード(医科)": "medical_code_ika",
     "医療機関コード(歯科)": "medical_code_shika",
+    "医療機関名コード(医科)": "medical_code_ika",  # 令和4・5年度の表記
+    "医療機関名コード(歯科)": "medical_code_shika",
+    "市町村コード": "municipality_code",  # 令和3年度の表記
+    "市町村名称": "municipality_name",
     "オープンデータ病棟コード": "od_ward_code",
     "病棟名": "ward_name",
     "報告月": "report_month",
@@ -79,6 +83,21 @@ def _clean(s) -> str | None:
 
 # ---- データ定義（コードブック） --------------------------------------------
 
+def zip_member(z: zipfile.ZipFile, name: str) -> str:
+    """ZIPの中のファイル名を探す。令和3〜5年度のZIPはファイル名がShift_JISで、そのままでは文字化けするため、
+    読み直した名前と比べる。フォルダの部分は無視して、ファイル名の末尾で一致するものを選ぶ。"""
+    for info in z.infolist():
+        decoded = info.filename
+        if not info.flag_bits & 0x800:  # UTF-8 の印がない名前は cp437 として読まれている
+            try:
+                decoded = info.filename.encode("cp437").decode("cp932")
+            except (UnicodeEncodeError, UnicodeDecodeError):
+                pass
+        if decoded == name or decoded.rsplit("/", 1)[-1] == name:
+            return info.filename
+    raise KeyError(f"ZIPの中に {name} がありません")
+
+
 def load_definition(zip_path: Path, member: str | None, sheet: str, prefix: str) -> pd.DataFrame:
     """データ定義の1シートを、列ごとのコードブックにする。
 
@@ -89,7 +108,7 @@ def load_definition(zip_path: Path, member: str | None, sheet: str, prefix: str)
         raw = Path(zip_path).read_bytes()
     else:
         with zipfile.ZipFile(zip_path) as z:
-            raw = z.read(member)
+            raw = z.read(zip_member(z, member))
     d = pd.read_excel(io.BytesIO(raw), sheet_name=sheet, header=0, dtype=str, engine="calamine")
     d = d.iloc[:, :10]
     d.columns = ["h1", "h2", "h3", "h4", "item", "required", "dtype", "secret", "zero_if_blank", "note"]
@@ -134,7 +153,7 @@ def load_definition(zip_path: Path, member: str | None, sheet: str, prefix: str)
 
 # ---- 1ファイルの読み込み -----------------------------------------------------
 
-def parse_file(path: Path, codebook: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame, dict]:
+def parse_file(path: Path, codebook: pd.DataFrame, max_mismatch: int | None = None) -> tuple[pd.DataFrame, pd.DataFrame, dict]:
     sheet = pc.CalamineWorkbook.from_path(str(path)).get_sheet_by_index(0)
     rows = sheet.to_python(skip_empty_area=False)
     width = len(codebook)
@@ -145,7 +164,9 @@ def parse_file(path: Path, codebook: pd.DataFrame) -> tuple[pd.DataFrame, pd.Dat
         for i in range(width)
         if norm(items[i]) != norm(codebook["item"].iat[i])
     ]
-    if len(mismatch) > max(3, width * 0.05):
+    # 項目名の言い回しだけが定義書と違う年度がある（令和4年度の病棟票「うち、」の有無など）。
+    # その場合はデータセット定義の parser_options.max_item_mismatch で許す数を決める
+    if len(mismatch) > (max_mismatch if max_mismatch is not None else max(3, width * 0.05)):
         raise ValueError(
             f"{path.name}: 項目名がデータ定義と {len(mismatch)} 列で一致しません。"
             f"シートや年度の取り違えがないか確認してください。例: {mismatch[:3]}"
@@ -233,7 +254,7 @@ def parse_dataset(ds: dict) -> tuple[pd.DataFrame, dict, dict]:
         src = raw_path(ds["id"], fs)
         if not src.exists():
             raise FileNotFoundError(f"{src} がありません（chiiki-od fetch {ds['id']} または --from-dir で取り込む）")
-        df, flags, info = parse_file(src, codebook)
+        df, flags, info = parse_file(src, codebook, opt.get("max_item_mismatch"))
         if len(data_files) > 1:
             df.insert(0, "source_file", fs["key"])
         flags["row"] = flags["row"] + offset

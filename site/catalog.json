@@ -1,11 +1,237 @@
 {
-  "generated_at": "2026-11-26T05:08:41+00:00",
+  "generated_at": "2026-11-26T06:07:11+00:00",
   "repo_url": "https://github.com/Kuma5w/open_data_healthcare_regional_analysis",
   "pages_url": "https://kuma5w.github.io/open_data_healthcare_regional_analysis/",
   "indicators": [
     {
+      "id": "day_rehab_offices_per_65plus",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": "65歳以上人口1万人あたり通所リハビリテーション事業所数",
+      "short_description": "通いでリハビリテーションを受けられる拠点（デイケア）の多さを、市区町村ごとに同じ方法で比べる入口の指標",
+      "unit_of_analysis": "municipality",
+      "unit_note": "政令指定都市は市単位に集約する（介護保険の保険者が市であり、介護保険事業計画も市単位で立てるため）。 区単位で見たいときは --ward-level で出力できる。\n",
+      "numerator": {
+        "description": "通所リハビリテーション事業所数（事業所番号で重複を除いた件数。介護老人保健施設・介護医療院・病院・診療所が行うもの）",
+        "dataset": "kaigo_jigyosho_160",
+        "as_of": "2026年6月末"
+      },
+      "denominator": {
+        "description": "65歳以上人口（総計＝日本人住民＋外国人住民）",
+        "dataset": "population_jumin_r8",
+        "as_of": "2026年1月1日"
+      },
+      "formula": "通所リハビリテーション事業所数 ÷ 65歳以上人口 × 10,000",
+      "intent": "退院後の高齢者が、通いでリハビリテーションを続けられる拠点の分布を比べるための入口の指標。 地域医療構想策定ガイドラインは、在宅医療の多職種連携の一つに通所リハビリテーションを挙げ、介護との連携では、 退院後の受け皿としての介護保険施設・居宅サービスの活用や、介護老人保健施設を活用した早期退院の取組を求めている。まず「拠点が少ない地域」を見つける目的で作った。\n",
+      "why_this_denominator": "他の介護サービスの指標と分母を揃えた。利用者の多くは高齢者だが、要介護認定者数や、退院患者数（病床機能報告）に対する数で見る方が需要に近い場合もある。\n",
+      "interpretation": "値が大きいほど、65歳以上人口に対して通所リハビリテーションの事業所が多い。全国の事業所のおよそ45％は介護老人保健施設・介護医療院、 44％は病院・診療所が担っており（事業所番号の区分による）、老健や医療機関の分布の影響を強く受ける。利用定員やリハビリ専門職の人数は反映しない。\n",
+      "policy_questions": [
+        "退院後に通いでリハビリテーションを続けられる拠点が少ない市区町村はどこか",
+        "回復期・包括期の病床や介護老人保健施設との組み合わせで、退院後の受け皿が確保されているか"
+      ],
+      "caveats": [
+        "事業所が0の市区町村が多い（420）。市区町村単位では値が不安定なので、構想区域など広い単位で合わせて見ることも検討する。",
+        "提供主体の内訳（「うち病院・診療所」「うち介護老人保健施設・介護医療院」）は事業所番号の3桁目（1・3、5・B）による。3桁目が7の事業所にも病院や老健の名前のものがあり、内訳はおおよその目安。",
+        "医療保険の外来リハビリテーションは含まない。",
+        "事業所数であり、職員数・利用定員・提供回数などの供給量は反映しない。「定員」列は0や空欄が多く、桁の大きすぎる値もあるため、供給量の代わりには使えない。",
+        "事業所の所在市区町村で数えている（公表ページの注記では「事業所所在地の市町村コード」）。市区町村の境界を越えた利用は反映しない。",
+        "介護サービス情報公表システムに載っている事業所だけを数える。休止中の事業所が含まれるかどうかは未確認。",
+        "分子（2026年6月末）と分母（2026年1月1日）の時点がずれている。",
+        "市町村合併をまたぐ年の比較では、reference/ の対応表で現在のコードに揃える。"
+      ],
+      "alternatives": [
+        {
+          "id": "visiting_rehab_offices_per_65plus",
+          "reason": "自宅で受けるリハビリテーションの拠点と並べて見る"
+        },
+        {
+          "id": "day_service_offices_per_65plus",
+          "reason": "リハビリテーションを主な目的としない通いの拠点と並べて見る"
+        }
+      ],
+      "authors": [
+        {
+          "name": "H.I."
+        }
+      ],
+      "script": "indicators/day_rehab_offices_per_65plus.py",
+      "output": {
+        "area_code": "municipality_code5",
+        "area_name": "municipality_name",
+        "value": "offices_per_10k_65plus",
+        "numerator": "offices",
+        "denominator": "pop_65plus",
+        "scale": 10000,
+        "digits": 3,
+        "unit": "事業所／65歳以上人口1万人",
+        "columns": [
+          {
+            "name": "municipality_code5",
+            "label": "市区町村コード"
+          },
+          {
+            "name": "municipality_name",
+            "label": "市区町村名"
+          },
+          {
+            "name": "offices",
+            "label": "通所リハビリテーション事業所数",
+            "unit": "事業所"
+          },
+          {
+            "name": "offices_medical",
+            "label": "うち病院・診療所（事業所番号の区分による）",
+            "unit": "事業所"
+          },
+          {
+            "name": "offices_roken",
+            "label": "うち介護老人保健施設・介護医療院（事業所番号の区分による）",
+            "unit": "事業所"
+          },
+          {
+            "name": "pop_65plus",
+            "label": "65歳以上人口",
+            "unit": "人"
+          },
+          {
+            "name": "offices_per_10k_65plus",
+            "label": "65歳以上人口1万人あたり事業所数",
+            "unit": "事業所／1万人"
+          }
+        ]
+      },
+      "references": [
+        {
+          "title": "介護サービス情報の公表システムデータのオープンデータ（厚生労働省）",
+          "url": "https://www.mhlw.go.jp/stf/kaigo-kouhyou_opendata.html"
+        },
+        {
+          "title": "住民基本台帳に基づく人口、人口動態及び世帯数（総務省）",
+          "url": "https://www.soumu.go.jp/main_sosiki/jichi_gyousei/daityo/jinkou_jinkoudoutai-setaisuu.html"
+        },
+        {
+          "title": "地域医療構想策定ガイドライン（厚生労働省医政局）在宅医療・介護との連携の章"
+        }
+      ],
+      "created": "2026-11-26",
+      "updated": "2026-11-26"
+    },
+    {
+      "id": "day_service_offices_per_65plus",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": "65歳以上人口1万人あたり通所介護事業所数（地域密着型通所介護を含む）",
+      "short_description": "高齢者が日中に通う通所介護（デイサービス）の拠点の多さを、市区町村ごとに同じ方法で比べる入口の指標",
+      "unit_of_analysis": "municipality",
+      "unit_note": "政令指定都市は市単位に集約する（介護保険の保険者が市であり、介護保険事業計画も市単位で立てるため）。 区単位で見たいときは --ward-level で出力できる。\n",
+      "numerator": {
+        "description": "通所介護（サービスコード150）と地域密着型通所介護（サービスコード780。利用定員18人以下で市町村が指定）の事業所数の合計（サービスごとに事業所番号で重複を除く）。地域密着型は kaigo_jigyosho_780",
+        "dataset": "kaigo_jigyosho_150",
+        "as_of": "2026年6月末"
+      },
+      "denominator": {
+        "description": "65歳以上人口（総計＝日本人住民＋外国人住民）",
+        "dataset": "population_jumin_r8",
+        "as_of": "2026年1月1日"
+      },
+      "formula": "通所介護事業所数（地域密着型を含む） ÷ 65歳以上人口 × 10,000",
+      "intent": "在宅で暮らす高齢者の日中の通いの場（入浴・食事・機能訓練など）であり、家族の介護負担を軽くする通所介護の拠点が、 地域によってどれくらい偏っているかを比べるための入口の指標。地域医療構想策定ガイドラインは、高齢者救急の増加に伴い、 退院後の受け皿として介護保険施設や居宅サービスを適切に活用できる体制の整備を求めている。まず「通いの拠点が少ない地域」を見つける目的で作った。\n",
+      "why_this_denominator": "他の介護サービスの指標と分母を揃えた。地域密着型通所介護を含めたのは、利用定員18人以下の小規模な事業所が別のサービスコード（780）になっており、 通所介護（150）だけでは小規模な事業所が多い地域の拠点を少なく見積もるため。\n",
+      "interpretation": "値が大きいほど、65歳以上人口に対して通所介護の事業所が多い。地域密着型は1事業所の規模が小さいため、 地域密着型の割合が高い地域では、同じ値でも受け入れられる人数は少ないことがある（内訳の列で確かめる）。\n",
+      "policy_questions": [
+        "日中の通いの場や家族の介護負担の軽減を支える拠点が少ない市区町村はどこか",
+        "退院後の在宅生活を支える居宅サービスの拠点が、地域でどれくらいあるか"
+      ],
+      "caveats": [
+        "通所介護と地域密着型通所介護の両方に同じ事業所番号で載る事業所が90件あり、それぞれのサービスで1件ずつ数えた（事業所番号は、同じ所在地で別のサービスの指定を受けるときに使い回されることがある）。",
+        "認知症対応型通所介護、通所リハビリテーション（day_rehab_offices_per_65plus）は含まない。",
+        "地域密着型通所介護の利用は原則としてその市町村の住民に限られるが、通所介護は市区町村を越えた利用がある。",
+        "事業所数であり、職員数・利用定員・提供回数などの供給量は反映しない。「定員」列は0や空欄が多く、桁の大きすぎる値もあるため、供給量の代わりには使えない。",
+        "事業所の所在市区町村で数えている（公表ページの注記では「事業所所在地の市町村コード」）。市区町村の境界を越えた利用は反映しない。",
+        "介護サービス情報公表システムに載っている事業所だけを数える。休止中の事業所が含まれるかどうかは未確認。",
+        "分子（2026年6月末）と分母（2026年1月1日）の時点がずれている。",
+        "市町村合併をまたぐ年の比較では、reference/ の対応表で現在のコードに揃える。"
+      ],
+      "alternatives": [
+        {
+          "id": "day_rehab_offices_per_65plus",
+          "reason": "リハビリテーションを目的とした通いの拠点と並べて見る"
+        },
+        {
+          "id": "short_stay_offices_per_65plus",
+          "reason": "家族の介護負担の軽減を支える短期入所と並べて見る"
+        }
+      ],
+      "authors": [
+        {
+          "name": "H.I."
+        }
+      ],
+      "script": "indicators/day_service_offices_per_65plus.py",
+      "output": {
+        "area_code": "municipality_code5",
+        "area_name": "municipality_name",
+        "value": "offices_per_10k_65plus",
+        "numerator": "offices",
+        "denominator": "pop_65plus",
+        "scale": 10000,
+        "digits": 3,
+        "unit": "事業所／65歳以上人口1万人",
+        "columns": [
+          {
+            "name": "municipality_code5",
+            "label": "市区町村コード"
+          },
+          {
+            "name": "municipality_name",
+            "label": "市区町村名"
+          },
+          {
+            "name": "offices",
+            "label": "通所介護事業所数（地域密着型を含む）",
+            "unit": "事業所"
+          },
+          {
+            "name": "offices_regular",
+            "label": "うち通所介護（150）",
+            "unit": "事業所"
+          },
+          {
+            "name": "offices_community",
+            "label": "うち地域密着型通所介護（780）",
+            "unit": "事業所"
+          },
+          {
+            "name": "pop_65plus",
+            "label": "65歳以上人口",
+            "unit": "人"
+          },
+          {
+            "name": "offices_per_10k_65plus",
+            "label": "65歳以上人口1万人あたり事業所数",
+            "unit": "事業所／1万人"
+          }
+        ]
+      },
+      "references": [
+        {
+          "title": "介護サービス情報の公表システムデータのオープンデータ（厚生労働省）",
+          "url": "https://www.mhlw.go.jp/stf/kaigo-kouhyou_opendata.html"
+        },
+        {
+          "title": "住民基本台帳に基づく人口、人口動態及び世帯数（総務省）",
+          "url": "https://www.soumu.go.jp/main_sosiki/jichi_gyousei/daityo/jinkou_jinkoudoutai-setaisuu.html"
+        },
+        {
+          "title": "地域医療構想策定ガイドライン（厚生労働省医政局）在宅医療・介護との連携の章"
+        }
+      ],
+      "created": "2026-11-26",
+      "updated": "2026-11-26"
+    },
+    {
       "id": "homecare_offices_per_65plus",
-      "version": "0.2.0",
+      "version": "0.2.1",
       "status": "draft",
       "name": "65歳以上人口1万人あたり訪問介護事業所数",
       "short_description": "高齢者人口に対する訪問介護の拠点の多さを、市区町村ごとに同じ方法で比べる入口の指標",
@@ -32,7 +258,7 @@
       "caveats": [
         "事業所数であり、職員数や訪問回数などの供給量は反映しない。「定員」列は訪問介護では0の例があり、供給量の代わりには使えない。",
         "事業所の所在市区町村で数えている。市区町村の境界を越えた訪問は反映しない。",
-        "コード列「都道府県コード又は市町村コード」は、2026年6月末時点のファイル（35,166事業所）で住所・市区町村名と照合した範囲では事業所の所在市区町村を示していた（公式の項目定義は未確認）。都道府県コード（下3桁000）の行があれば除外し、件数を実行記録に残す。",
+        "コード列「都道府県コード又は市町村コード」は事業所所在地の市町村コード（公表ページの注記による）。都道府県コード（下3桁000）の行があれば除外し、件数を実行記録に残す。",
         "分子（6月末）と分母（1月1日）の時点がずれている。",
         "人口の少ない町村では値が不安定。地図にするときは人口規模を併記するか、平滑化（経験ベイズ推定など）を検討する。",
         "休止中の事業所が含まれるかどうかは未確認。",
@@ -46,6 +272,14 @@
         {
           "id": "homecare_offices_per_certified",
           "reason": "要介護認定者数を分母にすると需要に近いが、認定率の地域差が混ざる"
+        },
+        {
+          "id": "visiting_nursing_offices_per_65plus",
+          "reason": "同じ分母で訪問看護の拠点を数え、在宅を支えるサービスを並べて比べる"
+        },
+        {
+          "id": "day_service_offices_per_65plus",
+          "reason": "同じ分母で通所介護（地域密着型を含む）の拠点を数え、並べて比べる"
         }
       ],
       "authors": [
@@ -338,6 +572,329 @@
       ],
       "created": "2026-11-26",
       "updated": "2026-11-26"
+    },
+    {
+      "id": "short_stay_offices_per_65plus",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": "65歳以上人口1万人あたり短期入所生活介護事業所数",
+      "short_description": "在宅介護を続けるための短期入所（ショートステイ）の拠点の多さを、市区町村ごとに同じ方法で比べる入口の指標",
+      "unit_of_analysis": "municipality",
+      "unit_note": "政令指定都市は市単位に集約する（介護保険の保険者が市であり、介護保険事業計画も市単位で立てるため）。 区単位で見たいときは --ward-level で出力できる。\n",
+      "numerator": {
+        "description": "短期入所生活介護事業所数（事業所番号で重複を除いた件数。特別養護老人ホームに併設のものや単独のものを含む）",
+        "dataset": "kaigo_jigyosho_210",
+        "as_of": "2026年6月末"
+      },
+      "denominator": {
+        "description": "65歳以上人口（総計＝日本人住民＋外国人住民）",
+        "dataset": "population_jumin_r8",
+        "as_of": "2026年1月1日"
+      },
+      "formula": "短期入所生活介護事業所数 ÷ 65歳以上人口 × 10,000",
+      "intent": "在宅で介護を続ける家族の休息（レスパイト）や、退院直後・急な事情で一時的に自宅での生活が難しいときの受け皿になる、 短期入所生活介護（ショートステイ）の拠点の分布を比べるための入口の指標。地域医療構想策定ガイドラインは、高齢者救急の増加に伴い、 退院後の受け皿として介護保険施設や居宅サービスを適切に活用できる体制の整備を求めている。まず「拠点が少ない地域」を見つける目的で作った。\n",
+      "why_this_denominator": "他の介護サービスの指標と分母を揃えた。利用者は要介護の高齢者が中心なので、要介護認定者数を分母にした版も考えられる。\n",
+      "interpretation": "値が大きいほど、65歳以上人口に対して短期入所生活介護の事業所が多い。受け入れられるベッドの数は反映しない（「定員」列は使えない）。 人口の少ない町村では1事業所の差で値が大きく変わる。\n",
+      "policy_questions": [
+        "家族の介護負担を軽くし、在宅での介護を続けるための短期入所の拠点が少ない市区町村はどこか",
+        "退院直後に一時的に受け入れられる介護側の資源が、地域でどれくらいあるか"
+      ],
+      "caveats": [
+        "医療的な管理が必要な人を介護老人保健施設・介護医療院などで受け入れる短期入所療養介護（別のサービス）は含まない。",
+        "特別養護老人ホームの空きベッドを使う短期入所（空床利用型）も、事業所としては同じように1件と数えられるため、専用のベッドの数とは対応しない。",
+        "事業所数であり、職員数・利用定員・提供回数などの供給量は反映しない。「定員」列は0や空欄が多く、桁の大きすぎる値もあるため、供給量の代わりには使えない。",
+        "事業所の所在市区町村で数えている（公表ページの注記では「事業所所在地の市町村コード」）。市区町村の境界を越えた利用は反映しない。",
+        "介護サービス情報公表システムに載っている事業所だけを数える。休止中の事業所が含まれるかどうかは未確認。",
+        "分子（2026年6月末）と分母（2026年1月1日）の時点がずれている。",
+        "市町村合併をまたぐ年の比較では、reference/ の対応表で現在のコードに揃える。"
+      ],
+      "alternatives": [
+        {
+          "id": "day_service_offices_per_65plus",
+          "reason": "通いの拠点と並べて、在宅介護を支えるサービスを比べる"
+        },
+        {
+          "id": "homecare_offices_per_65plus",
+          "reason": "訪問介護の拠点と並べて見る"
+        }
+      ],
+      "authors": [
+        {
+          "name": "H.I."
+        }
+      ],
+      "script": "indicators/short_stay_offices_per_65plus.py",
+      "output": {
+        "area_code": "municipality_code5",
+        "area_name": "municipality_name",
+        "value": "offices_per_10k_65plus",
+        "numerator": "offices",
+        "denominator": "pop_65plus",
+        "scale": 10000,
+        "digits": 3,
+        "unit": "事業所／65歳以上人口1万人",
+        "columns": [
+          {
+            "name": "municipality_code5",
+            "label": "市区町村コード"
+          },
+          {
+            "name": "municipality_name",
+            "label": "市区町村名"
+          },
+          {
+            "name": "offices",
+            "label": "短期入所生活介護事業所数",
+            "unit": "事業所"
+          },
+          {
+            "name": "pop_65plus",
+            "label": "65歳以上人口",
+            "unit": "人"
+          },
+          {
+            "name": "offices_per_10k_65plus",
+            "label": "65歳以上人口1万人あたり事業所数",
+            "unit": "事業所／1万人"
+          }
+        ]
+      },
+      "references": [
+        {
+          "title": "介護サービス情報の公表システムデータのオープンデータ（厚生労働省）",
+          "url": "https://www.mhlw.go.jp/stf/kaigo-kouhyou_opendata.html"
+        },
+        {
+          "title": "住民基本台帳に基づく人口、人口動態及び世帯数（総務省）",
+          "url": "https://www.soumu.go.jp/main_sosiki/jichi_gyousei/daityo/jinkou_jinkoudoutai-setaisuu.html"
+        },
+        {
+          "title": "地域医療構想策定ガイドライン（厚生労働省医政局）在宅医療・介護との連携の章"
+        }
+      ],
+      "created": "2026-11-26",
+      "updated": "2026-11-26"
+    },
+    {
+      "id": "visiting_nursing_offices_per_65plus",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": "65歳以上人口1万人あたり訪問看護事業所数",
+      "short_description": "在宅医療を支える訪問看護の拠点の多さを、市区町村ごとに同じ方法で比べる入口の指標",
+      "unit_of_analysis": "municipality",
+      "unit_note": "政令指定都市は市単位に集約する（介護保険の保険者が市であり、介護保険事業計画も市単位で立てるため）。 区単位で見たいときは --ward-level で出力できる。\n",
+      "numerator": {
+        "description": "訪問看護事業所数（事業所番号で重複を除いた件数。訪問看護ステーションのほか、介護保険のみなし指定で訪問看護を行う病院・診療所を含む）",
+        "dataset": "kaigo_jigyosho_130",
+        "as_of": "2026年6月末"
+      },
+      "denominator": {
+        "description": "65歳以上人口（総計＝日本人住民＋外国人住民）",
+        "dataset": "population_jumin_r8",
+        "as_of": "2026年1月1日"
+      },
+      "formula": "訪問看護事業所数 ÷ 65歳以上人口 × 10,000",
+      "intent": "在宅医療を支える訪問看護の拠点が、地域によってどれくらい偏っているかを、全国で同じ方法で比べるための入口の指標。 地域医療構想策定ガイドラインは、在宅医療の協議で確認するデータに訪問看護ステーション数を挙げ、 在宅医療等連携機能を担う医療機関が訪問看護ステーション等と連携して患者の状態の変化を早く捉える役割を示している。 まず「訪問看護の拠点が少ない地域」を見つけ、訪問介護（homecare_offices_per_65plus）など他の在宅サービスと並べて見る目的で作った。\n",
+      "why_this_denominator": "訪問介護など他の介護サービスの指標と分母を揃え、在宅を支えるサービスを横に並べて比べられるようにした。 訪問看護は医療保険でも提供され、小児や医療的ケア児など65歳未満の利用者もいるため、65歳以上人口と需要の対応は訪問介護よりゆるい。 総人口や75歳以上人口、要介護認定者数を分母にした版も考えられる。\n",
+      "interpretation": "値が大きいほど、65歳以上人口に対して訪問看護の事業所が多い。看護職員の数、24時間対応の体制の有無、訪問回数は反映しないため、 値が大きくても提供量が多いとは限らない。人口の少ない町村では1事業所の差で値が大きく変わる。\n",
+      "policy_questions": [
+        "在宅医療を支える訪問看護の拠点が少ない市区町村はどこか",
+        "在宅医療等連携機能を担う医療機関の周辺に、訪問看護の拠点があるか"
+      ],
+      "caveats": [
+        "訪問看護ステーションのほか、病院・診療所が行う訪問看護（介護保険のみなし指定）を含む。病院・診療所の数は「うち病院・診療所」の列に再掲した（事業所番号の3桁目が1・3のもの）。訪問看護ステーションだけの数は、全体からこの列を引くとおおよそ分かる。",
+        "本体と同じ事業所番号でサテライトが別の行に載っている例が1組あり（静岡市の2つの区）、1件として数えた。サテライトが別の行に載っていない場合、サテライトの所在地では数えられない。",
+        "看護職員数・24時間対応の有無（ガイドラインが挙げる項目）はこのデータにない。",
+        "事業所数であり、職員数・利用定員・提供回数などの供給量は反映しない。「定員」列は0や空欄が多く、桁の大きすぎる値もあるため、供給量の代わりには使えない。",
+        "事業所の所在市区町村で数えている（公表ページの注記では「事業所所在地の市町村コード」）。市区町村の境界を越えた利用は反映しない。",
+        "介護サービス情報公表システムに載っている事業所だけを数える。休止中の事業所が含まれるかどうかは未確認。",
+        "分子（2026年6月末）と分母（2026年1月1日）の時点がずれている。",
+        "市町村合併をまたぐ年の比較では、reference/ の対応表で現在のコードに揃える。"
+      ],
+      "alternatives": [
+        {
+          "id": "homecare_offices_per_65plus",
+          "reason": "訪問介護の拠点と並べて、在宅を支えるサービスの偏りを比べる"
+        },
+        {
+          "id": "visiting_rehab_offices_per_65plus",
+          "reason": "訪問で行うリハビリテーションの拠点と並べて見る"
+        }
+      ],
+      "authors": [
+        {
+          "name": "H.I."
+        }
+      ],
+      "script": "indicators/visiting_nursing_offices_per_65plus.py",
+      "output": {
+        "area_code": "municipality_code5",
+        "area_name": "municipality_name",
+        "value": "offices_per_10k_65plus",
+        "numerator": "offices",
+        "denominator": "pop_65plus",
+        "scale": 10000,
+        "digits": 3,
+        "unit": "事業所／65歳以上人口1万人",
+        "columns": [
+          {
+            "name": "municipality_code5",
+            "label": "市区町村コード"
+          },
+          {
+            "name": "municipality_name",
+            "label": "市区町村名"
+          },
+          {
+            "name": "offices",
+            "label": "訪問看護事業所数",
+            "unit": "事業所"
+          },
+          {
+            "name": "offices_medical",
+            "label": "うち病院・診療所（事業所番号の区分による）",
+            "unit": "事業所"
+          },
+          {
+            "name": "pop_65plus",
+            "label": "65歳以上人口",
+            "unit": "人"
+          },
+          {
+            "name": "offices_per_10k_65plus",
+            "label": "65歳以上人口1万人あたり事業所数",
+            "unit": "事業所／1万人"
+          }
+        ]
+      },
+      "references": [
+        {
+          "title": "介護サービス情報の公表システムデータのオープンデータ（厚生労働省）",
+          "url": "https://www.mhlw.go.jp/stf/kaigo-kouhyou_opendata.html"
+        },
+        {
+          "title": "住民基本台帳に基づく人口、人口動態及び世帯数（総務省）",
+          "url": "https://www.soumu.go.jp/main_sosiki/jichi_gyousei/daityo/jinkou_jinkoudoutai-setaisuu.html"
+        },
+        {
+          "title": "地域医療構想策定ガイドライン（厚生労働省医政局）在宅医療・介護との連携の章"
+        }
+      ],
+      "created": "2026-11-26",
+      "updated": "2026-11-26"
+    },
+    {
+      "id": "visiting_rehab_offices_per_65plus",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": "65歳以上人口1万人あたり訪問リハビリテーション事業所数",
+      "short_description": "自宅でリハビリテーションを受けられる拠点の多さを、市区町村ごとに同じ方法で比べる入口の指標",
+      "unit_of_analysis": "municipality",
+      "unit_note": "政令指定都市は市単位に集約する（介護保険の保険者が市であり、介護保険事業計画も市単位で立てるため）。 区単位で見たいときは --ward-level で出力できる。\n",
+      "numerator": {
+        "description": "訪問リハビリテーション事業所数（事業所番号で重複を除いた件数。病院・診療所・介護老人保健施設・介護医療院が行うもの）",
+        "dataset": "kaigo_jigyosho_140",
+        "as_of": "2026年6月末"
+      },
+      "denominator": {
+        "description": "65歳以上人口（総計＝日本人住民＋外国人住民）",
+        "dataset": "population_jumin_r8",
+        "as_of": "2026年1月1日"
+      },
+      "formula": "訪問リハビリテーション事業所数 ÷ 65歳以上人口 × 10,000",
+      "intent": "退院後や在宅療養中の高齢者が、自宅でリハビリテーションを受けられる拠点の分布を比べるための入口の指標。 地域医療構想策定ガイドラインは、高齢者救急が増える中で早期の在宅復帰を進めるため、退院後早期から多職種の支援が切れ目なく提供されることを求め、 在宅医療の多職種連携の一つに訪問リハビリテーションを挙げている。まず「拠点が少ない地域」を見つける目的で作った。\n",
+      "why_this_denominator": "訪問介護・訪問看護など他の介護サービスの指標と分母を揃え、並べて比べられるようにした。 利用者の多くは高齢者だが、要介護認定者数や、退院患者数（病床機能報告）に対する数で見る方が需要に近い場合もある。\n",
+      "interpretation": "値が大きいほど、65歳以上人口に対して訪問リハビリテーションの事業所が多い。全国の事業所のおよそ7割は病院・診療所、 2割は介護老人保健施設・介護医療院が担っており（事業所番号の区分による）、医療機関の分布の影響を強く受ける。 理学療法士などの人数や訪問回数は反映しない。\n",
+      "policy_questions": [
+        "退院後に自宅でリハビリテーションを続けられる拠点が少ない市区町村はどこか",
+        "回復期・包括期の病床が多い地域で、退院後の訪問リハビリテーションの拠点があるか"
+      ],
+      "caveats": [
+        "全国で5,067事業所と少なく、事業所が0の市区町村が多い（630）。市区町村単位では値が不安定なので、構想区域など広い単位で合わせて見ることも検討する。",
+        "提供主体の内訳（「うち病院・診療所」「うち介護老人保健施設・介護医療院」）は事業所番号の3桁目（1・3、5・B）による。3桁目が7の事業所にも病院や老健の名前のものがあり、内訳はおおよその目安。",
+        "医療保険で行う訪問リハビリテーション（在宅患者訪問リハビリテーション指導管理料など）は、介護保険の事業所の一覧ではとらえられない。",
+        "事業所数であり、職員数・利用定員・提供回数などの供給量は反映しない。「定員」列は0や空欄が多く、桁の大きすぎる値もあるため、供給量の代わりには使えない。",
+        "事業所の所在市区町村で数えている（公表ページの注記では「事業所所在地の市町村コード」）。市区町村の境界を越えた利用は反映しない。",
+        "介護サービス情報公表システムに載っている事業所だけを数える。休止中の事業所が含まれるかどうかは未確認。",
+        "分子（2026年6月末）と分母（2026年1月1日）の時点がずれている。",
+        "市町村合併をまたぐ年の比較では、reference/ の対応表で現在のコードに揃える。"
+      ],
+      "alternatives": [
+        {
+          "id": "day_rehab_offices_per_65plus",
+          "reason": "通いで受けるリハビリテーションの拠点と並べて見る"
+        },
+        {
+          "id": "visiting_nursing_offices_per_65plus",
+          "reason": "訪問看護の拠点と並べて見る（訪問看護ステーションの理学療法士等による訪問もある）"
+        }
+      ],
+      "authors": [
+        {
+          "name": "H.I."
+        }
+      ],
+      "script": "indicators/visiting_rehab_offices_per_65plus.py",
+      "output": {
+        "area_code": "municipality_code5",
+        "area_name": "municipality_name",
+        "value": "offices_per_10k_65plus",
+        "numerator": "offices",
+        "denominator": "pop_65plus",
+        "scale": 10000,
+        "digits": 3,
+        "unit": "事業所／65歳以上人口1万人",
+        "columns": [
+          {
+            "name": "municipality_code5",
+            "label": "市区町村コード"
+          },
+          {
+            "name": "municipality_name",
+            "label": "市区町村名"
+          },
+          {
+            "name": "offices",
+            "label": "訪問リハビリテーション事業所数",
+            "unit": "事業所"
+          },
+          {
+            "name": "offices_medical",
+            "label": "うち病院・診療所（事業所番号の区分による）",
+            "unit": "事業所"
+          },
+          {
+            "name": "offices_roken",
+            "label": "うち介護老人保健施設・介護医療院（事業所番号の区分による）",
+            "unit": "事業所"
+          },
+          {
+            "name": "pop_65plus",
+            "label": "65歳以上人口",
+            "unit": "人"
+          },
+          {
+            "name": "offices_per_10k_65plus",
+            "label": "65歳以上人口1万人あたり事業所数",
+            "unit": "事業所／1万人"
+          }
+        ]
+      },
+      "references": [
+        {
+          "title": "介護サービス情報の公表システムデータのオープンデータ（厚生労働省）",
+          "url": "https://www.mhlw.go.jp/stf/kaigo-kouhyou_opendata.html"
+        },
+        {
+          "title": "住民基本台帳に基づく人口、人口動態及び世帯数（総務省）",
+          "url": "https://www.soumu.go.jp/main_sosiki/jichi_gyousei/daityo/jinkou_jinkoudoutai-setaisuu.html"
+        },
+        {
+          "title": "地域医療構想策定ガイドライン（厚生労働省医政局）在宅医療・介護との連携の章"
+        }
+      ],
+      "created": "2026-11-26",
+      "updated": "2026-11-26"
     }
   ],
   "datasets": [
@@ -473,11 +1030,12 @@
         {
           "name": "municipality_code",
           "type": "str",
-          "description": "6桁（検査数字付き）。政令市は区のコード。住所・市区町村名と照合した範囲では事業所の所在市区町村（公式の項目定義は未確認）"
+          "description": "事業所所在地の市町村コード（公表ページの注記による）。6桁（検査数字付き）。政令市は区のコード"
         },
         {
           "name": "record_no",
-          "type": "str"
+          "type": "str",
+          "description": "介護保険事業所番号（公表ページの注記による。事業所番号の列と同じ値）"
         },
         {
           "name": "pref_name",
@@ -580,6 +1138,731 @@
       "codebook": null
     },
     {
+      "id": "kaigo_jigyosho_130",
+      "title": "介護サービス事業所一覧（訪問看護）",
+      "publisher": "厚生労働省（介護サービス情報公表システム）",
+      "source_page": "https://www.mhlw.go.jp/stf/kaigo-kouhyou_opendata.html",
+      "attribution": "出典：厚生労働省「介護サービス情報公表システム」オープンデータ（訪問看護、2026年6月末時点）を加工して作成",
+      "update_frequency": "年2回（6月末時点・12月末時点）",
+      "verified": true,
+      "columns": [
+        {
+          "name": "municipality_code",
+          "type": "str",
+          "description": "事業所所在地の市町村コード（公表ページの注記による）。6桁（検査数字付き）。政令市は区のコード"
+        },
+        {
+          "name": "record_no",
+          "type": "str",
+          "description": "介護保険事業所番号（公表ページの注記による。事業所番号の列と同じ値）"
+        },
+        {
+          "name": "pref_name",
+          "type": "str"
+        },
+        {
+          "name": "municipality_name",
+          "type": "str"
+        },
+        {
+          "name": "office_name",
+          "type": "str"
+        },
+        {
+          "name": "office_name_kana",
+          "type": "str"
+        },
+        {
+          "name": "service_type",
+          "type": "str"
+        },
+        {
+          "name": "address",
+          "type": "str"
+        },
+        {
+          "name": "address_building",
+          "type": "str"
+        },
+        {
+          "name": "lat",
+          "type": "float"
+        },
+        {
+          "name": "lon",
+          "type": "float"
+        },
+        {
+          "name": "tel",
+          "type": "str"
+        },
+        {
+          "name": "fax",
+          "type": "str"
+        },
+        {
+          "name": "corporate_number",
+          "type": "str"
+        },
+        {
+          "name": "corporate_name",
+          "type": "str"
+        },
+        {
+          "name": "office_number",
+          "type": "str",
+          "description": "10桁。先頭の0を保つため文字列"
+        },
+        {
+          "name": "available_days",
+          "type": "str"
+        },
+        {
+          "name": "available_days_note",
+          "type": "str"
+        },
+        {
+          "name": "capacity",
+          "type": "int",
+          "description": "0や空欄が多く、桁の大きすぎる値もあるため、供給量の代わりには使えない"
+        },
+        {
+          "name": "url",
+          "type": "str"
+        },
+        {
+          "name": "kyosei_service",
+          "type": "str"
+        },
+        {
+          "name": "meets_kaigo_standard",
+          "type": "str"
+        },
+        {
+          "name": "meets_shogai_standard",
+          "type": "str"
+        },
+        {
+          "name": "remarks",
+          "type": "str"
+        }
+      ],
+      "notes": [
+        "サービス種類ごとに別ファイル（訪問看護はサービスコード130）。他のサービスは同じ形式で datasets/ に追加できる。",
+        "2024年6月末以前はZIP形式で提供されている。",
+        "政令指定都市は区単位のコードで収録されている。市単位で集計するときは chiiki_od.codes.ward_to_city を使う。",
+        "緯度・経度が0の事業所が37件ある（未設定とみられる）。地図に載せるときは除く。",
+        "事業所番号の3桁目は付番の区分（1：医療機関（医科）、3：歯科、5：介護老人保健施設、6：訪問看護ステーション、7：それ以外の介護保険事業所。介護医療院はBの例がある）。病院・診療所や老健のみなし指定の事業所は、医療機関等のコードがそのまま事業所番号になる。",
+        "同じ事業所番号の行が1組ある（本体とサテライトが別の区に載っている例：静岡市葵区・静岡市駿河区）。数えるときは事業所番号で重複を除く。"
+      ],
+      "related": [],
+      "codebook": null
+    },
+    {
+      "id": "kaigo_jigyosho_140",
+      "title": "介護サービス事業所一覧（訪問リハビリテーション）",
+      "publisher": "厚生労働省（介護サービス情報公表システム）",
+      "source_page": "https://www.mhlw.go.jp/stf/kaigo-kouhyou_opendata.html",
+      "attribution": "出典：厚生労働省「介護サービス情報公表システム」オープンデータ（訪問リハビリテーション、2026年6月末時点）を加工して作成",
+      "update_frequency": "年2回（6月末時点・12月末時点）",
+      "verified": true,
+      "columns": [
+        {
+          "name": "municipality_code",
+          "type": "str",
+          "description": "事業所所在地の市町村コード（公表ページの注記による）。6桁（検査数字付き）。政令市は区のコード"
+        },
+        {
+          "name": "record_no",
+          "type": "str",
+          "description": "介護保険事業所番号（公表ページの注記による。事業所番号の列と同じ値）"
+        },
+        {
+          "name": "pref_name",
+          "type": "str"
+        },
+        {
+          "name": "municipality_name",
+          "type": "str"
+        },
+        {
+          "name": "office_name",
+          "type": "str"
+        },
+        {
+          "name": "office_name_kana",
+          "type": "str"
+        },
+        {
+          "name": "service_type",
+          "type": "str"
+        },
+        {
+          "name": "address",
+          "type": "str"
+        },
+        {
+          "name": "address_building",
+          "type": "str"
+        },
+        {
+          "name": "lat",
+          "type": "float"
+        },
+        {
+          "name": "lon",
+          "type": "float"
+        },
+        {
+          "name": "tel",
+          "type": "str"
+        },
+        {
+          "name": "fax",
+          "type": "str"
+        },
+        {
+          "name": "corporate_number",
+          "type": "str"
+        },
+        {
+          "name": "corporate_name",
+          "type": "str"
+        },
+        {
+          "name": "office_number",
+          "type": "str",
+          "description": "10桁。先頭の0を保つため文字列"
+        },
+        {
+          "name": "available_days",
+          "type": "str"
+        },
+        {
+          "name": "available_days_note",
+          "type": "str"
+        },
+        {
+          "name": "capacity",
+          "type": "int",
+          "description": "0や空欄が多く、桁の大きすぎる値もあるため、供給量の代わりには使えない"
+        },
+        {
+          "name": "url",
+          "type": "str"
+        },
+        {
+          "name": "kyosei_service",
+          "type": "str"
+        },
+        {
+          "name": "meets_kaigo_standard",
+          "type": "str"
+        },
+        {
+          "name": "meets_shogai_standard",
+          "type": "str"
+        },
+        {
+          "name": "remarks",
+          "type": "str"
+        }
+      ],
+      "notes": [
+        "サービス種類ごとに別ファイル（訪問リハビリテーションはサービスコード140）。他のサービスは同じ形式で datasets/ に追加できる。",
+        "2024年6月末以前はZIP形式で提供されている。",
+        "政令指定都市は区単位のコードで収録されている。市単位で集計するときは chiiki_od.codes.ward_to_city を使う。",
+        "緯度・経度が0の事業所が7件ある（未設定とみられる）。地図に載せるときは除く。",
+        "事業所番号の3桁目は付番の区分（1：医療機関（医科）、3：歯科、5：介護老人保健施設、6：訪問看護ステーション、7：それ以外の介護保険事業所。介護医療院はBの例がある）。病院・診療所や老健のみなし指定の事業所は、医療機関等のコードがそのまま事業所番号になる。"
+      ],
+      "related": [],
+      "codebook": null
+    },
+    {
+      "id": "kaigo_jigyosho_150",
+      "title": "介護サービス事業所一覧（通所介護）",
+      "publisher": "厚生労働省（介護サービス情報公表システム）",
+      "source_page": "https://www.mhlw.go.jp/stf/kaigo-kouhyou_opendata.html",
+      "attribution": "出典：厚生労働省「介護サービス情報公表システム」オープンデータ（通所介護、2026年6月末時点）を加工して作成",
+      "update_frequency": "年2回（6月末時点・12月末時点）",
+      "verified": true,
+      "columns": [
+        {
+          "name": "municipality_code",
+          "type": "str",
+          "description": "事業所所在地の市町村コード（公表ページの注記による）。6桁（検査数字付き）。政令市は区のコード"
+        },
+        {
+          "name": "record_no",
+          "type": "str",
+          "description": "介護保険事業所番号（公表ページの注記による。事業所番号の列と同じ値）"
+        },
+        {
+          "name": "pref_name",
+          "type": "str"
+        },
+        {
+          "name": "municipality_name",
+          "type": "str"
+        },
+        {
+          "name": "office_name",
+          "type": "str"
+        },
+        {
+          "name": "office_name_kana",
+          "type": "str"
+        },
+        {
+          "name": "service_type",
+          "type": "str"
+        },
+        {
+          "name": "address",
+          "type": "str"
+        },
+        {
+          "name": "address_building",
+          "type": "str"
+        },
+        {
+          "name": "lat",
+          "type": "float"
+        },
+        {
+          "name": "lon",
+          "type": "float"
+        },
+        {
+          "name": "tel",
+          "type": "str"
+        },
+        {
+          "name": "fax",
+          "type": "str"
+        },
+        {
+          "name": "corporate_number",
+          "type": "str"
+        },
+        {
+          "name": "corporate_name",
+          "type": "str"
+        },
+        {
+          "name": "office_number",
+          "type": "str",
+          "description": "10桁。先頭の0を保つため文字列"
+        },
+        {
+          "name": "available_days",
+          "type": "str"
+        },
+        {
+          "name": "available_days_note",
+          "type": "str"
+        },
+        {
+          "name": "capacity",
+          "type": "int",
+          "description": "0や空欄が多く、桁の大きすぎる値もあるため、供給量の代わりには使えない"
+        },
+        {
+          "name": "url",
+          "type": "str"
+        },
+        {
+          "name": "kyosei_service",
+          "type": "str"
+        },
+        {
+          "name": "meets_kaigo_standard",
+          "type": "str"
+        },
+        {
+          "name": "meets_shogai_standard",
+          "type": "str"
+        },
+        {
+          "name": "remarks",
+          "type": "str"
+        }
+      ],
+      "notes": [
+        "サービス種類ごとに別ファイル（通所介護はサービスコード150）。他のサービスは同じ形式で datasets/ に追加できる。",
+        "2024年6月末以前はZIP形式で提供されている。",
+        "政令指定都市は区単位のコードで収録されている。市単位で集計するときは chiiki_od.codes.ward_to_city を使う。",
+        "緯度・経度が0の事業所が21件ある（未設定とみられる）。地図に載せるときは除く。",
+        "事業所番号の3桁目は付番の区分（1：医療機関（医科）、3：歯科、5：介護老人保健施設、6：訪問看護ステーション、7：それ以外の介護保険事業所。介護医療院はBの例がある）。病院・診療所や老健のみなし指定の事業所は、医療機関等のコードがそのまま事業所番号になる。 このサービスでは 8・9・A の例もある（区分の公式な説明は未確認）。"
+      ],
+      "related": [
+        "kaigo_jigyosho_780"
+      ],
+      "codebook": null
+    },
+    {
+      "id": "kaigo_jigyosho_160",
+      "title": "介護サービス事業所一覧（通所リハビリテーション）",
+      "publisher": "厚生労働省（介護サービス情報公表システム）",
+      "source_page": "https://www.mhlw.go.jp/stf/kaigo-kouhyou_opendata.html",
+      "attribution": "出典：厚生労働省「介護サービス情報公表システム」オープンデータ（通所リハビリテーション、2026年6月末時点）を加工して作成",
+      "update_frequency": "年2回（6月末時点・12月末時点）",
+      "verified": true,
+      "columns": [
+        {
+          "name": "municipality_code",
+          "type": "str",
+          "description": "事業所所在地の市町村コード（公表ページの注記による）。6桁（検査数字付き）。政令市は区のコード"
+        },
+        {
+          "name": "record_no",
+          "type": "str",
+          "description": "介護保険事業所番号（公表ページの注記による。事業所番号の列と同じ値）"
+        },
+        {
+          "name": "pref_name",
+          "type": "str"
+        },
+        {
+          "name": "municipality_name",
+          "type": "str"
+        },
+        {
+          "name": "office_name",
+          "type": "str"
+        },
+        {
+          "name": "office_name_kana",
+          "type": "str"
+        },
+        {
+          "name": "service_type",
+          "type": "str"
+        },
+        {
+          "name": "address",
+          "type": "str"
+        },
+        {
+          "name": "address_building",
+          "type": "str"
+        },
+        {
+          "name": "lat",
+          "type": "float"
+        },
+        {
+          "name": "lon",
+          "type": "float"
+        },
+        {
+          "name": "tel",
+          "type": "str"
+        },
+        {
+          "name": "fax",
+          "type": "str"
+        },
+        {
+          "name": "corporate_number",
+          "type": "str"
+        },
+        {
+          "name": "corporate_name",
+          "type": "str"
+        },
+        {
+          "name": "office_number",
+          "type": "str",
+          "description": "10桁。先頭の0を保つため文字列"
+        },
+        {
+          "name": "available_days",
+          "type": "str"
+        },
+        {
+          "name": "available_days_note",
+          "type": "str"
+        },
+        {
+          "name": "capacity",
+          "type": "int",
+          "description": "0や空欄が多く、桁の大きすぎる値もあるため、供給量の代わりには使えない"
+        },
+        {
+          "name": "url",
+          "type": "str"
+        },
+        {
+          "name": "kyosei_service",
+          "type": "str"
+        },
+        {
+          "name": "meets_kaigo_standard",
+          "type": "str"
+        },
+        {
+          "name": "meets_shogai_standard",
+          "type": "str"
+        },
+        {
+          "name": "remarks",
+          "type": "str"
+        }
+      ],
+      "notes": [
+        "サービス種類ごとに別ファイル（通所リハビリテーションはサービスコード160）。他のサービスは同じ形式で datasets/ に追加できる。",
+        "2024年6月末以前はZIP形式で提供されている。",
+        "政令指定都市は区単位のコードで収録されている。市単位で集計するときは chiiki_od.codes.ward_to_city を使う。",
+        "緯度・経度が0の事業所が2件ある（未設定とみられる）。地図に載せるときは除く。",
+        "事業所番号の3桁目は付番の区分（1：医療機関（医科）、3：歯科、5：介護老人保健施設、6：訪問看護ステーション、7：それ以外の介護保険事業所。介護医療院はBの例がある）。病院・診療所や老健のみなし指定の事業所は、医療機関等のコードがそのまま事業所番号になる。"
+      ],
+      "related": [],
+      "codebook": null
+    },
+    {
+      "id": "kaigo_jigyosho_210",
+      "title": "介護サービス事業所一覧（短期入所生活介護）",
+      "publisher": "厚生労働省（介護サービス情報公表システム）",
+      "source_page": "https://www.mhlw.go.jp/stf/kaigo-kouhyou_opendata.html",
+      "attribution": "出典：厚生労働省「介護サービス情報公表システム」オープンデータ（短期入所生活介護、2026年6月末時点）を加工して作成",
+      "update_frequency": "年2回（6月末時点・12月末時点）",
+      "verified": true,
+      "columns": [
+        {
+          "name": "municipality_code",
+          "type": "str",
+          "description": "事業所所在地の市町村コード（公表ページの注記による）。6桁（検査数字付き）。政令市は区のコード"
+        },
+        {
+          "name": "record_no",
+          "type": "str",
+          "description": "介護保険事業所番号（公表ページの注記による。事業所番号の列と同じ値）"
+        },
+        {
+          "name": "pref_name",
+          "type": "str"
+        },
+        {
+          "name": "municipality_name",
+          "type": "str"
+        },
+        {
+          "name": "office_name",
+          "type": "str"
+        },
+        {
+          "name": "office_name_kana",
+          "type": "str"
+        },
+        {
+          "name": "service_type",
+          "type": "str"
+        },
+        {
+          "name": "address",
+          "type": "str"
+        },
+        {
+          "name": "address_building",
+          "type": "str"
+        },
+        {
+          "name": "lat",
+          "type": "float"
+        },
+        {
+          "name": "lon",
+          "type": "float"
+        },
+        {
+          "name": "tel",
+          "type": "str"
+        },
+        {
+          "name": "fax",
+          "type": "str"
+        },
+        {
+          "name": "corporate_number",
+          "type": "str"
+        },
+        {
+          "name": "corporate_name",
+          "type": "str"
+        },
+        {
+          "name": "office_number",
+          "type": "str",
+          "description": "10桁。先頭の0を保つため文字列"
+        },
+        {
+          "name": "available_days",
+          "type": "str"
+        },
+        {
+          "name": "available_days_note",
+          "type": "str"
+        },
+        {
+          "name": "capacity",
+          "type": "int",
+          "description": "0や空欄が多く、桁の大きすぎる値もあるため、供給量の代わりには使えない"
+        },
+        {
+          "name": "url",
+          "type": "str"
+        },
+        {
+          "name": "kyosei_service",
+          "type": "str"
+        },
+        {
+          "name": "meets_kaigo_standard",
+          "type": "str"
+        },
+        {
+          "name": "meets_shogai_standard",
+          "type": "str"
+        },
+        {
+          "name": "remarks",
+          "type": "str"
+        }
+      ],
+      "notes": [
+        "サービス種類ごとに別ファイル（短期入所生活介護はサービスコード210）。他のサービスは同じ形式で datasets/ に追加できる。",
+        "2024年6月末以前はZIP形式で提供されている。",
+        "政令指定都市は区単位のコードで収録されている。市単位で集計するときは chiiki_od.codes.ward_to_city を使う。",
+        "緯度・経度が0の事業所が8件ある（未設定とみられる）。地図に載せるときは除く。",
+        "事業所番号の3桁目は付番の区分（1：医療機関（医科）、3：歯科、5：介護老人保健施設、6：訪問看護ステーション、7：それ以外の介護保険事業所。介護医療院はBの例がある）。病院・診療所や老健のみなし指定の事業所は、医療機関等のコードがそのまま事業所番号になる。 このサービスでは 8・9・A の例もある（区分の公式な説明は未確認）。"
+      ],
+      "related": [],
+      "codebook": null
+    },
+    {
+      "id": "kaigo_jigyosho_780",
+      "title": "介護サービス事業所一覧（地域密着型通所介護）",
+      "publisher": "厚生労働省（介護サービス情報公表システム）",
+      "source_page": "https://www.mhlw.go.jp/stf/kaigo-kouhyou_opendata.html",
+      "attribution": "出典：厚生労働省「介護サービス情報公表システム」オープンデータ（地域密着型通所介護、2026年6月末時点）を加工して作成",
+      "update_frequency": "年2回（6月末時点・12月末時点）",
+      "verified": true,
+      "columns": [
+        {
+          "name": "municipality_code",
+          "type": "str",
+          "description": "事業所所在地の市町村コード（公表ページの注記による）。6桁（検査数字付き）。政令市は区のコード"
+        },
+        {
+          "name": "record_no",
+          "type": "str",
+          "description": "介護保険事業所番号（公表ページの注記による。事業所番号の列と同じ値）"
+        },
+        {
+          "name": "pref_name",
+          "type": "str"
+        },
+        {
+          "name": "municipality_name",
+          "type": "str"
+        },
+        {
+          "name": "office_name",
+          "type": "str"
+        },
+        {
+          "name": "office_name_kana",
+          "type": "str"
+        },
+        {
+          "name": "service_type",
+          "type": "str"
+        },
+        {
+          "name": "address",
+          "type": "str"
+        },
+        {
+          "name": "address_building",
+          "type": "str"
+        },
+        {
+          "name": "lat",
+          "type": "float"
+        },
+        {
+          "name": "lon",
+          "type": "float"
+        },
+        {
+          "name": "tel",
+          "type": "str"
+        },
+        {
+          "name": "fax",
+          "type": "str"
+        },
+        {
+          "name": "corporate_number",
+          "type": "str"
+        },
+        {
+          "name": "corporate_name",
+          "type": "str"
+        },
+        {
+          "name": "office_number",
+          "type": "str",
+          "description": "10桁。先頭の0を保つため文字列"
+        },
+        {
+          "name": "available_days",
+          "type": "str"
+        },
+        {
+          "name": "available_days_note",
+          "type": "str"
+        },
+        {
+          "name": "capacity",
+          "type": "int",
+          "description": "0や空欄が多く、桁の大きすぎる値もあるため、供給量の代わりには使えない"
+        },
+        {
+          "name": "url",
+          "type": "str"
+        },
+        {
+          "name": "kyosei_service",
+          "type": "str"
+        },
+        {
+          "name": "meets_kaigo_standard",
+          "type": "str"
+        },
+        {
+          "name": "meets_shogai_standard",
+          "type": "str"
+        },
+        {
+          "name": "remarks",
+          "type": "str"
+        }
+      ],
+      "notes": [
+        "サービス種類ごとに別ファイル（地域密着型通所介護はサービスコード780。定員18人以下の通所介護で、市町村が指定する）。他のサービスは同じ形式で datasets/ に追加できる。",
+        "2024年6月末以前はZIP形式で提供されている。",
+        "政令指定都市は区単位のコードで収録されている。市単位で集計するときは chiiki_od.codes.ward_to_city を使う。",
+        "緯度・経度が0の事業所が24件ある（未設定とみられる）。地図に載せるときは除く。",
+        "事業所番号の3桁目は付番の区分（1：医療機関（医科）、3：歯科、5：介護老人保健施設、6：訪問看護ステーション、7：それ以外の介護保険事業所。介護医療院はBの例がある）。病院・診療所や老健のみなし指定の事業所は、医療機関等のコードがそのまま事業所番号になる。 このサービスでは 8・9・A の例もある（区分の公式な説明は未確認）。"
+      ],
+      "related": [
+        "kaigo_jigyosho_150"
+      ],
+      "codebook": null
+    },
+    {
       "id": "population_jumin_r7",
       "title": "住民基本台帳 年齢階級別人口（市区町村別・総計）令和7年1月1日",
       "publisher": "総務省",
@@ -628,11 +1911,27 @@
     }
   ],
   "results": {
+    "day_rehab_offices_per_65plus": {
+      "path": "results/day_rehab_offices_per_65plus.json",
+      "csv": "results/day_rehab_offices_per_65plus.csv",
+      "generated_at": "2026-11-26T06:06:43+00:00",
+      "card_version": "0.1.0",
+      "rows": 1741,
+      "stale": []
+    },
+    "day_service_offices_per_65plus": {
+      "path": "results/day_service_offices_per_65plus.json",
+      "csv": "results/day_service_offices_per_65plus.csv",
+      "generated_at": "2026-11-26T06:06:42+00:00",
+      "card_version": "0.1.0",
+      "rows": 1741,
+      "stale": []
+    },
     "homecare_offices_per_65plus": {
       "path": "results/homecare_offices_per_65plus.json",
       "csv": "results/homecare_offices_per_65plus.csv",
-      "generated_at": "2026-11-26T03:40:12+00:00",
-      "card_version": "0.2.0",
+      "generated_at": "2026-11-26T06:06:42+00:00",
+      "card_version": "0.2.1",
       "rows": 1741,
       "stale": []
     },
@@ -650,6 +1949,30 @@
       "generated_at": "2026-11-26T03:40:13+00:00",
       "card_version": "0.1.0",
       "rows": 339,
+      "stale": []
+    },
+    "short_stay_offices_per_65plus": {
+      "path": "results/short_stay_offices_per_65plus.json",
+      "csv": "results/short_stay_offices_per_65plus.csv",
+      "generated_at": "2026-11-26T06:06:43+00:00",
+      "card_version": "0.1.0",
+      "rows": 1741,
+      "stale": []
+    },
+    "visiting_nursing_offices_per_65plus": {
+      "path": "results/visiting_nursing_offices_per_65plus.json",
+      "csv": "results/visiting_nursing_offices_per_65plus.csv",
+      "generated_at": "2026-11-26T06:06:42+00:00",
+      "card_version": "0.1.0",
+      "rows": 1741,
+      "stale": []
+    },
+    "visiting_rehab_offices_per_65plus": {
+      "path": "results/visiting_rehab_offices_per_65plus.json",
+      "csv": "results/visiting_rehab_offices_per_65plus.csv",
+      "generated_at": "2026-11-26T06:06:42+00:00",
+      "card_version": "0.1.0",
+      "rows": 1741,
       "stale": []
     }
   },

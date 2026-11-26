@@ -1,0 +1,101 @@
+id: kaigo_jigyosho_210
+title: 介護サービス事業所一覧（短期入所生活介護）
+publisher: 厚生労働省（介護サービス情報公表システム）
+source_page: https://www.mhlw.go.jp/stf/kaigo-kouhyou_opendata.html
+license:
+  terms_url: https://www.mhlw.go.jp/chosakuken/index.html
+  attribution: 出典：厚生労働省「介護サービス情報公表システム」オープンデータ（短期入所生活介護、2026年6月末時点）を加工して作成
+  notes: 介護サービス情報公表システムから抽出したデータであることを表示する。利用した場合は厚労省のフォームでの連絡が依頼されている。
+update_frequency: 年2回（6月末時点・12月末時点）
+verified: true
+verified_note: 2026-11-26に2026年6月末時点ファイル（11,275行×24列、UTF-8 BOM付き）で確認。事業所番号に重複なし、1,784の市区町村コード。
+files:
+- key: main
+  url: https://www.mhlw.go.jp/content/12300000/jigyosho_210_all_20260709180538.csv
+  as_of: 2026年6月末
+  format: csv
+  encoding: utf-8-sig
+columns:
+- source: 都道府県コード又は市町村コード
+  name: municipality_code
+  type: str
+  description: 事業所所在地の市町村コード（公表ページの注記による）。6桁（検査数字付き）。政令市は区のコード
+- source: 'No'
+  name: record_no
+  type: str
+  description: 介護保険事業所番号（公表ページの注記による。事業所番号の列と同じ値）
+- source: 都道府県名
+  name: pref_name
+  type: str
+- source: 市区町村名
+  name: municipality_name
+  type: str
+- source: 事業所名
+  name: office_name
+  type: str
+- source: 事業所名カナ
+  name: office_name_kana
+  type: str
+- source: サービスの種類
+  name: service_type
+  type: str
+- source: 住所
+  name: address
+  type: str
+- source: 方書（ビル名等）
+  name: address_building
+  type: str
+- source: 緯度
+  name: lat
+  type: float
+- source: 経度
+  name: lon
+  type: float
+- source: 電話番号
+  name: tel
+  type: str
+- source: FAX番号
+  name: fax
+  type: str
+- source: 法人番号
+  name: corporate_number
+  type: str
+- source: 法人の名称
+  name: corporate_name
+  type: str
+- source: 事業所番号
+  name: office_number
+  type: str
+  description: 10桁。先頭の0を保つため文字列
+- source: 利用可能曜日
+  name: available_days
+  type: str
+- source: 利用可能曜日特記事項
+  name: available_days_note
+  type: str
+- source: 定員
+  name: capacity
+  type: int
+  description: 0や空欄が多く、桁の大きすぎる値もあるため、供給量の代わりには使えない
+- source: URL
+  name: url
+  type: str
+- source: 高齢者の方と障害者の方が同時一体的に利用できるサービス
+  name: kyosei_service
+  type: str
+- source: 介護保険の通常の指定基準を満たしている
+  name: meets_kaigo_standard
+  type: str
+- source: 障害福祉の通常の指定基準を満たしている
+  name: meets_shogai_standard
+  type: str
+- source: 備考
+  name: remarks
+  type: str
+output: kaigo_jigyosho_210
+notes:
+- サービス種類ごとに別ファイル（短期入所生活介護はサービスコード210）。他のサービスは同じ形式で datasets/ に追加できる。
+- 2024年6月末以前はZIP形式で提供されている。
+- 政令指定都市は区単位のコードで収録されている。市単位で集計するときは chiiki_od.codes.ward_to_city を使う。
+- 緯度・経度が0の事業所が8件ある（未設定とみられる）。地図に載せるときは除く。
+- 事業所番号の3桁目は付番の区分（1：医療機関（医科）、3：歯科、5：介護老人保健施設、6：訪問看護ステーション、7：それ以外の介護保険事業所。介護医療院はBの例がある）。病院・診療所や老健のみなし指定の事業所は、医療機関等のコードがそのまま事業所番号になる。 このサービスでは 8・9・A の例もある（区分の公式な説明は未確認）。

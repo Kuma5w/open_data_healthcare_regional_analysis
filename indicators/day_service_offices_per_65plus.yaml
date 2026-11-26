@@ -1,0 +1,85 @@
+id: day_service_offices_per_65plus
+version: 0.1.0
+status: draft
+name: 65歳以上人口1万人あたり通所介護事業所数（地域密着型通所介護を含む）
+short_description: 高齢者が日中に通う通所介護（デイサービス）の拠点の多さを、市区町村ごとに同じ方法で比べる入口の指標
+unit_of_analysis: municipality
+unit_note: >
+  政令指定都市は市単位に集約する（介護保険の保険者が市であり、介護保険事業計画も市単位で立てるため）。
+  区単位で見たいときは --ward-level で出力できる。
+
+numerator:
+  description: 通所介護（サービスコード150）と地域密着型通所介護（サービスコード780。利用定員18人以下で市町村が指定）の事業所数の合計（サービスごとに事業所番号で重複を除く）。地域密着型は kaigo_jigyosho_780
+  dataset: kaigo_jigyosho_150
+  as_of: 2026年6月末
+denominator:
+  description: 65歳以上人口（総計＝日本人住民＋外国人住民）
+  dataset: population_jumin_r8
+  as_of: 2026年1月1日
+formula: 通所介護事業所数（地域密着型を含む） ÷ 65歳以上人口 × 10,000
+
+intent: >
+  在宅で暮らす高齢者の日中の通いの場（入浴・食事・機能訓練など）であり、家族の介護負担を軽くする通所介護の拠点が、
+  地域によってどれくらい偏っているかを比べるための入口の指標。地域医療構想策定ガイドラインは、高齢者救急の増加に伴い、
+  退院後の受け皿として介護保険施設や居宅サービスを適切に活用できる体制の整備を求めている。まず「通いの拠点が少ない地域」を見つける目的で作った。
+
+why_this_denominator: >
+  他の介護サービスの指標と分母を揃えた。地域密着型通所介護を含めたのは、利用定員18人以下の小規模な事業所が別のサービスコード（780）になっており、
+  通所介護（150）だけでは小規模な事業所が多い地域の拠点を少なく見積もるため。
+
+interpretation: >
+  値が大きいほど、65歳以上人口に対して通所介護の事業所が多い。地域密着型は1事業所の規模が小さいため、
+  地域密着型の割合が高い地域では、同じ値でも受け入れられる人数は少ないことがある（内訳の列で確かめる）。
+
+policy_questions:
+  - 日中の通いの場や家族の介護負担の軽減を支える拠点が少ない市区町村はどこか
+  - 退院後の在宅生活を支える居宅サービスの拠点が、地域でどれくらいあるか
+
+caveats:
+  - 通所介護と地域密着型通所介護の両方に同じ事業所番号で載る事業所が90件あり、それぞれのサービスで1件ずつ数えた（事業所番号は、同じ所在地で別のサービスの指定を受けるときに使い回されることがある）。
+  - 認知症対応型通所介護、通所リハビリテーション（day_rehab_offices_per_65plus）は含まない。
+  - 地域密着型通所介護の利用は原則としてその市町村の住民に限られるが、通所介護は市区町村を越えた利用がある。
+  - 事業所数であり、職員数・利用定員・提供回数などの供給量は反映しない。「定員」列は0や空欄が多く、桁の大きすぎる値もあるため、供給量の代わりには使えない。
+  - 事業所の所在市区町村で数えている（公表ページの注記では「事業所所在地の市町村コード」）。市区町村の境界を越えた利用は反映しない。
+  - 介護サービス情報公表システムに載っている事業所だけを数える。休止中の事業所が含まれるかどうかは未確認。
+  - 分子（2026年6月末）と分母（2026年1月1日）の時点がずれている。
+  - 市町村合併をまたぐ年の比較では、reference/ の対応表で現在のコードに揃える。
+
+alternatives:
+  - id: day_rehab_offices_per_65plus
+    reason: リハビリテーションを目的とした通いの拠点と並べて見る
+  - id: short_stay_offices_per_65plus
+    reason: 家族の介護負担の軽減を支える短期入所と並べて見る
+
+authors:
+  - name: H.I.
+
+script: indicators/day_service_offices_per_65plus.py
+
+output:
+  area_code: municipality_code5
+  area_name: municipality_name
+  value: offices_per_10k_65plus
+  numerator: offices
+  denominator: pop_65plus
+  scale: 10000
+  digits: 3
+  unit: 事業所／65歳以上人口1万人
+  columns:
+    - {name: municipality_code5, label: 市区町村コード}
+    - {name: municipality_name, label: 市区町村名}
+    - {name: offices, label: 通所介護事業所数（地域密着型を含む）, unit: 事業所}
+    - {name: offices_regular, label: うち通所介護（150）, unit: 事業所}
+    - {name: offices_community, label: うち地域密着型通所介護（780）, unit: 事業所}
+    - {name: pop_65plus, label: 65歳以上人口, unit: 人}
+    - {name: offices_per_10k_65plus, label: 65歳以上人口1万人あたり事業所数, unit: 事業所／1万人}
+
+references:
+  - title: 介護サービス情報の公表システムデータのオープンデータ（厚生労働省）
+    url: https://www.mhlw.go.jp/stf/kaigo-kouhyou_opendata.html
+  - title: 住民基本台帳に基づく人口、人口動態及び世帯数（総務省）
+    url: https://www.soumu.go.jp/main_sosiki/jichi_gyousei/daityo/jinkou_jinkoudoutai-setaisuu.html
+  - title: 地域医療構想策定ガイドライン（厚生労働省医政局）在宅医療・介護との連携の章
+
+created: "2026-11-26"
+updated: "2026-11-26"

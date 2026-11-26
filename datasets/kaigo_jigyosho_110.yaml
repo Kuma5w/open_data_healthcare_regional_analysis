@@ -19,10 +19,11 @@ columns:
 - source: 都道府県コード又は市町村コード
   name: municipality_code
   type: str
-  description: 6桁（検査数字付き）。政令市は区のコード。住所・市区町村名と照合した範囲では事業所の所在市区町村（公式の項目定義は未確認）
+  description: 事業所所在地の市町村コード（公表ページの注記による）。6桁（検査数字付き）。政令市は区のコード
 - source: 'No'
   name: record_no
   type: str
+  description: 介護保険事業所番号（公表ページの注記による。事業所番号の列と同じ値）
 - source: 都道府県名
   name: pref_name
   type: str

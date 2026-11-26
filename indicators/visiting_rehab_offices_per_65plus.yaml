@@ -1,0 +1,86 @@
+id: visiting_rehab_offices_per_65plus
+version: 0.1.0
+status: draft
+name: 65歳以上人口1万人あたり訪問リハビリテーション事業所数
+short_description: 自宅でリハビリテーションを受けられる拠点の多さを、市区町村ごとに同じ方法で比べる入口の指標
+unit_of_analysis: municipality
+unit_note: >
+  政令指定都市は市単位に集約する（介護保険の保険者が市であり、介護保険事業計画も市単位で立てるため）。
+  区単位で見たいときは --ward-level で出力できる。
+
+numerator:
+  description: 訪問リハビリテーション事業所数（事業所番号で重複を除いた件数。病院・診療所・介護老人保健施設・介護医療院が行うもの）
+  dataset: kaigo_jigyosho_140
+  as_of: 2026年6月末
+denominator:
+  description: 65歳以上人口（総計＝日本人住民＋外国人住民）
+  dataset: population_jumin_r8
+  as_of: 2026年1月1日
+formula: 訪問リハビリテーション事業所数 ÷ 65歳以上人口 × 10,000
+
+intent: >
+  退院後や在宅療養中の高齢者が、自宅でリハビリテーションを受けられる拠点の分布を比べるための入口の指標。
+  地域医療構想策定ガイドラインは、高齢者救急が増える中で早期の在宅復帰を進めるため、退院後早期から多職種の支援が切れ目なく提供されることを求め、
+  在宅医療の多職種連携の一つに訪問リハビリテーションを挙げている。まず「拠点が少ない地域」を見つける目的で作った。
+
+why_this_denominator: >
+  訪問介護・訪問看護など他の介護サービスの指標と分母を揃え、並べて比べられるようにした。
+  利用者の多くは高齢者だが、要介護認定者数や、退院患者数（病床機能報告）に対する数で見る方が需要に近い場合もある。
+
+interpretation: >
+  値が大きいほど、65歳以上人口に対して訪問リハビリテーションの事業所が多い。全国の事業所のおよそ7割は病院・診療所、
+  2割は介護老人保健施設・介護医療院が担っており（事業所番号の区分による）、医療機関の分布の影響を強く受ける。
+  理学療法士などの人数や訪問回数は反映しない。
+
+policy_questions:
+  - 退院後に自宅でリハビリテーションを続けられる拠点が少ない市区町村はどこか
+  - 回復期・包括期の病床が多い地域で、退院後の訪問リハビリテーションの拠点があるか
+
+caveats:
+  - 全国で5,067事業所と少なく、事業所が0の市区町村が多い（630）。市区町村単位では値が不安定なので、構想区域など広い単位で合わせて見ることも検討する。
+  - 提供主体の内訳（「うち病院・診療所」「うち介護老人保健施設・介護医療院」）は事業所番号の3桁目（1・3、5・B）による。3桁目が7の事業所にも病院や老健の名前のものがあり、内訳はおおよその目安。
+  - 医療保険で行う訪問リハビリテーション（在宅患者訪問リハビリテーション指導管理料など）は、介護保険の事業所の一覧ではとらえられない。
+  - 事業所数であり、職員数・利用定員・提供回数などの供給量は反映しない。「定員」列は0や空欄が多く、桁の大きすぎる値もあるため、供給量の代わりには使えない。
+  - 事業所の所在市区町村で数えている（公表ページの注記では「事業所所在地の市町村コード」）。市区町村の境界を越えた利用は反映しない。
+  - 介護サービス情報公表システムに載っている事業所だけを数える。休止中の事業所が含まれるかどうかは未確認。
+  - 分子（2026年6月末）と分母（2026年1月1日）の時点がずれている。
+  - 市町村合併をまたぐ年の比較では、reference/ の対応表で現在のコードに揃える。
+
+alternatives:
+  - id: day_rehab_offices_per_65plus
+    reason: 通いで受けるリハビリテーションの拠点と並べて見る
+  - id: visiting_nursing_offices_per_65plus
+    reason: 訪問看護の拠点と並べて見る（訪問看護ステーションの理学療法士等による訪問もある）
+
+authors:
+  - name: H.I.
+
+script: indicators/visiting_rehab_offices_per_65plus.py
+
+output:
+  area_code: municipality_code5
+  area_name: municipality_name
+  value: offices_per_10k_65plus
+  numerator: offices
+  denominator: pop_65plus
+  scale: 10000
+  digits: 3
+  unit: 事業所／65歳以上人口1万人
+  columns:
+    - {name: municipality_code5, label: 市区町村コード}
+    - {name: municipality_name, label: 市区町村名}
+    - {name: offices, label: 訪問リハビリテーション事業所数, unit: 事業所}
+    - {name: offices_medical, label: うち病院・診療所（事業所番号の区分による）, unit: 事業所}
+    - {name: offices_roken, label: うち介護老人保健施設・介護医療院（事業所番号の区分による）, unit: 事業所}
+    - {name: pop_65plus, label: 65歳以上人口, unit: 人}
+    - {name: offices_per_10k_65plus, label: 65歳以上人口1万人あたり事業所数, unit: 事業所／1万人}
+
+references:
+  - title: 介護サービス情報の公表システムデータのオープンデータ（厚生労働省）
+    url: https://www.mhlw.go.jp/stf/kaigo-kouhyou_opendata.html
+  - title: 住民基本台帳に基づく人口、人口動態及び世帯数（総務省）
+    url: https://www.soumu.go.jp/main_sosiki/jichi_gyousei/daityo/jinkou_jinkoudoutai-setaisuu.html
+  - title: 地域医療構想策定ガイドライン（厚生労働省医政局）在宅医療・介護との連携の章
+
+created: "2026-11-26"
+updated: "2026-11-26"

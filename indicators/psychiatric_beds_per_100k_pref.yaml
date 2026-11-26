@@ -1,5 +1,5 @@
 id: psychiatric_beds_per_100k_pref
-version: 0.1.0
+version: 0.1.1
 status: draft
 name: 都道府県ごとの人口10万人あたり精神病床数
 short_description: 精神病床（許可病床）が人口に対してどれくらいあるかを、都道府県ごとに比べる
@@ -39,6 +39,8 @@ caveats:
   - 人口は住民基本台帳（2026年1月1日）の総数。調査の時点（2025年6月30日）と半年ずれる。ほかの人口あたりの指標とそろえた。
 
 alternatives:
+  - id: psychiatric_beds_per_100k_koso
+    reason: 構想区域ごとに見る（医療施設調査の市区町村別の精神病床数をまとめる）
   - id: psychiatric_inpatients_per_100k_pref
     reason: 病床ではなく、在院患者の数で見る
   - id: psychiatric_bed_occupancy_pref

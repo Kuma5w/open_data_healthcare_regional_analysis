@@ -291,3 +291,24 @@ def test_精神科の専門外来と救急の指標を選び分ける():
     )
     for (q, want), g in zip(cases, json.loads(r.stdout), strict=True):
         assert g["indicator"] == want, (q, g)
+
+
+def test_精神病床数の都道府県版と構想区域版を選び分ける():
+    inds = [
+        {"id": "pref", "name": "都道府県ごとの人口10万人あたり精神病床数"},
+        {"id": "koso", "name": "構想区域ごとの人口10万人あたり精神病床数"},
+        {"id": "occupancy", "name": "都道府県ごとの精神病床の利用率"},
+        {"id": "hosp_koso", "name": "構想区域ごとの人口10万人あたり病院数"},
+    ]
+    units = {"pref": "prefecture", "koso": "koso_kuiki", "occupancy": "prefecture", "hosp_koso": "koso_kuiki"}
+    ctx = {"prefectures": codes.PREFECTURES, "indicators": inds, "units": units,
+           "areas": {k: (KOSO if u == "koso_kuiki" else []) for k, u in units.items()}}
+    qs = ["構想区域ごとの精神病床数を千葉県で", "精神病床数を出して"]
+    r = subprocess.run(
+        ["node", str(RUNNER)],
+        input=json.dumps({"ctx": ctx, "cases": [{"q": q, "current": None} for q in qs]}, ensure_ascii=False),
+        capture_output=True, text=True, encoding="utf-8", check=True,
+    )
+    koso, both = json.loads(r.stdout)
+    assert koso["indicator"] == "koso" and koso["pref"] == "12"
+    assert both["indicator"] is None and sorted(both["ties"]) == ["koso", "pref"]

@@ -21,7 +21,15 @@ def parse_bed_function_report(ds: dict):
     return parse_dataset(ds)
 
 
+def parse_medical_facility_survey(ds: dict):
+    """医療施設調査 二次医療圏・市区町村編（市区町村別の施設数・病床数）。詳細は chiiki_od.iryo_shisetsu。"""
+    from .iryo_shisetsu import parse_dataset
+
+    return parse_dataset(ds)
+
+
 PARSERS = {
     "population_jumin_age": parse_population_jumin_age,
     "bed_function_report": parse_bed_function_report,
+    "medical_facility_survey": parse_medical_facility_survey,
 }

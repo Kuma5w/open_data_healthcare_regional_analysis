@@ -450,7 +450,8 @@ function drawResult() {
     <button class="btn ghost" type="button" id="prt">印刷・PDFにする</button>
     <button class="btn ghost" type="button" id="ask-res">この結果について質問する</button>
   </div>
-  <p class="note np">CSVの見出しは日本語です。スクリプトの列名のままのCSVは <a href="${esc(doc.csv)}" download>${esc(doc.csv.split("/").pop())}</a>。Excelで開くとコードの先頭の0が消えることがあります。</p>
+  <p class="note" id="dl-st" role="status"></p>
+  <p class="note np">CSVの見出しは日本語です。スクリプトの列名のままのCSVは <a href="${esc(doc.csv)}" download id="raw-csv">${esc(doc.csv.split("/").pop())}</a>。Excelで開くとコードの先頭の0が消えることがあります。</p>
   <h4>${pref ? `${esc(v.region)}の表` : "都道府県ごとの表"}（${esc(SORTS[RS.sort])}）</h4>
   ${tableHtml(v)}
   ${reproHtml()}${recordHtml()}
@@ -462,6 +463,11 @@ function drawResult() {
   $("dl").addEventListener("click", () => downloadCsv(false));
   $("dl-pref")?.addEventListener("click", () => downloadCsv(true));
   $("prt").addEventListener("click", () => window.print());
+  $("raw-csv").addEventListener("click", async (e) => {
+    if (!DL) return;
+    e.preventDefault();
+    try { saveFile(doc.csv.split("/").pop(), await fetch(doc.csv).then((r) => r.text())); } catch (_) { $("dl-st").textContent = "CSVを読み込めませんでした。"; }
+  });
   $("ask-res").addEventListener("click", () => setFocus(c.id, true));
   bindBars(v);
 }
@@ -518,9 +524,19 @@ function downloadCsv(prefTable) {
     rows = list;
     name = `${c.id}_${RS.pref || "all"}.csv`;
   }
-  const text = "﻿" + [head, ...rows].map((r) => r.map(q).join(",")).join("\r\n") + "\r\n";
+  saveFile(name, "\ufeff" + [head, ...rows].map((r) => r.map(q).join(",")).join("\r\n") + "\r\n");
+}
+// claude.ai 上ではページから直接ダウンロードできないため、downloads の機能で保存する
+let DL = null;
+async function saveFile(name, data) {
+  const st = $("dl-st");
+  if (DL) {
+    try { await DL.save({ filename: name, data }); if (st) st.textContent = `${name} を保存しました。`; }
+    catch (e) { if (st) st.textContent = e?.code === "declined" ? "保存を取りやめました。" : e?.code === "rate_limited" ? "少し待ってからもう一度押してください。" : "この表示環境では保存できません。GitHub Pages のサイトから保存してください。"; }
+    return;
+  }
   const a = document.createElement("a");
-  a.href = URL.createObjectURL(new Blob([text], { type: "text/csv;charset=utf-8" }));
+  a.href = URL.createObjectURL(new Blob([data], { type: "text/csv;charset=utf-8" }));
   a.download = name; document.body.appendChild(a); a.click(); a.remove();
   setTimeout(() => URL.revokeObjectURL(a.href), 1000);
 }
@@ -781,7 +797,10 @@ dlg.addEventListener("close", () => {
   }
   route(); renderSug(); status();
   for (let i = 0; i < 6 && !(window.claude && window.claude.use); i++) await new Promise((r) => setTimeout(r, 300));
-  if (window.claude && window.claude.use) { try { sample = await window.claude.use("sample"); } catch (_) { sample = null; } }
+  if (window.claude && window.claude.use) {
+    try { sample = await window.claude.use("sample"); } catch (_) { sample = null; }
+    try { DL = await window.claude.use("downloads"); } catch (_) { DL = null; }
+  }
   status();
 })();
 }

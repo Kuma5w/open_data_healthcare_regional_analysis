@@ -35,9 +35,17 @@ def parse_kouseikyoku(ds: dict):
     return parse_dataset(ds)
 
 
+def parse_seishin630_facility(ds: dict):
+    """精神保健福祉資料（630調査）医療機関票 施設概要（都道府県・政令市別の集計表）。詳細は chiiki_od.seishin630。"""
+    from .seishin630 import parse_dataset
+
+    return parse_dataset(ds)
+
+
 PARSERS = {
     "population_jumin_age": parse_population_jumin_age,
     "bed_function_report": parse_bed_function_report,
     "medical_facility_survey": parse_medical_facility_survey,
     "kouseikyoku": parse_kouseikyoku,
+    "seishin630_facility": parse_seishin630_facility,
 }

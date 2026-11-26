@@ -1,0 +1,78 @@
+id: psychiatric_inpatients_per_100k_pref
+version: 0.1.0
+status: draft
+name: 都道府県ごとの人口10万人あたり精神病床の在院患者数
+short_description: 精神病床に入院している患者が人口に対してどれくらいいるかを、都道府県ごとに比べる
+unit_of_analysis: prefecture
+unit_note: 都道府県（政令指定都市の分を含む）。630調査の施設概要は都道府県と政令指定都市ごとの集計表で、構想区域や市区町村の値はない。
+
+numerator:
+  description: 精神病床を有する病院の在院患者数（2025年6月30日時点）。内訳として、医療保護入院患者数と措置入院患者数（緊急措置入院を含む）も出す
+  dataset: mental_health_630_facility_r7
+  as_of: 2025年6月30日
+denominator:
+  description: 総人口（住民基本台帳の総計）
+  dataset: population_jumin_r8
+  as_of: 2026年1月1日
+formula: 在院患者数 ÷ 総人口 × 100,000
+
+intent: >
+  改正医療法により、地域医療構想に精神医療が位置付けられた（地域医療構想策定ガイドライン Ⅰ-３）。国のワーキンググループで精神医療の地域医療構想のガイドラインが検討されている（2026年度中に結論の予定）。WG資料では、基準病床数の政策効果係数を、人口当たりの慢性期入院患者数が少ない県の水準と比べて決めている。人口当たりの入院患者数の地域差を、都道府県ごとに同じ方法で見るための指標。
+
+why_this_denominator: >
+  入院患者の数を人口で割り、地域の人口規模の違いをならした。精神疾患は全年齢に及ぶため総人口を分母にした。年齢構成の違い（高齢者の多い県では認知症の入院が多いなど）は調整していない。
+
+interpretation: >
+  値が大きいほど、人口に対して精神病床の入院患者が多い。入院の必要性が高い地域だけでなく、地域生活への移行が進んでいない地域でも大きくなりうる。入院期間（1年以上の長期入院など）はこの表にないので区別できない。
+
+policy_questions:
+  - 人口に対して精神病床の入院患者が多い都道府県はどこか
+  - 医療保護入院・措置入院の患者が人口に対して多い都道府県はどこか
+
+caveats:
+  - 630調査（精神保健福祉資料）の医療機関票の集計表で、令和7年6月30日の1日の状況。在院患者数・入院形態別の患者数もその日の人数。
+  - 公表されているのは都道府県と政令指定都市ごとの集計だけで、医療機関ごとの値や構想区域ごとの値はない。精神医療の地域医療構想をどの単位で考えるか（都道府県か構想区域か）は国のワーキンググループで検討中。
+  - 医療機関の所在地の都道府県で数えている。患者が都道府県をまたいで入院する流出入は反映しない。
+  - 都道府県の値には政令指定都市の分が含まれる。医療機関が提出した値の集計で、公表元は「提出票に矛盾する数値があると合計が一致しない場合がある」としている（令和7年度の施設概要では、都道府県の合計と全国の行、表どうしの内訳はすべて一致した）。
+  - 入院期間（3か月未満・1年以上など）や疾患の内訳はこの表にない。630調査の在院患者のクロス集計（公表ページで項目を選んで出力）にある。
+  - 年齢構成を調整していない。
+  - 人口は住民基本台帳（2026年1月1日）の総数。調査の時点（2025年6月30日）と半年ずれる。ほかの人口あたりの指標とそろえた。
+
+alternatives:
+  - id: psychiatric_beds_per_100k_pref
+    reason: 病床の量で見る
+  - id: psychiatric_bed_occupancy_pref
+    reason: 病床に対する在院患者の割合を見る
+
+authors:
+  - name: H.I.
+
+script: indicators/psychiatric_inpatients_per_100k_pref.py
+
+output:
+  area_code: pref_code
+  area_name: pref_name
+  value: inpatients_per_100k
+  numerator: inpatients
+  denominator: population
+  scale: 100000
+  digits: 1
+  unit: 人／人口10万人
+  columns:
+    - {name: pref_code, label: 都道府県コード}
+    - {name: pref_name, label: 都道府県名}
+    - {name: inpatients, label: 在院患者数, unit: 人}
+    - {name: inpatients_medical_protection, label: うち医療保護入院患者数, unit: 人}
+    - {name: inpatients_involuntary, label: うち措置入院患者数（緊急措置入院を含む）, unit: 人}
+    - {name: population, label: 総人口, unit: 人}
+    - {name: inpatients_per_100k, label: 人口10万人あたり在院患者数, unit: 人／10万人}
+
+references:
+  - title: 精神保健福祉資料（630調査）令和7年度 医療機関票 施設概要（国立精神・神経医療研究センター 精神保健研究所）
+    url: https://www.ncnp.go.jp/nimh/seisaku/data/630.html
+  - title: 地域医療構想策定ガイドライン（2026）Ⅰ-３ 精神医療に関する地域医療構想について
+  - title: 精神医療に関する地域医療構想の検討ワーキンググループ 資料（厚生労働省、令和8年11月）
+    url: https://www.mhlw.go.jp/content/10800000/001772794.pdf
+
+created: "2026-11-26"
+updated: "2026-11-26"

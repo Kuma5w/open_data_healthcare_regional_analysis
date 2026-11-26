@@ -1,0 +1,11 @@
+﻿table_no,table_name,level,area_code,area_name,facilities,beds_licensed,inpatients,inpatients_medical_protection,inpatients_involuntary,beds_involuntary_capable,beds_designated,psychiatrists_ft,psychiatrists_pt,designated_physicians_ft,designated_physicians_pt
+1,精神病床有_全病院,prefecture,43,熊本県,4,1000,850,400,6,120,20,30,10,20,5
+6,精神病床有_国立・都道府県立精神科病院等,prefecture,43,熊本県,1,100,60,30,3,100,0,10,2,8,1
+7,精神病床有_指定病院,prefecture,43,熊本県,2,600,540,300,2,20,20,15,6,9,3
+8,精神病床有_非指定病院,prefecture,43,熊本県,1,300,250,70,1,0,0,5,2,3,1
+1,精神病床有_全病院,prefecture,01,北海道,2,200,210,100,0,0,0,4,1,2,0
+6,精神病床有_国立・都道府県立精神科病院等,prefecture,01,北海道,0,0,0,0,0,0,0,0,0,0,0
+7,精神病床有_指定病院,prefecture,01,北海道,2,200,210,100,0,0,0,4,1,2,0
+8,精神病床有_非指定病院,prefecture,01,北海道,0,0,0,0,0,0,0,0,0,0,0
+1,精神病床有_全病院,national,00,全国,6,1200,1060,500,6,120,20,34,11,22,5
+1,精神病床有_全病院,designated_city,43100,熊本市,2,500,430,200,4,100,0,20,6,12,3

@@ -261,6 +261,8 @@ const fromHash = (h, list) => list.find((x) => toHash(x.id) === h);
 // サイトのファイルは毎回、新しい版があるか確かめて読む（GitHub Pages は最大10分キャッシュするため、公開直後に古い版が混ざるのを防ぐ）
 const getFile = (path) => fetch(path, { cache: "no-cache" });
 const gh = (path) => `${REPO}/blob/main/${path}`;
+// 感想・意見の Issue（.github/ISSUE_TEMPLATE/feedback.md）を開くリンク。title を渡すと件名に入れる
+const feedbackUrl = (title) => `${REPO}/issues/new?template=feedback.md${title ? "&title=" + encodeURIComponent(title) : ""}`;
 const safeUrl = (u) => (/^https?:\/\//.test(u || "") ? u : null);
 
 // ---- 簡易Markdown（docs の節の表示用） -------------------------------------
@@ -337,7 +339,8 @@ function viewIndicator(c, params) {
   <h3 id="caveats">注意点</h3><ul class="c">${(c.caveats || []).map((x) => `<li>${esc(x)}</li>`).join("")}</ul>
   ${alt ? `<h3>関連する指標</h3><ul class="c">${alt}</ul>` : ""}
   <h3>計算と出典</h3><ul class="c"><li><a href="${gh(c.script)}">計算スクリプト（${esc(c.script)}）</a></li><li><a href="${gh(`indicators/${c.id}.yaml`)}">指標カード（YAML）</a></li>${refs}</ul>
-  <p style="margin-top:20px"><button class="btn" type="button" id="ask-card">この指標について質問する</button></p>`;
+  <p style="margin-top:20px"><button class="btn" type="button" id="ask-card">この指標について質問する</button></p>
+  <p class="note"><a id="feedback-card" href="${esc(feedbackUrl(`［感想］${c.name}`))}">この指標への感想・意見を送る（GitHub の Issue。公開されます）</a></p>`;
   $("ask-card").addEventListener("click", () => setFocus(c.id, true));
   return loadResult(c, params || new URLSearchParams());
 }
@@ -863,6 +866,7 @@ function viewAbout() {
   <p>表示の切り替えは、右の窓口に「熊本県の結果を出して」「熊本市を表示して」「値の小さい順に並べて」のように書いてもできます。依頼の言葉はサイトが決まった規則で読み取るので、AIの設定がなくても使えます。</p>
   <h3>質問窓口のしくみ</h3><p>質問に近い指標カード・データの説明・列の見出しをこのサイトの中から探し、それだけを根拠にAIが答えます。根拠にした資料を回答の下に示します。カードに書かれていないことは「作成者の説明はありません」と答えます。</p>
   <p>接続先は「接続の設定」で選べます。claude.ai 上ではClaudeを、それ以外ではOpenAI互換のAPI（ローカルのOllamaなど）を使います。</p>
+  <h3>感想・意見を送る</h3><p>指標はすべて草案です。使ってみた感想、分かりにくかった点、指標の考え方への意見を歓迎します。<a id="feedback-about" href="${esc(feedbackUrl(""))}">GitHub の Issue「使ってみた感想・意見」</a>から送ってください（Issue は公開されます）。各指標のページの下にも、その指標への感想を送るリンクがあります。</p>
   <h3>指標を追加する</h3><p><a href="${REPO}">GitHubのリポジトリ</a>から、Issueで相談してプルリクエストを送ってください（<a href="${gh("CONTRIBUTING.md")}">貢献の手引き</a>）。</p>
   <p class="note">カタログの生成日時：<span class="num">${esc(CAT.generated_at)}</span></p>`;
 }

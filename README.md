@@ -6,15 +6,35 @@
 
 サイト：https://kuma5w.github.io/open_data_healthcare_regional_analysis/
 
-> 状態：v0.5。病床機能報告（令和7年度）の全5表と、住民基本台帳の年齢階級別人口（令和7年・令和8年）を変換できます。見本の指標は3つで、サイトの「結果を見る」から地域を選んで表・グラフ・地図・CSVを出せます。表示の切り替えは、質問窓口に「熊本県の結果を出して」と書いてもできます。
+> 状態（2026年11月）：データセット28、指標32。指標はすべて草案（`status: draft`）で、意見をもらいながら直していく段階です。サイトの「結果を見る」から地域を選んで、表・グラフ・地図・CSV・印刷用の1枚を出せます。表示の切り替えは、質問窓口に「熊本県の結果を出して」と書いてもできます。
 
-## 見本の指標
+## はじめての方へ
 
-| 指標 | 単位 | 使うデータ |
-|---|---|---|
-| [65歳以上人口1万人あたり訪問介護事業所数](indicators/homecare_offices_per_65plus.yaml) | 市区町村 | 介護サービス事業所（訪問介護）、住民基本台帳人口（令和8年） |
-| [構想区域ごとの回復期病床の割合](indicators/recovery_bed_share_koso.yaml) | 構想区域 | 病床機能報告 病棟票（令和7年度） |
-| [構想区域ごとの75歳以上人口10万人あたり回復期病床数](indicators/recovery_beds_per_100k_75plus_koso.yaml) | 構想区域 | 病床機能報告 病棟票、住民基本台帳人口（令和7年） |
+インストールしなくても、サイトだけで使えます。
+
+1. **サイトで指標を選ぶ**：[指標の一覧](https://kuma5w.github.io/open_data_healthcare_regional_analysis/)から、関心のある指標を開きます。
+2. **指標カードを読む**：作成者の意図、分子と分母、なぜその分母を選んだか、注意点が書いてあります。数値より先に、ここを読んでください。
+3. **結果を見る**：地域を選ぶと、表・グラフ・地図が出ます。CSV をダウンロードしたり、印刷用の1枚を出したりできます。
+4. **質問窓口に聞く**：指標の意味を、カードを根拠にAIが答えます。AIの接続先は各自で設定します（[docs/site.md](docs/site.md) の「質問窓口の接続先」）。「熊本県の結果を出して」のような表示の切り替えは、AIを設定しなくても使えます。
+5. **手元で再現する**：計算はすべてスクリプトで再現できます（下の「はじめかた」）。
+
+### 感想・意見を送る
+
+使ってみた感想、分かりにくかった点、指標の考え方への意見を歓迎します。[Issue の「使ってみた感想・意見」](https://github.com/Kuma5w/open_data_healthcare_regional_analysis/issues/new?template=feedback.md)から送ってください。Issue は公開されます。新しい指標の提案は「新しい指標の相談」のテンプレートを使ってください。
+
+## 指標の一覧
+
+| 分野 | 指標 | 単位 | 使うデータ |
+|---|---|---|---|
+| 病床 | [回復期病床の割合](indicators/recovery_bed_share_koso.yaml)、[75歳以上人口10万人あたり回復期病床数](indicators/recovery_beds_per_100k_75plus_koso.yaml) | 構想区域 | 病床機能報告（令和7年度）、住民基本台帳人口 |
+| 在宅医療等連携機能（作成者 D.S.） | 類型（P・S・C）の判定：[病院別](indicators/zaitaku_renkei_psc_hospital.yaml)・[構想区域別](indicators/zaitaku_renkei_psc_koso.yaml)、該当項目数の推移（FY2020〜2024）：[病院別](indicators/zaitaku_renkei_trend_hospital.yaml)・[構想区域別](indicators/zaitaku_renkei_trend_koso.yaml) | 病院（名前は伏せる）、構想区域 | 病床機能報告（令和3〜7年度）、外来機能報告（令和7年度）、地方厚生局の届出受理医療機関名簿 |
+| 医療施設 | 人口10万人あたりの[病院数](indicators/hospitals_per_100k.yaml)・[一般診療所数](indicators/general_clinics_per_100k.yaml)・[歯科診療所数](indicators/dental_clinics_per_100k.yaml)（市区町村）、同じく[病院数](indicators/hospitals_per_100k_koso.yaml)・[一般診療所数](indicators/general_clinics_per_100k_koso.yaml)・[歯科診療所数](indicators/dental_clinics_per_100k_koso.yaml)（構想区域） | 市区町村、構想区域 | 医療施設調査（令和7年）、住民基本台帳人口 |
+| 介護サービス | 65歳以上人口1万人あたり事業所数：[訪問介護](indicators/homecare_offices_per_65plus.yaml)・[訪問看護](indicators/visiting_nursing_offices_per_65plus.yaml)・[訪問リハビリテーション](indicators/visiting_rehab_offices_per_65plus.yaml)・[通所介護](indicators/day_service_offices_per_65plus.yaml)・[通所リハビリテーション](indicators/day_rehab_offices_per_65plus.yaml)・[短期入所生活介護](indicators/short_stay_offices_per_65plus.yaml) | 市区町村 | 介護サービス情報公表システム、住民基本台帳人口 |
+| 精神医療（病床・医師） | 人口10万人あたりの[精神病床数](indicators/psychiatric_beds_per_100k_pref.yaml)・[在院患者数](indicators/psychiatric_inpatients_per_100k_pref.yaml)・[精神科医師数](indicators/psychiatrists_per_100k_pref.yaml)、[精神病床の利用率](indicators/psychiatric_bed_occupancy_pref.yaml)、[措置入院受入可能病床の利用状況](indicators/involuntary_bed_use_pref.yaml) | 都道府県 | 精神保健福祉資料（630調査、令和7年度）、住民基本台帳人口 |
+| 精神医療（構想区域） | [人口10万人あたり精神病床数](indicators/psychiatric_beds_per_100k_koso.yaml) | 構想区域 | 医療施設調査（令和7年）、住民基本台帳人口 |
+| 精神医療（診療実績） | [精神科救急医療体制整備事業に参画する病院数](indicators/psy_emergency_hospitals_per_1m_pref.yaml)、専門外来を持つ病院数：[児童・思春期](indicators/child_adolescent_clinics_per_1m_pref.yaml)・[依存症](indicators/addiction_clinics_per_1m_pref.yaml)・[認知症](indicators/dementia_clinics_per_1m_pref.yaml)・[うつ病](indicators/depression_clinics_per_1m_pref.yaml)・[発達障害](indicators/developmental_clinics_per_1m_pref.yaml)・[摂食障害](indicators/eating_disorder_clinics_per_1m_pref.yaml)、[医療保護入院の1年時点の退院率](indicators/medical_protection_discharge_1y_pref.yaml) | 都道府県 | 精神保健福祉資料（630調査、令和7年度）、住民基本台帳人口 |
+
+人口あたりの指標の分母（総人口・65歳以上・75歳以上・20歳未満など）と、その理由は各カードに書いてあります。`chiiki-od list` でも一覧できます。
 
 ## 3つの約束
 
@@ -74,7 +94,15 @@ chiiki-od fetch bed_function_report_r7_form2_monthly --from-dir ~/Downloads/R7_h
 chiiki-od convert bed_function_report_r7_form2_monthly
 ```
 
-データセットごとの使い方と注意点は docs/datasets/ にあります（[病床機能報告](docs/datasets/bed_function_report.md)、[住民基本台帳人口](docs/datasets/population_jumin.md)）。
+データセットごとの使い方と注意点は docs/datasets/ にあります。
+
+- [病床機能報告](docs/datasets/bed_function_report.md)（令和3〜7年度。過年度の注意点は末尾）
+- [外来機能報告](docs/datasets/outpatient_function_report.md)
+- [地方厚生局の届出受理医療機関名簿](docs/datasets/kouseikyoku_todokede.md)
+- [介護サービス事業所](docs/datasets/kaigo_jigyosho.md)
+- [医療施設調査](docs/datasets/medical_facility_survey.md)
+- [精神保健福祉資料（630調査）](docs/datasets/mental_health_630.md)
+- [住民基本台帳人口](docs/datasets/population_jumin.md)
 
 ### 変換後のデータを直接使う
 
@@ -101,10 +129,10 @@ df <- read_parquet("data/processed/kaigo_jigyosho_110.parquet")
 ## 作業の進め方
 
 1. 雛形：構成・指標カードの型・共通対応表（済）
-2. データ3種（病床機能報告・介護事業所・人口）の変換と、見本の指標を3つ （済）
+2. データの変換と指標（済。データセット28・指標32）
 3. 指標カタログのサイトと解説チャットボット（済。[docs/site.md](docs/site.md)）
-4. ボタン出力：段階1（指標×地域を選んで、表・グラフ・CSV・印刷・再現の手順を出す）と、段階2（塗り分け地図、質問窓口からの地域の指定）は済
-5. 公開して、プルリクエストの受け付けを始める ← 次
+4. ボタン出力：表・グラフ・CSV・印刷・再現の手順、塗り分け地図、質問窓口からの地域の指定、推移のグラフ（済）
+5. 公開して、プルリクエストの受け付けを始める（公開済み。少数の研究者に試してもらい、感想をもとに直している ← いま）
 
 ## 出典とライセンス
 

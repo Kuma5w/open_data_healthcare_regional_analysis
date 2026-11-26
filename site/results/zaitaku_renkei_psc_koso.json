@@ -2,10 +2,10 @@
  "format": 1,
  "indicator": "zaitaku_renkei_psc_koso",
  "name": "在宅医療等連携機能の類型（P・S・C）に該当する病院の数（構想区域別）",
- "card_version": "0.1.0",
+ "card_version": "0.1.1",
  "script": "indicators/zaitaku_renkei_psc_koso.py",
  "script_sha256": "b16579c3e751633de1e57df8fc4e842623d174925dd8dc3f9eacebbb24acd4b0",
- "generated_at": "2026-11-26T07:01:04+00:00",
+ "generated_at": "2026-11-26T07:57:17+00:00",
  "sample": false,
  "options": {},
  "output": {
@@ -661,6 +661,404 @@
      "fetched_at": "2026-11-26T02:07:34+00:00",
      "obtained": "local_copy",
      "key": "main"
+    }
+   ]
+  },
+  {
+   "dataset": "bed_function_report_r7_form2_annual",
+   "title": "病床機能報告 令和7年度 様式2病棟票（年間合計）",
+   "publisher": "厚生労働省",
+   "source_page": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/open_data_00020.html",
+   "attribution": "出典：厚生労働省「令和7年度病床機能報告公表データ」（様式2病棟票）を加工して作成",
+   "manual_download": false,
+   "files": [
+    {
+     "url": "https://www.mhlw.go.jp/content/10800000/001717797.zip",
+     "as_of": "令和7年度",
+     "sha256": "cbcbbd613ba3320410d547518c3ae1296ffcdf5315a6cebc6937660f0f565ccb",
+     "fetched_at": "2026-11-26T02:37:01+00:00",
+     "obtained": "local_copy",
+     "key": "notes"
+    },
+    {
+     "url": "https://www.mhlw.go.jp/content/10800000/001717807.xlsx",
+     "as_of": "令和6年4月〜令和7年3月診療分",
+     "sha256": "f5da985cbf909013ca5dd0cf948f0cf11f577c16ef2bb0ee00b46d70ef7fdd3e",
+     "fetched_at": "2026-11-26T02:37:01+00:00",
+     "obtained": "local_copy",
+     "key": "main"
+    }
+   ]
+  },
+  {
+   "dataset": "outpatient_function_report_r7_form2",
+   "title": "外来機能報告 令和7年度 様式2（報告月0＝年間値、1〜12＝月別）",
+   "publisher": "厚生労働省",
+   "source_page": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/open_data_00021.html",
+   "attribution": "出典：厚生労働省「令和7年度外来機能報告の結果」（外来様式2）を加工して作成",
+   "manual_download": false,
+   "files": [
+    {
+     "url": "https://www.mhlw.go.jp/content/10800000/001724277.xlsx",
+     "as_of": "令和7年度",
+     "sha256": "adc4941ff1eb087be8bdf779d8c18d90ab6bd61e9c96e2ca5b491671fe11eb44",
+     "fetched_at": "2026-11-26T06:47:15+00:00",
+     "obtained": "local_copy",
+     "key": "definition"
+    },
+    {
+     "url": "https://www.mhlw.go.jp/content/10800000/001724280.xlsx",
+     "as_of": "令和6年4月〜令和7年3月診療分",
+     "sha256": "66de57e5335bd0cd9d35968d8050e97f7b41389c23be33dd7b4eb9caab4fce55",
+     "fetched_at": "2026-11-26T06:47:15+00:00",
+     "obtained": "local_copy",
+     "key": "main"
+    }
+   ]
+  },
+  {
+   "dataset": "kouseikyoku_todokede_ika_r8",
+   "title": "地方厚生局 届出受理医療機関名簿（医科）令和8年10・11月",
+   "publisher": "厚生労働省 地方厚生（支）局",
+   "source_page": "https://kouseikyoku.mhlw.go.jp/",
+   "attribution": "出典：各地方厚生（支）局「届出受理医療機関名簿」（令和8年10月1日・11月1日現在）を加工して作成",
+   "manual_download": true,
+   "files": [
+    {
+     "url": "https://kouseikyoku.mhlw.go.jp/hokkaido/",
+     "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+     "sha256": "f78f9d268a30e7788bef74ec28e4abee37deaa16781cac0b221f62ed678e8ea8",
+     "fetched_at": "2026-11-26T06:50:00+00:00",
+     "obtained": "local_copy",
+     "key": "p01"
+    },
+    {
+     "url": "https://kouseikyoku.mhlw.go.jp/tohoku/",
+     "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+     "sha256": "fc8f37cba4a300fae6ae5a90cc0939ed5fb38a010823952406f3eea4bb693844",
+     "fetched_at": "2026-11-26T06:50:00+00:00",
+     "obtained": "local_copy",
+     "key": "tohoku"
+    },
+    {
+     "url": "https://kouseikyoku.mhlw.go.jp/kantoshinetsu/",
+     "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+     "sha256": "6539daf862e951927cab9f86951bfcd9478f81bc2e833a5c95cd1ad2312b7955",
+     "fetched_at": "2026-11-26T06:50:00+00:00",
+     "obtained": "local_copy",
+     "key": "p08"
+    },
+    {
+     "url": "https://kouseikyoku.mhlw.go.jp/kantoshinetsu/",
+     "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+     "sha256": "70cbda78aeeae368434c0ed46d964886eba3ed988a9be7f308dbf317e6c90c40",
+     "fetched_at": "2026-11-26T06:50:00+00:00",
+     "obtained": "local_copy",
+     "key": "p09"
+    },
+    {
+     "url": "https://kouseikyoku.mhlw.go.jp/kantoshinetsu/",
+     "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+     "sha256": "e04b1d76cbbe50fd54770369614f231c191d6f9ea9d2782d5cb9327d0019f092",
+     "fetched_at": "2026-11-26T06:50:00+00:00",
+     "obtained": "local_copy",
+     "key": "p10"
+    },
+    {
+     "url": "https://kouseikyoku.mhlw.go.jp/kantoshinetsu/",
+     "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+     "sha256": "54c5ff2cf8b61771a91b66aad27bc10c14b3857cbb69f906336a4d7d7bfe9200",
+     "fetched_at": "2026-11-26T06:50:00+00:00",
+     "obtained": "local_copy",
+     "key": "p11"
+    },
+    {
+     "url": "https://kouseikyoku.mhlw.go.jp/kantoshinetsu/",
+     "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+     "sha256": "c0a06f6fb6e8292784f0547fce6fc95ed5fa56a5f76c89edb2ed2979c59a48a1",
+     "fetched_at": "2026-11-26T06:50:00+00:00",
+     "obtained": "local_copy",
+     "key": "p12"
+    },
+    {
+     "url": "https://kouseikyoku.mhlw.go.jp/kantoshinetsu/",
+     "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+     "sha256": "206f78d09eee977ea8cd76b81ce9bcdc63345191dd1b321f2f5bf05b8ba78364",
+     "fetched_at": "2026-11-26T06:50:00+00:00",
+     "obtained": "local_copy",
+     "key": "p13"
+    },
+    {
+     "url": "https://kouseikyoku.mhlw.go.jp/kantoshinetsu/",
+     "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+     "sha256": "5206cec47ffb773c88631e1957c553218e5b2fea5937563f1e0d684dcba49312",
+     "fetched_at": "2026-11-26T06:50:00+00:00",
+     "obtained": "local_copy",
+     "key": "p14"
+    },
+    {
+     "url": "https://kouseikyoku.mhlw.go.jp/kantoshinetsu/",
+     "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+     "sha256": "d4416073d997c410da4692ff31a9ede8c52c156e0b78fb784fe8b34b55398f4d",
+     "fetched_at": "2026-11-26T06:50:00+00:00",
+     "obtained": "local_copy",
+     "key": "p15"
+    },
+    {
+     "url": "https://kouseikyoku.mhlw.go.jp/kantoshinetsu/",
+     "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+     "sha256": "e7f5a00d70735534bb1483c563f1a8a15065c6b96b44150e83072b4820a80b95",
+     "fetched_at": "2026-11-26T06:50:00+00:00",
+     "obtained": "local_copy",
+     "key": "p19"
+    },
+    {
+     "url": "https://kouseikyoku.mhlw.go.jp/kantoshinetsu/",
+     "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+     "sha256": "01d39b7a1725c8df33c3a41919402bdace863b583ca1859fc1ebb057acaeb516",
+     "fetched_at": "2026-11-26T06:50:00+00:00",
+     "obtained": "local_copy",
+     "key": "p20"
+    },
+    {
+     "url": "https://kouseikyoku.mhlw.go.jp/tokaihokuriku/",
+     "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+     "sha256": "ed87d91fb610814bc4a5f6f2a3534e50c7542883a9c1bcb19493a6887aeb9de6",
+     "fetched_at": "2026-11-26T06:50:00+00:00",
+     "obtained": "local_copy",
+     "key": "p16"
+    },
+    {
+     "url": "https://kouseikyoku.mhlw.go.jp/tokaihokuriku/",
+     "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+     "sha256": "a5fe5ab30e5c7be59b7174932f1cbc0f9691a51db0fb26b854bb34ca0dd81693",
+     "fetched_at": "2026-11-26T06:50:00+00:00",
+     "obtained": "local_copy",
+     "key": "p17"
+    },
+    {
+     "url": "https://kouseikyoku.mhlw.go.jp/tokaihokuriku/",
+     "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+     "sha256": "94af9c9f90c0aeace516760627f6ed645be1a90c096209423114221ab4bff01d",
+     "fetched_at": "2026-11-26T06:50:00+00:00",
+     "obtained": "local_copy",
+     "key": "p21"
+    },
+    {
+     "url": "https://kouseikyoku.mhlw.go.jp/tokaihokuriku/",
+     "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+     "sha256": "629d0eda06db289561e592b2a8fe41000d9ea8f1042bc05de0381531b7f9ee11",
+     "fetched_at": "2026-11-26T06:50:00+00:00",
+     "obtained": "local_copy",
+     "key": "p22"
+    },
+    {
+     "url": "https://kouseikyoku.mhlw.go.jp/tokaihokuriku/",
+     "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+     "sha256": "a4c6264878f155e64ae497cef236a4f73518a54b8cf72257ce90f78012dbed3e",
+     "fetched_at": "2026-11-26T06:50:00+00:00",
+     "obtained": "local_copy",
+     "key": "p23"
+    },
+    {
+     "url": "https://kouseikyoku.mhlw.go.jp/tokaihokuriku/",
+     "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+     "sha256": "29aec03e38a6ddafc5d70a5fbaff7cb883da169a4bf5199128256be1984c90fc",
+     "fetched_at": "2026-11-26T06:50:00+00:00",
+     "obtained": "local_copy",
+     "key": "p24"
+    },
+    {
+     "url": "https://kouseikyoku.mhlw.go.jp/kinki/",
+     "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+     "sha256": "ef5a6e6ccb7f17b5d3994c0038dc0bc2321abc730fe95d52aa92a78f78445e72",
+     "fetched_at": "2026-11-26T06:50:00+00:00",
+     "obtained": "local_copy",
+     "key": "p18"
+    },
+    {
+     "url": "https://kouseikyoku.mhlw.go.jp/kinki/",
+     "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+     "sha256": "1e8d2fab9c1eb72c6be1053d9a54950edf294d629975341520be8a20e60626ba",
+     "fetched_at": "2026-11-26T06:50:00+00:00",
+     "obtained": "local_copy",
+     "key": "p25"
+    },
+    {
+     "url": "https://kouseikyoku.mhlw.go.jp/kinki/",
+     "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+     "sha256": "341644f18a08365e8fae3bbc4c28e952f1724e9cd35e303622be5f48969f7226",
+     "fetched_at": "2026-11-26T06:50:00+00:00",
+     "obtained": "local_copy",
+     "key": "p26"
+    },
+    {
+     "url": "https://kouseikyoku.mhlw.go.jp/kinki/",
+     "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+     "sha256": "cb66e110b825800313a516bfb0fd9d09252ec3fc38d3bf419e4f9d38f93a2d50",
+     "fetched_at": "2026-11-26T06:50:00+00:00",
+     "obtained": "local_copy",
+     "key": "p27"
+    },
+    {
+     "url": "https://kouseikyoku.mhlw.go.jp/kinki/",
+     "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+     "sha256": "156a4bdc35b46555a14ee64e45952cd58a7dfac1999e0e11a9cb58f33a2a3a95",
+     "fetched_at": "2026-11-26T06:50:00+00:00",
+     "obtained": "local_copy",
+     "key": "p28"
+    },
+    {
+     "url": "https://kouseikyoku.mhlw.go.jp/kinki/",
+     "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+     "sha256": "62b7340629b924113ab1a741275e0e7d98206063acda6ddedab34d1fccb56b6e",
+     "fetched_at": "2026-11-26T06:50:00+00:00",
+     "obtained": "local_copy",
+     "key": "p29"
+    },
+    {
+     "url": "https://kouseikyoku.mhlw.go.jp/kinki/",
+     "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+     "sha256": "66bacff60871734b6d63626139b99dc7d85ded8bf8b02be35e7487f23f16664d",
+     "fetched_at": "2026-11-26T06:50:00+00:00",
+     "obtained": "local_copy",
+     "key": "p30"
+    },
+    {
+     "url": "https://kouseikyoku.mhlw.go.jp/chugokushikoku/",
+     "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+     "sha256": "57fe1ef56d9b1da96fdf59867fc9b8ff8d07dbd7a26e8c01b4c46fc413d88a41",
+     "fetched_at": "2026-11-26T06:50:00+00:00",
+     "obtained": "local_copy",
+     "key": "p31"
+    },
+    {
+     "url": "https://kouseikyoku.mhlw.go.jp/chugokushikoku/",
+     "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+     "sha256": "508f3e8f93de7455b42768e7c01c77a549e693c7de6f0f514f769902e26d865b",
+     "fetched_at": "2026-11-26T06:50:00+00:00",
+     "obtained": "local_copy",
+     "key": "p32"
+    },
+    {
+     "url": "https://kouseikyoku.mhlw.go.jp/chugokushikoku/",
+     "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+     "sha256": "6a065df35a0701acaf8883af517d172dbd571185df2b6204c4f9a581587dc888",
+     "fetched_at": "2026-11-26T06:50:00+00:00",
+     "obtained": "local_copy",
+     "key": "p33"
+    },
+    {
+     "url": "https://kouseikyoku.mhlw.go.jp/chugokushikoku/",
+     "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+     "sha256": "1d9ddec3472313596790e51f3b0301147afc0343f908adbd90940764f5278b94",
+     "fetched_at": "2026-11-26T06:50:00+00:00",
+     "obtained": "local_copy",
+     "key": "p34"
+    },
+    {
+     "url": "https://kouseikyoku.mhlw.go.jp/chugokushikoku/",
+     "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+     "sha256": "0a7f99d858f2abdd85ca5ebb4b0752efedc28df94aaeae4bfc686e4b735c7a2c",
+     "fetched_at": "2026-11-26T06:50:00+00:00",
+     "obtained": "local_copy",
+     "key": "p35"
+    },
+    {
+     "url": "https://kouseikyoku.mhlw.go.jp/shikoku/",
+     "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+     "sha256": "3d48eef599967bbf5db73ad0e59b047be556aa7b04692eb6e286141b553344a5",
+     "fetched_at": "2026-11-26T06:50:00+00:00",
+     "obtained": "local_copy",
+     "key": "p36"
+    },
+    {
+     "url": "https://kouseikyoku.mhlw.go.jp/shikoku/",
+     "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+     "sha256": "a4352f36f7cfabaca4a5b09155908ca4110caa547957bb011ea406679a8d0e10",
+     "fetched_at": "2026-11-26T06:50:00+00:00",
+     "obtained": "local_copy",
+     "key": "p37"
+    },
+    {
+     "url": "https://kouseikyoku.mhlw.go.jp/shikoku/",
+     "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+     "sha256": "ca640aca98301a39a37605796158ca889bbb240793abf6a3ed3f209136fe475b",
+     "fetched_at": "2026-11-26T06:50:00+00:00",
+     "obtained": "local_copy",
+     "key": "p38"
+    },
+    {
+     "url": "https://kouseikyoku.mhlw.go.jp/shikoku/",
+     "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+     "sha256": "7aceec8daa396b43b42bcd3c93a6d52bdcdf2cb1abc2f022675c572d886ed89b",
+     "fetched_at": "2026-11-26T06:50:00+00:00",
+     "obtained": "local_copy",
+     "key": "p39"
+    },
+    {
+     "url": "https://kouseikyoku.mhlw.go.jp/kyushu/",
+     "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+     "sha256": "8aba19ebb1a46605ad614d205762b9c54c2b1198bd394bb26850d6e02e8ce8b9",
+     "fetched_at": "2026-11-26T06:50:00+00:00",
+     "obtained": "local_copy",
+     "key": "p40"
+    },
+    {
+     "url": "https://kouseikyoku.mhlw.go.jp/kyushu/",
+     "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+     "sha256": "6a37900edaf2c5cc4b9180f4e73a4924514521b03c7ec1f60f82416fcdb55d06",
+     "fetched_at": "2026-11-26T06:50:00+00:00",
+     "obtained": "local_copy",
+     "key": "p41"
+    },
+    {
+     "url": "https://kouseikyoku.mhlw.go.jp/kyushu/",
+     "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+     "sha256": "e0f47268c1be1a8393e4b2e4bfc9b65e6f35ae2cc315d570a6d6adf6bc8ba610",
+     "fetched_at": "2026-11-26T06:50:00+00:00",
+     "obtained": "local_copy",
+     "key": "p42"
+    },
+    {
+     "url": "https://kouseikyoku.mhlw.go.jp/kyushu/",
+     "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+     "sha256": "031d1c6de7aebffd52b6fa25a443d65af122002aa49fd426eb9565a802c8adb6",
+     "fetched_at": "2026-11-26T06:50:00+00:00",
+     "obtained": "local_copy",
+     "key": "p43"
+    },
+    {
+     "url": "https://kouseikyoku.mhlw.go.jp/kyushu/",
+     "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+     "sha256": "f9230b0be8fe8412ccb4f600b7a7c74f0b127fe06758fb9c7b9fce65902c86e9",
+     "fetched_at": "2026-11-26T06:50:00+00:00",
+     "obtained": "local_copy",
+     "key": "p44"
+    },
+    {
+     "url": "https://kouseikyoku.mhlw.go.jp/kyushu/",
+     "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+     "sha256": "72cce2217e92330d49c517015e136fbdfa045eb2553b9eccf952f3a65ec10ec1",
+     "fetched_at": "2026-11-26T06:50:00+00:00",
+     "obtained": "local_copy",
+     "key": "p45"
+    },
+    {
+     "url": "https://kouseikyoku.mhlw.go.jp/kyushu/",
+     "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+     "sha256": "35419953636a780c632f0a37b9451783a18d7ad983fd5299b93f80af67795dce",
+     "fetched_at": "2026-11-26T06:50:00+00:00",
+     "obtained": "local_copy",
+     "key": "p46"
+    },
+    {
+     "url": "https://kouseikyoku.mhlw.go.jp/kyushu/",
+     "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+     "sha256": "8887c6a80fae3bacaf77b216b8706f846d0d69e8c108b6d21b36a83e99dd0fc4",
+     "fetched_at": "2026-11-26T06:50:00+00:00",
+     "obtained": "local_copy",
+     "key": "p47"
     }
    ]
   }

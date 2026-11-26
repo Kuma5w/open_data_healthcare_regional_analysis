@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-26T07:02:40+00:00",
+  "generated_at": "2026-11-26T07:58:16+00:00",
   "repo_url": "https://github.com/Kuma5w/open_data_healthcare_regional_analysis",
   "pages_url": "https://kuma5w.github.io/open_data_healthcare_regional_analysis/",
   "indicators": [
@@ -1571,7 +1571,7 @@
     },
     {
       "id": "zaitaku_renkei_psc_hospital",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "status": "draft",
       "name": "在宅医療等連携機能の類型（P・S・C）と星取り表（病院別）",
       "short_description": "病院ごとに在宅医療に関わる18項目を実数の基準と比べ、P・S・Cの3類型を判定し、どの項目を満たすかを○×で示す",
@@ -1587,6 +1587,12 @@
         "dataset": "bed_function_report_r7_ward",
         "as_of": "令和6年度実績"
       },
+      "datasets": [
+        "bed_function_report_r7_facility",
+        "bed_function_report_r7_form2_annual",
+        "outpatient_function_report_r7_form2",
+        "kouseikyoku_todokede_ika_r8"
+      ],
       "formula": "項目ごとに「件数の基準以上、または割合の基準以上」で○。P 6項目中3以上・S 7項目中4以上・C 5項目中3以上で類型に該当（複数は併記、なしは「—」）",
       "intent": "新たな地域医療構想で病院に求められる「在宅医療等連携機能」を、病院ごとに、実数で説明できる形で評価するための指標。 病床機能報告・外来機能報告・厚生局の届出から在宅医療に関わる18項目をとり、項目ごとに実数の基準と比べて、 P（自院で在宅医療を実施）・S（在宅療養の後方支援）・C（介護施設等との連携）の3つの「在宅医療機能の類型」を判定する。 類型だけでなく、病院×18項目の○×（星取り表）を必ず示し、どの項目が足りないかを見えるようにする。 千葉県のR7報告（256病院）で、地域医療構想の調整会議に出す資料として確定した方法を、全国に同じ基準で当てはめた。\n",
       "why_this_denominator": "県内順位（パーセンタイル）や総合スコアは使わず、項目ごとに実数の基準を置いた。実数の大きさで評価する方が説明しやすいため。 基準は件数が主で、割合は「または」の条件にした。小規模病院を拾うため。件数の少ない項目には割合の基準を置いていない。 割合の分母は、P4・S1・S3が退院患者数（病棟票「当該病棟から退院した患者数」）、C1が新規入棟患者数、C2・C3が退棟患者数。 看取りは2つに分け、医療機関以外での看取りをP、医療機関での看取りをCに入れた。 基準値は、診療報酬に実績要件があるものはそれを年換算し（地域包括ケア病棟の在宅医療等の実績、機能強化型在宅療養支援病院の要件）、 ないものは千葉県で実績のある病院（値＞0）の中央値を丸めた値。全国でも千葉県R7の基準値をそのまま使っている（全国の中央値で置き直すと結果は変わる）。\n",
@@ -1613,6 +1619,10 @@
         {
           "id": "zaitaku_renkei_psc_koso",
           "reason": "構想区域ごとに、類型に該当する病院の数を数える（地図に載る）"
+        },
+        {
+          "id": "zaitaku_renkei_trend_hospital",
+          "reason": "病院ごとの、毎年追える11項目の該当数の推移（FY2020〜2024）"
         }
       ],
       "authors": [
@@ -1865,7 +1875,7 @@
     },
     {
       "id": "zaitaku_renkei_psc_koso",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "status": "draft",
       "name": "在宅医療等連携機能の類型（P・S・C）に該当する病院の数（構想区域別）",
       "short_description": "在宅医療等連携機能のP・S・Cのいずれかの類型に該当する病院が、構想区域ごとにいくつあるかを数える",
@@ -1881,6 +1891,12 @@
         "dataset": "bed_function_report_r7_facility",
         "as_of": "令和7年7月1日"
       },
+      "datasets": [
+        "bed_function_report_r7_facility",
+        "bed_function_report_r7_form2_annual",
+        "outpatient_function_report_r7_form2",
+        "kouseikyoku_todokede_ika_r8"
+      ],
       "formula": "構想区域ごとに、類型に該当する病院の数を数える",
       "intent": "新たな地域医療構想で病院に求められる「在宅医療等連携機能」を、病院ごとに実数で評価し、その結果を構想区域ごとにまとめる指標。 病床機能報告・外来機能報告・厚生局の届出から在宅医療に関わる18項目をとり、項目ごとに実数の基準と比べて、 P（自院で在宅医療を実施）・S（在宅療養の後方支援）・C（介護施設等との連携）の3つの「在宅医療機能の類型」を判定する。 類型だけでなく、病院×18項目の○×（星取り表）を必ず示し、どの項目が足りないかを見えるようにする。 千葉県のR7報告（256病院）で、地域医療構想の調整会議に出す資料として確定した方法を、全国に同じ基準で当てはめた。 構想区域ごとに、どの類型の病院がいくつあるか（Pはあるが S がない、など）を調整会議で議論する出発点にする。\n",
       "why_this_denominator": "県内順位（パーセンタイル）や総合スコアは使わず、項目ごとに実数の基準を置いた。実数の大きさで評価する方が説明しやすいため。 基準は件数が主で、割合は「または」の条件にした。小規模病院を拾うため。件数の少ない項目には割合の基準を置いていない。 割合の分母は、P4・S1・S3が退院患者数（病棟票「当該病棟から退院した患者数」）、C1が新規入棟患者数、C2・C3が退棟患者数。 看取りは2つに分け、医療機関以外での看取りをP、医療機関での看取りをCに入れた。 基準値は、診療報酬に実績要件があるものはそれを年換算し（地域包括ケア病棟の在宅医療等の実績、機能強化型在宅療養支援病院の要件）、 ないものは千葉県で実績のある病院（値＞0）の中央値を丸めた値。全国でも千葉県R7の基準値をそのまま使っている（全国の中央値で置き直すと結果は変わる）。 区域の値は、D.S.氏の医療圏別サマリーと同じく病院の数そのもの。人口や対象病院数で割った値は作っていない。\n",
@@ -1906,6 +1922,10 @@
         {
           "id": "zaitaku_renkei_psc_hospital",
           "reason": "病院ごとの類型と18項目の○×（星取り表）を見る"
+        },
+        {
+          "id": "zaitaku_renkei_trend_koso",
+          "reason": "構想区域ごとの、毎年追える11項目の1病院あたり該当数の推移（FY2020〜2024）"
         }
       ],
       "authors": [
@@ -1987,9 +2007,590 @@
       ],
       "created": "2026-11-26",
       "updated": "2026-11-26"
+    },
+    {
+      "id": "zaitaku_renkei_trend_hospital",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": "在宅医療等連携機能の該当項目数の推移（病院別、FY2020〜2024）",
+      "short_description": "P・S・C判定の18項目のうち病床機能報告で毎年追える11項目について、病院ごとに満たした項目の数と○×を年度ごとに示す",
+      "unit_of_analysis": "facility",
+      "unit_note": "1行＝病院×年度（実績年度。FY2020＝令和3年度報告 … FY2024＝令和7年度報告）。対象は令和7年度のP・S・C判定の対象病院と、 過年度でそれにつながる病院（オープンデータ医療機関コード、医療機関コード（医科）、法人名を除いた名称の順で照合）。 病院名と医療機関コードは載せず、番号と伏せた名前（「区域名・A病院」）はP・S・C判定の病院別の指標と同じ。 表と都道府県の値は最新の年度（FY2024）、推移のグラフはすべての年度。地図には載らない。\n",
+      "numerator": {
+        "description": "11項目（P4、S1〜S6、C1〜C4）のうち、基準を満たした項目の数。判定の基準は P・S・C判定（zaitaku_renkei_psc_hospital）と同じ",
+        "dataset": "bed_function_report_r7_ward",
+        "as_of": "各年度の7月1日（病床）・前年度の実績"
+      },
+      "denominator": {
+        "description": "割合の基準の分母。P4・S1・S3は退院患者数、C1は新規入棟患者数、C2・C3は退棟患者数（いずれも各年度の病棟票、病院ごとに合計）",
+        "dataset": "bed_function_report_r7_ward",
+        "as_of": "各年度の前年度の実績"
+      },
+      "datasets": [
+        "bed_function_report_r7_facility",
+        "bed_function_report_r7_form2_monthly",
+        "bed_function_report_r7_form2_annual",
+        "outpatient_function_report_r7_form2",
+        "kouseikyoku_todokede_ika_r8",
+        "bed_function_report_r6_ward",
+        "bed_function_report_r6_form2_monthly",
+        "bed_function_report_r5_ward",
+        "bed_function_report_r5_form2_monthly",
+        "bed_function_report_r4_ward",
+        "bed_function_report_r4_form2_monthly",
+        "bed_function_report_r3_ward",
+        "bed_function_report_r3_form2_monthly"
+      ],
+      "formula": "年度ごとに、項目ごとに「件数の基準以上、または割合の基準以上」で○。○の数（0〜11）が該当項目数",
+      "intent": "在宅医療等連携機能（P・S・C）の判定のうち、病床機能報告で毎年追える11項目を、令和7年度と同じ基準で各年度に当てはめ、 病院ごとに、在宅医療への関わりが5年度でどう変わったかを見るための指標。 千葉県で D.S.氏が調整会議の資料（病院別の該当項目数の推移）として作った方法を、全国に同じ基準で当てはめた。 届出（P5・S7）、外来機能報告の件数（P1〜P3）、看取り（P6・C5）は過年度を同じ形でそろえられないため含めない。 そのため類型（P・S・C）は年度ごとには判定せず、該当項目数と、項目ごとの○×で推移を見る。\n",
+      "why_this_denominator": "P・S・C判定と同じく、項目ごとに実数の基準を置き、割合は「または」の条件にした（小規模病院を拾うため）。 割合の分母は、P4・S1・S3が退院患者数、C1が新規入棟患者数、C2・C3が退棟患者数。 病院の値は該当項目数そのもので、割り算はしていない。全国・都道府県の線は、病院の該当項目数の平均。\n",
+      "interpretation": "該当項目数が増えた病院は、在宅医療等連携機能に関わる実績の幅が広がっている。どの項目が○になったかで、何が変わったかを確かめる。 年度の間の変化には、病院の実績の変化のほか、病床の転換、報告の誤りや未報告、診療報酬改定による算定の変化（入退院支援加算3は令和7年度報告から）が含まれる。 判定は実績要件に照らした機械的なもので、特定の病院の役割や再編の可否を決めるものではない。\n",
+      "policy_questions": [
+        "在宅医療等連携機能の実績が広がっている（狭まっている）病院はどこか",
+        "後方支援（S）や介護施設等との連携（C）の項目を、近年新たに満たすようになった病院はどれくらいあるか"
+      ],
+      "caveats": [
+        "様式2の件数（S1〜S6・C4）は、すべての年度で月別票から推計した（公表値の合計＋非公表「*」の月数×補完値）。過年度には年間合計票がないため、令和7年度も同じ方法にそろえた。そのため令和7年度（FY2024）の○×は、P・S・C判定の星取り表（年間合計票の実数による）と一部ずれる（全国で S3 520病院、S4 186、S6 137 など。千葉県で最大は S3 の22病院で、D.S.氏の結果と同じ）。実数の列（S1_value など）も推計値。",
+        "補完値は、令和7年度の年間合計票の実数と月別票の公表値の差を、非公表の月数で割った値（都道府県ごと・項目ごと、1〜9に丸める。非公表の月がない都道府県は全国の値）。千葉県の値は D.S.氏の値と一致した。",
+        "入退院支援加算３は令和7年度報告から様式2の項目になったため、FY2020〜2023 は0としてS1を判定した。",
+        "病床初期加算は令和4年度改定で再編された。R3・R4報告の旧名の項目を、令和7年度の項目に対応させた。列の対応は reference/bfr_item_map.csv。",
+        "過年度の病院は、オープンデータ医療機関コード→医療機関コード（医科）→同じ都道府県で法人名を除いた名称（1対1）の順で令和7年度の病院につないだ。令和3年度報告には医療機関コード（医科）がない。つながらない病院（令和7年度までの廃止や、名称と番号の両方が変わった病院）はこの表に含めない（構想区域別の推移には含める）。",
+        "報告しなかった年度のある病院は、その年度の行がない。",
+        "判定不能（「－」）：様式1の患者数が桁違いの病院（1床当たりの新規入棟または退棟が年100人超）は P4・C1〜C3 を「－」にし、該当しないものとして数えた。",
+        "P4の「退院後1か月以内に自院が在宅医療を提供する予定の患者」は実施予定「不明」が多い病院があり、過小になりうる。",
+        "基準値は千葉県R7報告で決めたものを全国・全年度に当てはめている。",
+        "病院名を伏せているが、値は公表データから計算できるため、匿名化ではない。照合のための番号の付け方や、手元で病院名つきの表を出す方法は、作成者と検討中。"
+      ],
+      "alternatives": [
+        {
+          "id": "zaitaku_renkei_trend_koso",
+          "reason": "構想区域ごとに、1病院あたりの該当項目数の推移を見る（地図に載る）"
+        },
+        {
+          "id": "zaitaku_renkei_psc_hospital",
+          "reason": "令和7年度の18項目で、P・S・Cの類型と星取り表を見る"
+        }
+      ],
+      "authors": [
+        {
+          "name": "D.S."
+        }
+      ],
+      "script": "indicators/zaitaku_renkei_trend_hospital.py",
+      "output": {
+        "area_code": "hospital_id",
+        "area_name": "hospital_label",
+        "value": "items_met",
+        "digits": 0,
+        "unit": "項目（11項目中）",
+        "time": "fiscal_year",
+        "time_stat": "mean",
+        "columns": [
+          {
+            "name": "hospital_id",
+            "label": "病院の番号（構想区域コード-記号）"
+          },
+          {
+            "name": "hospital_label",
+            "label": "病院（名前を伏せた表示）"
+          },
+          {
+            "name": "pref_code",
+            "label": "都道府県コード"
+          },
+          {
+            "name": "koso_kuiki_code",
+            "label": "構想区域コード（令和7年度）"
+          },
+          {
+            "name": "koso_kuiki_name",
+            "label": "構想区域名（令和7年度）"
+          },
+          {
+            "name": "fiscal_year",
+            "label": "実績年度"
+          },
+          {
+            "name": "beds",
+            "label": "一般・療養病床の許可病床数",
+            "unit": "床"
+          },
+          {
+            "name": "items_met",
+            "label": "該当項目数（11項目中）",
+            "unit": "項目"
+          },
+          {
+            "name": "S_count",
+            "label": "Sの該当項目数（S1〜S6）",
+            "unit": "項目"
+          },
+          {
+            "name": "C_count",
+            "label": "Cの該当項目数（C1〜C4）",
+            "unit": "項目"
+          },
+          {
+            "name": "P4",
+            "label": "P4 退院患者への自院在宅医療の提供"
+          },
+          {
+            "name": "S1",
+            "label": "S1 入退院支援加算1〜3"
+          },
+          {
+            "name": "S2",
+            "label": "S2 入院時支援加算1・2"
+          },
+          {
+            "name": "S3",
+            "label": "S3 介護支援連携指導料"
+          },
+          {
+            "name": "S4",
+            "label": "S4 退院時共同指導料2"
+          },
+          {
+            "name": "S5",
+            "label": "S5 退院前訪問指導料"
+          },
+          {
+            "name": "S6",
+            "label": "S6 在宅患者の緊急入院の受入"
+          },
+          {
+            "name": "C1",
+            "label": "C1 介護施設等からの入院"
+          },
+          {
+            "name": "C2",
+            "label": "C2 介護保険施設（老健・特養・介護医療院）への退院"
+          },
+          {
+            "name": "C3",
+            "label": "C3 有料老人ホーム等への退院"
+          },
+          {
+            "name": "C4",
+            "label": "C4 在宅患者支援・急性期患者支援の病床初期加算"
+          },
+          {
+            "name": "P4_value",
+            "label": "P4の実数",
+            "unit": "人"
+          },
+          {
+            "name": "S1_value",
+            "label": "S1の推計値",
+            "unit": "件"
+          },
+          {
+            "name": "S2_value",
+            "label": "S2の推計値",
+            "unit": "件"
+          },
+          {
+            "name": "S3_value",
+            "label": "S3の推計値",
+            "unit": "件"
+          },
+          {
+            "name": "S4_value",
+            "label": "S4の推計値",
+            "unit": "件"
+          },
+          {
+            "name": "S5_value",
+            "label": "S5の推計値",
+            "unit": "件"
+          },
+          {
+            "name": "S6_value",
+            "label": "S6の推計値",
+            "unit": "件"
+          },
+          {
+            "name": "C1_value",
+            "label": "C1の実数",
+            "unit": "人"
+          },
+          {
+            "name": "C2_value",
+            "label": "C2の実数",
+            "unit": "人"
+          },
+          {
+            "name": "C3_value",
+            "label": "C3の実数",
+            "unit": "人"
+          },
+          {
+            "name": "C4_value",
+            "label": "C4の推計値",
+            "unit": "件"
+          }
+        ]
+      },
+      "references": [
+        {
+          "title": "病床機能報告（厚生労働省）令和3〜7年度の公表データ",
+          "url": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/0000055891.html"
+        },
+        {
+          "title": "地域医療構想策定ガイドライン（厚生労働省医政局）在宅医療の章（在宅医療等連携機能を担う医療機関の役割）"
+        },
+        {
+          "title": "D.S.「在宅医療等連携機能：実数基準のP・S・C判定」年次推移（千葉県で作成。未公表）"
+        }
+      ],
+      "created": "2026-11-26",
+      "updated": "2026-11-26"
+    },
+    {
+      "id": "zaitaku_renkei_trend_koso",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": "在宅医療等連携機能の該当項目数の推移（構想区域別、FY2020〜2024）",
+      "short_description": "P・S・C判定の18項目のうち病床機能報告で毎年追える11項目について、構想区域の病院が1病院あたりいくつ満たしているかを年度ごとに示す",
+      "unit_of_analysis": "koso_kuiki",
+      "unit_note": "1行＝構想区域×年度（実績年度。FY2020＝令和3年度報告 … FY2024＝令和7年度報告）。表・地図・都道府県の値は最新の年度（FY2024）、 推移のグラフはすべての年度。区域は令和7年度の構想区域にそろえた（令和7年度の病院につながる病院はその病院の区域、 つながらない病院は所在地の市区町村から割り当てた）。対象の病院がない区域・年度は値なし。\n",
+      "numerator": {
+        "description": "対象の病院（一般・療養病床を持つ病院）が満たした項目の数の合計（11項目。P4、S1〜S6、C1〜C4）。判定の基準は P・S・C判定（zaitaku_renkei_psc_hospital）と同じ",
+        "dataset": "bed_function_report_r7_ward",
+        "as_of": "各年度の7月1日（病床）・前年度の実績"
+      },
+      "denominator": {
+        "description": "対象の病院の数",
+        "dataset": "bed_function_report_r7_ward",
+        "as_of": "各年度の7月1日"
+      },
+      "datasets": [
+        "bed_function_report_r7_form2_monthly",
+        "bed_function_report_r7_form2_annual",
+        "bed_function_report_r6_ward",
+        "bed_function_report_r6_form2_monthly",
+        "bed_function_report_r5_ward",
+        "bed_function_report_r5_form2_monthly",
+        "bed_function_report_r4_ward",
+        "bed_function_report_r4_form2_monthly",
+        "bed_function_report_r3_ward",
+        "bed_function_report_r3_form2_monthly"
+      ],
+      "formula": "年度ごとに、区域の病院の該当項目数（0〜11）の合計 ÷ 区域の病院の数（1病院あたりの該当項目数）",
+      "intent": "在宅医療等連携機能（P・S・C）の判定のうち、病床機能報告で毎年追える11項目を、令和7年度と同じ基準で各年度に当てはめ、 構想区域の病院が在宅医療にどれだけ幅広く関わるようになってきたか（または減ってきたか）を5年度で見るための指標。 千葉県で D.S.氏が調整会議の資料（医療圏の推移・病院別の該当項目数の推移）として作った方法を、全国に同じ基準で当てはめた。 届出（P5・S7）、外来機能報告の件数（P1〜P3）、看取り（P6・C5）は過年度を同じ形でそろえられないため含めない。 そのため、類型（P・S・C）の判定は年度ごとには行わず、該当項目数で推移を見る。項目ごとの○の病院数も列に出す。\n",
+      "why_this_denominator": "区域の病院の数で割り、1病院あたりの該当項目数にした。病院の数が多い区域ほど合計が大きくなるのを避け、区域どうし・年度どうしを比べられるようにするため。 病院の新設・廃止で分母が変わるので、病院の数（hospitals）の列と合わせて見る。 人口あたりにはしていない（P・S・C判定の構想区域別の指標と同じく、病院の機能の広がりを見る指標のため）。\n",
+      "interpretation": "値が大きいほど、区域の病院が11項目のうち多くを満たしている（在宅医療等連携機能に幅広く関わっている）。最大は11。 年度の間の変化には、病院の実績の変化のほか、病院の新設・廃止・病床の転換、報告の誤りや未報告、診療報酬改定による算定の変化（入退院支援加算3は令和7年度報告から）が含まれる。 項目ごとの○の病院数（n_P4 など）で、どの項目が増えたかを確かめる。判定は実績要件に照らした機械的なもので、特定の病院の役割を決めるものではない。\n",
+      "policy_questions": [
+        "在宅医療等連携機能に関わる病院の実績は、構想区域ごとに5年間で広がっているか",
+        "増えた（減った）のは、後方支援（S）・介護施設等との連携（C）のどの項目か"
+      ],
+      "caveats": [
+        "様式2の件数（S1〜S6・C4）は、すべての年度で月別票から推計した（公表値の合計＋非公表「*」の月数×補完値）。過年度には年間合計票がないため、令和7年度も同じ方法にそろえた。そのため令和7年度（FY2024）の判定は、P・S・C判定の星取り表（年間合計票の実数による）と一部ずれる（全国で S3 520病院、S4 186、S6 137 など。千葉県で最大は S3 の22病院で、D.S.氏の結果と同じ）。",
+        "補完値は、令和7年度の年間合計票の実数と月別票の公表値の差を、非公表の月数で割った値（都道府県ごと・項目ごと、1〜9に丸める。非公表の月がない都道府県は全国の値）。千葉県の値は D.S.氏の値と一致した。全国の値は注記（notes）に出す。",
+        "入退院支援加算３は令和7年度報告から様式2の項目になったため、FY2020〜2023 は0としてS1を判定した（S1の件数がわずかに小さくなりうる）。",
+        "病床初期加算は令和4年度改定で再編された。R3・R4報告の「救急・在宅等支援（療養）病床初期加算及び有床診療所一般病床初期加算」を、令和7年度の「救急・在宅等支援病床初期加算、在宅患者支援療養病床初期加算…」の列に対応させた。",
+        "年度によって列の位置と見出しが変わるため、見出しで令和7年度の列に対応づけた（対応表は reference/bfr_item_map.csv）。",
+        "病院の数は年度ごとの病棟票による。病院名・医療機関コードが変わった病院や、報告しなかった年度のある病院があり、病院の数の変化がそのまま新設・廃止を表すわけではない。",
+        "判定不能（「－」）：様式1の患者数が桁違いの病院（1床当たりの新規入棟または退棟が年100人超）は P4・C1〜C3 を「－」にし、該当しないものとして数えた。",
+        "P4の「退院後1か月以内に自院が在宅医療を提供する予定の患者」は実施予定「不明」が多い病院があり、過小になりうる。",
+        "基準値は千葉県R7報告で決めたものを全国・全年度に当てはめている。",
+        "対象は一般・療養病床を持つ病院。有床診療所は含まない。患者が区域をまたぐ流出入は反映しない。"
+      ],
+      "alternatives": [
+        {
+          "id": "zaitaku_renkei_trend_hospital",
+          "reason": "病院ごとの該当項目数の推移（病院名は伏せる）"
+        },
+        {
+          "id": "zaitaku_renkei_psc_koso",
+          "reason": "令和7年度の18項目で、P・S・Cの類型に該当する病院の数を数える"
+        }
+      ],
+      "authors": [
+        {
+          "name": "D.S."
+        }
+      ],
+      "script": "indicators/zaitaku_renkei_trend_koso.py",
+      "output": {
+        "area_code": "koso_kuiki_code",
+        "area_name": "koso_kuiki_name",
+        "value": "items_per_hospital",
+        "numerator": "items_met_sum",
+        "denominator": "hospitals",
+        "scale": 1,
+        "digits": 2,
+        "unit": "項目（11項目中、1病院あたり）",
+        "time": "fiscal_year",
+        "columns": [
+          {
+            "name": "pref_code",
+            "label": "都道府県コード"
+          },
+          {
+            "name": "koso_kuiki_code",
+            "label": "構想区域コード"
+          },
+          {
+            "name": "koso_kuiki_name",
+            "label": "構想区域名"
+          },
+          {
+            "name": "fiscal_year",
+            "label": "実績年度"
+          },
+          {
+            "name": "hospitals",
+            "label": "対象の病院（一般・療養病床を持つ病院）",
+            "unit": "病院"
+          },
+          {
+            "name": "items_met_sum",
+            "label": "該当項目数の合計",
+            "unit": "項目"
+          },
+          {
+            "name": "items_per_hospital",
+            "label": "1病院あたりの該当項目数",
+            "unit": "項目"
+          },
+          {
+            "name": "n_P4",
+            "label": "P4 退院患者への自院在宅医療の提供 を満たす病院",
+            "unit": "病院"
+          },
+          {
+            "name": "n_S1",
+            "label": "S1 入退院支援加算1〜3 を満たす病院",
+            "unit": "病院"
+          },
+          {
+            "name": "n_S2",
+            "label": "S2 入院時支援加算1・2 を満たす病院",
+            "unit": "病院"
+          },
+          {
+            "name": "n_S3",
+            "label": "S3 介護支援連携指導料 を満たす病院",
+            "unit": "病院"
+          },
+          {
+            "name": "n_S4",
+            "label": "S4 退院時共同指導料2 を満たす病院",
+            "unit": "病院"
+          },
+          {
+            "name": "n_S5",
+            "label": "S5 退院前訪問指導料 を満たす病院",
+            "unit": "病院"
+          },
+          {
+            "name": "n_S6",
+            "label": "S6 在宅患者の緊急入院の受入 を満たす病院",
+            "unit": "病院"
+          },
+          {
+            "name": "n_C1",
+            "label": "C1 介護施設等からの入院 を満たす病院",
+            "unit": "病院"
+          },
+          {
+            "name": "n_C2",
+            "label": "C2 介護保険施設への退院 を満たす病院",
+            "unit": "病院"
+          },
+          {
+            "name": "n_C3",
+            "label": "C3 有料老人ホーム等への退院 を満たす病院",
+            "unit": "病院"
+          },
+          {
+            "name": "n_C4",
+            "label": "C4 病床初期加算 を満たす病院",
+            "unit": "病院"
+          }
+        ]
+      },
+      "references": [
+        {
+          "title": "病床機能報告（厚生労働省）令和3〜7年度の公表データ",
+          "url": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/0000055891.html"
+        },
+        {
+          "title": "地域医療構想策定ガイドライン（厚生労働省医政局）在宅医療の章（在宅医療等連携機能を担う医療機関の役割）"
+        },
+        {
+          "title": "D.S.「在宅医療等連携機能：実数基準のP・S・C判定」年次推移（千葉県で作成。未公表）"
+        }
+      ],
+      "created": "2026-11-26",
+      "updated": "2026-11-26"
     }
   ],
   "datasets": [
+    {
+      "id": "bed_function_report_r3_form2_monthly",
+      "title": "病床機能報告 令和3年度 様式2病棟票（月別）",
+      "publisher": "厚生労働省",
+      "source_page": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/0000055891.html",
+      "attribution": "出典：厚生労働省「令和3年度病床機能報告公表データ」（様式2病棟票）を加工して作成",
+      "update_frequency": "年1回",
+      "verified": true,
+      "columns": [],
+      "notes": [
+        "1行＝1病棟×1か月（令和2年4月〜令和3年3月診療分）。月別の件数が1〜9件のセルは「*」（秘匿）。過年度の年間の件数を出すときは、公表値の合計に秘匿の月数×補完値を足して推計する（chiiki_od.psc_trend）。",
+        "令和3年度の表には二次医療圏の列がない（構想区域の列はある）。市町村コードの見出しは「市町村コード」。",
+        "数値列の記号（*：月別1〜9件の秘匿、-：任意項目の未報告・非該当・不備、未報告又はデータ不備：必須項目の未報告・不備）は欠損にし、元の記号は <output>__flags.parquet に row_id・列・記号として残す。",
+        "列名は先頭の識別列のみ英字、それ以外は表の種類の接頭辞＋位置番号（年度によって位置が違う）。年度をまたいで同じ項目を使うときは、見出しで対応づける（reference/bfr_item_map.csv）。",
+        "ファイルのURLは公表ファイル名から書いたもの（公表ページでの確認が必要）。手元のファイルを --from-dir で取り込む。"
+      ],
+      "related": [
+        "bed_function_report_r3_ward"
+      ],
+      "codebook": "codebooks/bed_function_report_r3_form2_monthly.csv"
+    },
+    {
+      "id": "bed_function_report_r3_ward",
+      "title": "病床機能報告 令和3年度 病棟票（様式1・病院）",
+      "publisher": "厚生労働省",
+      "source_page": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/0000055891.html",
+      "attribution": "出典：厚生労働省「令和3年度病床機能報告公表データ」（病棟票）を加工して作成",
+      "update_frequency": "年1回",
+      "verified": true,
+      "columns": [],
+      "notes": [
+        "1行＝1病棟。地域別7ファイルを縦に結合する。施設の状況は令和3年7月1日時点、通年の実績は令和2年4月〜令和3年3月。",
+        "令和3年度の表には二次医療圏の列がない（構想区域の列はある）。市町村コードの見出しは「市町村コード」。",
+        "数値列の記号（*：月別1〜9件の秘匿、-：任意項目の未報告・非該当・不備、未報告又はデータ不備：必須項目の未報告・不備）は欠損にし、元の記号は <output>__flags.parquet に row_id・列・記号として残す。",
+        "列名は先頭の識別列のみ英字、それ以外は表の種類の接頭辞＋位置番号（年度によって位置が違う）。年度をまたいで同じ項目を使うときは、見出しで対応づける（reference/bfr_item_map.csv）。",
+        "ファイルのURLは公表ファイル名から書いたもの（公表ページでの確認が必要）。手元のファイルを --from-dir で取り込む。"
+      ],
+      "related": [
+        "bed_function_report_r3_form2_monthly"
+      ],
+      "codebook": "codebooks/bed_function_report_r3_ward.csv"
+    },
+    {
+      "id": "bed_function_report_r4_form2_monthly",
+      "title": "病床機能報告 令和4年度 様式2病棟票（月別）",
+      "publisher": "厚生労働省",
+      "source_page": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/0000055891.html",
+      "attribution": "出典：厚生労働省「令和4年度病床機能報告公表データ」（様式2病棟票）を加工して作成",
+      "update_frequency": "年1回",
+      "verified": true,
+      "columns": [],
+      "notes": [
+        "1行＝1病棟×1か月（令和3年4月〜令和4年3月診療分）。月別の件数が1〜9件のセルは「*」（秘匿）。過年度の年間の件数を出すときは、公表値の合計に秘匿の月数×補完値を足して推計する（chiiki_od.psc_trend）。",
+        "数値列の記号（*：月別1〜9件の秘匿、-：任意項目の未報告・非該当・不備、未報告又はデータ不備：必須項目の未報告・不備）は欠損にし、元の記号は <output>__flags.parquet に row_id・列・記号として残す。",
+        "列名は先頭の識別列のみ英字、それ以外は表の種類の接頭辞＋位置番号（年度によって位置が違う）。年度をまたいで同じ項目を使うときは、見出しで対応づける（reference/bfr_item_map.csv）。",
+        "ファイルのURLは公表ファイル名から書いたもの（公表ページでの確認が必要）。手元のファイルを --from-dir で取り込む。"
+      ],
+      "related": [
+        "bed_function_report_r4_ward"
+      ],
+      "codebook": "codebooks/bed_function_report_r4_form2_monthly.csv"
+    },
+    {
+      "id": "bed_function_report_r4_ward",
+      "title": "病床機能報告 令和4年度 病棟票（様式1・病院）",
+      "publisher": "厚生労働省",
+      "source_page": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/0000055891.html",
+      "attribution": "出典：厚生労働省「令和4年度病床機能報告公表データ」（病棟票）を加工して作成",
+      "update_frequency": "年1回",
+      "verified": true,
+      "columns": [],
+      "notes": [
+        "1行＝1病棟。地域別8ファイルを縦に結合する。施設の状況は令和4年7月1日時点、通年の実績は令和3年4月〜令和4年3月。",
+        "データの表の項目名が、データ定義と39列で言い回しだけ違う（「医療機関名コード（医科）」、月別の在棟・退棟・新規入棟の「うち、」の有無など）。列の並びは一致するため、parser_options.max_item_mismatch で許している。",
+        "数値列の記号（*：月別1〜9件の秘匿、-：任意項目の未報告・非該当・不備、未報告又はデータ不備：必須項目の未報告・不備）は欠損にし、元の記号は <output>__flags.parquet に row_id・列・記号として残す。",
+        "列名は先頭の識別列のみ英字、それ以外は表の種類の接頭辞＋位置番号（年度によって位置が違う）。年度をまたいで同じ項目を使うときは、見出しで対応づける（reference/bfr_item_map.csv）。",
+        "ファイルのURLは公表ファイル名から書いたもの（公表ページでの確認が必要）。手元のファイルを --from-dir で取り込む。"
+      ],
+      "related": [
+        "bed_function_report_r4_form2_monthly"
+      ],
+      "codebook": "codebooks/bed_function_report_r4_ward.csv"
+    },
+    {
+      "id": "bed_function_report_r5_form2_monthly",
+      "title": "病床機能報告 令和5年度 様式2病棟票（月別）",
+      "publisher": "厚生労働省",
+      "source_page": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/0000055891.html",
+      "attribution": "出典：厚生労働省「令和5年度病床機能報告公表データ」（様式2病棟票）を加工して作成",
+      "update_frequency": "年1回",
+      "verified": true,
+      "columns": [],
+      "notes": [
+        "1行＝1病棟×1か月（令和4年4月〜令和5年3月診療分）。月別の件数が1〜9件のセルは「*」（秘匿）。過年度の年間の件数を出すときは、公表値の合計に秘匿の月数×補完値を足して推計する（chiiki_od.psc_trend）。",
+        "数値列の記号（*：月別1〜9件の秘匿、-：任意項目の未報告・非該当・不備、未報告又はデータ不備：必須項目の未報告・不備）は欠損にし、元の記号は <output>__flags.parquet に row_id・列・記号として残す。",
+        "列名は先頭の識別列のみ英字、それ以外は表の種類の接頭辞＋位置番号（年度によって位置が違う）。年度をまたいで同じ項目を使うときは、見出しで対応づける（reference/bfr_item_map.csv）。",
+        "ファイルのURLは公表ファイル名から書いたもの（公表ページでの確認が必要）。手元のファイルを --from-dir で取り込む。"
+      ],
+      "related": [
+        "bed_function_report_r5_ward"
+      ],
+      "codebook": "codebooks/bed_function_report_r5_form2_monthly.csv"
+    },
+    {
+      "id": "bed_function_report_r5_ward",
+      "title": "病床機能報告 令和5年度 病棟票（様式1・病院）",
+      "publisher": "厚生労働省",
+      "source_page": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/0000055891.html",
+      "attribution": "出典：厚生労働省「令和5年度病床機能報告公表データ」（病棟票）を加工して作成",
+      "update_frequency": "年1回",
+      "verified": true,
+      "columns": [],
+      "notes": [
+        "1行＝1病棟。地域別7ファイルを縦に結合する。施設の状況は令和5年7月1日時点、通年の実績は令和4年4月〜令和5年3月。",
+        "数値列の記号（*：月別1〜9件の秘匿、-：任意項目の未報告・非該当・不備、未報告又はデータ不備：必須項目の未報告・不備）は欠損にし、元の記号は <output>__flags.parquet に row_id・列・記号として残す。",
+        "列名は先頭の識別列のみ英字、それ以外は表の種類の接頭辞＋位置番号（年度によって位置が違う）。年度をまたいで同じ項目を使うときは、見出しで対応づける（reference/bfr_item_map.csv）。",
+        "ファイルのURLは公表ファイル名から書いたもの（公表ページでの確認が必要）。手元のファイルを --from-dir で取り込む。"
+      ],
+      "related": [
+        "bed_function_report_r5_form2_monthly"
+      ],
+      "codebook": "codebooks/bed_function_report_r5_ward.csv"
+    },
+    {
+      "id": "bed_function_report_r6_form2_monthly",
+      "title": "病床機能報告 令和6年度 様式2病棟票（月別）",
+      "publisher": "厚生労働省",
+      "source_page": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/0000055891.html",
+      "attribution": "出典：厚生労働省「令和6年度病床機能報告公表データ」（様式2病棟票）を加工して作成",
+      "update_frequency": "年1回",
+      "verified": true,
+      "columns": [],
+      "notes": [
+        "1行＝1病棟×1か月（令和5年4月〜令和6年3月診療分）。月別の件数が1〜9件のセルは「*」（秘匿）。過年度の年間の件数を出すときは、公表値の合計に秘匿の月数×補完値を足して推計する（chiiki_od.psc_trend）。",
+        "数値列の記号（*：月別1〜9件の秘匿、-：任意項目の未報告・非該当・不備、未報告又はデータ不備：必須項目の未報告・不備）は欠損にし、元の記号は <output>__flags.parquet に row_id・列・記号として残す。",
+        "列名は先頭の識別列のみ英字、それ以外は表の種類の接頭辞＋位置番号（年度によって位置が違う）。年度をまたいで同じ項目を使うときは、見出しで対応づける（reference/bfr_item_map.csv）。",
+        "ファイルのURLは公表ファイル名から書いたもの（公表ページでの確認が必要）。手元のファイルを --from-dir で取り込む。"
+      ],
+      "related": [
+        "bed_function_report_r6_ward"
+      ],
+      "codebook": "codebooks/bed_function_report_r6_form2_monthly.csv"
+    },
+    {
+      "id": "bed_function_report_r6_ward",
+      "title": "病床機能報告 令和6年度 病棟票（様式1・病院）",
+      "publisher": "厚生労働省",
+      "source_page": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/0000055891.html",
+      "attribution": "出典：厚生労働省「令和6年度病床機能報告公表データ」（病棟票）を加工して作成",
+      "update_frequency": "年1回",
+      "verified": true,
+      "columns": [],
+      "notes": [
+        "1行＝1病棟。地域別7ファイルを縦に結合する。施設の状況は令和6年7月1日時点、通年の実績は令和5年4月〜令和6年3月。",
+        "数値列の記号（*：月別1〜9件の秘匿、-：任意項目の未報告・非該当・不備、未報告又はデータ不備：必須項目の未報告・不備）は欠損にし、元の記号は <output>__flags.parquet に row_id・列・記号として残す。",
+        "列名は先頭の識別列のみ英字、それ以外は表の種類の接頭辞＋位置番号（年度によって位置が違う）。年度をまたいで同じ項目を使うときは、見出しで対応づける（reference/bfr_item_map.csv）。",
+        "ファイルのURLは公表ファイル名から書いたもの（公表ページでの確認が必要）。手元のファイルを --from-dir で取り込む。"
+      ],
+      "related": [
+        "bed_function_report_r6_form2_monthly"
+      ],
+      "codebook": "codebooks/bed_function_report_r6_ward.csv"
+    },
     {
       "id": "bed_function_report_r7_clinic",
       "title": "病床機能報告 令和7年度 診療所票（有床診療所）",
@@ -3323,15 +3924,31 @@
     "zaitaku_renkei_psc_hospital": {
       "path": "results/zaitaku_renkei_psc_hospital.json",
       "csv": "results/zaitaku_renkei_psc_hospital.csv",
-      "generated_at": "2026-11-26T07:01:02+00:00",
-      "card_version": "0.1.0",
+      "generated_at": "2026-11-26T07:57:14+00:00",
+      "card_version": "0.1.1",
       "rows": 6875,
       "stale": []
     },
     "zaitaku_renkei_psc_koso": {
       "path": "results/zaitaku_renkei_psc_koso.json",
       "csv": "results/zaitaku_renkei_psc_koso.csv",
-      "generated_at": "2026-11-26T07:01:04+00:00",
+      "generated_at": "2026-11-26T07:57:17+00:00",
+      "card_version": "0.1.1",
+      "rows": 339,
+      "stale": []
+    },
+    "zaitaku_renkei_trend_hospital": {
+      "path": "results/zaitaku_renkei_trend_hospital.json",
+      "csv": "results/zaitaku_renkei_trend_hospital.csv",
+      "generated_at": "2026-11-26T07:57:29+00:00",
+      "card_version": "0.1.0",
+      "rows": 6875,
+      "stale": []
+    },
+    "zaitaku_renkei_trend_koso": {
+      "path": "results/zaitaku_renkei_trend_koso.json",
+      "csv": "results/zaitaku_renkei_trend_koso.csv",
+      "generated_at": "2026-11-26T07:57:22+00:00",
       "card_version": "0.1.0",
       "rows": 339,
       "stale": []

@@ -85,7 +85,8 @@ def _pooled(df: pd.DataFrame, out: dict, digits: int) -> dict:
 
 def _inputs(card: dict) -> list[dict]:
     out = []
-    for ds_id in dict.fromkeys(card[p]["dataset"] for p in ("numerator", "denominator")):
+    ids = [card[p]["dataset"] for p in ("numerator", "denominator")] + list(card.get("datasets") or [])
+    for ds_id in dict.fromkeys(ids):
         d = specs.load_dataset(ds_id)
         m = manifest.load(ds_id)
         out.append({
@@ -121,6 +122,13 @@ def build(card_id: str, sample: bool = False) -> tuple[dict, pd.DataFrame]:
             raise ValueError(f"{card_id}: output.{key}（{out[key]}）が output.columns にありません")
 
     df = df[names].reset_index(drop=True)
+    full, times, time_col = df, None, out.get("time")
+    if time_col:
+        # 推移を持つ指標：表・地図・要約は最新の時点の行で作り、時点ごとの値は series に入れる
+        if time_col not in names:
+            raise ValueError(f"{card_id}: output.time（{time_col}）が output.columns にありません")
+        times = sorted(full[time_col].dropna().astype(str).unique())
+        df = full[full[time_col].astype(str) == times[-1]].reset_index(drop=True)
     area = df[out["area_code"]]
     if not all(isinstance(v, str) for v in area):
         raise ValueError(f"{card_id}: 地域コードの列 {out['area_code']} は文字列にしてください（先頭の0を保つため）")
@@ -158,7 +166,42 @@ def build(card_id: str, sample: bool = False) -> tuple[dict, pd.DataFrame]:
         "csv": f"results/{card_id}.csv",
         "rows": [[_cell(v) for v in row] for row in df.itertuples(index=False, name=None)],
     }
-    return doc, df
+    if time_col:
+        doc["series"] = _series(full, out, prec, times, time_col)
+    return doc, full
+
+
+def _series(full: pd.DataFrame, out: dict, digits: int, times: list[str], time_col: str) -> dict:
+    """時点ごとの全国・都道府県の値と、地域ごとの値の並び。
+
+    全国・都道府県の値は output.time_stat（pooled＝計、median＝中央値、mean＝平均）。
+    指定がなければ、分子・分母があれば計、なければ中央値。
+    """
+    t = full[time_col].astype(str)
+    kind = out.get("time_stat") or ("pooled" if _pooled(full.head(1), out, digits) else "median")
+
+    def level(g: pd.DataFrame):
+        if g.empty:
+            return None
+        if kind == "pooled":
+            return _pooled(g, out, digits).get("pooled")
+        if kind == "mean":
+            v = g[out["value"]].dropna().astype(float)
+            return _round(v.mean(), digits) if len(v) else None
+        return _summary(g[out["value"]], digits).get("median")
+
+    pref = full[out["area_code"]].str[:2]
+    by_pref = {code: [level(full[(pref == code) & (t == x)]) for x in times] for code in sorted(pref.unique())}
+    piv = full.assign(_t=t).groupby([out["area_code"], "_t"], sort=True)[out["value"]].first().unstack("_t")
+    piv = piv.reindex(columns=times)  # 値のない地域も null の並びで残す
+    return {
+        "time_column": time_col,
+        "times": times,
+        "kind": kind,
+        "national": [level(full[t == x]) for x in times],
+        "by_pref": by_pref,
+        "areas": {code: [_cell(v) for v in row] for code, row in zip(piv.index, piv.to_numpy(dtype=object), strict=True)},
+    }
 
 
 def _dump(doc: dict) -> str:

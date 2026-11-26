@@ -120,8 +120,11 @@ def convert_dataset(dataset_id: str) -> Path:
     if ds.get("parser"):
         from .parsers import PARSERS
 
-        df, report = PARSERS[ds["parser"]](ds)
+        result = PARSERS[ds["parser"]](ds)
+        df, report = result[0], result[1]
+        extras = result[2] if len(result) > 2 else {}
     else:
+        extras = {}
         frames, report = [], {}
         multi = len(ds["files"]) > 1
         for fs in ds["files"]:
@@ -145,12 +148,26 @@ def convert_dataset(dataset_id: str) -> Path:
         "converter_version": __version__,
     }
     write_parquet(df, dest, meta)
+    extra_paths = {}
+    for name, table in extras.items():
+        if name == "__codebook__":
+            paths.CODEBOOKS.mkdir(parents=True, exist_ok=True)
+            cb_path = paths.CODEBOOKS / f"{dataset_id}.csv"
+            table.to_csv(cb_path, index=False, encoding="utf-8")
+            extra_paths["codebook"] = str(cb_path.relative_to(paths.ROOT))
+            print(f"コードブック: {cb_path.relative_to(paths.ROOT)}")
+        else:
+            p = paths.PROCESSED / f"{ds['output']}__{name}.parquet"
+            write_parquet(table, p, {**meta, "table": name})
+            extra_paths[name] = str(p.relative_to(paths.ROOT))
+            print(f"保存しました: {p.relative_to(paths.ROOT)}（{len(table):,}行）")
     man["output"] = {
         "path": str(dest.relative_to(paths.ROOT)),
         "rows": len(df),
         "columns": list(df.columns),
         "converted_at": meta["converted_at"],
         "converter_version": __version__,
+        "extras": extra_paths,
         "report": report,
     }
     manifest.save(dataset_id, man)

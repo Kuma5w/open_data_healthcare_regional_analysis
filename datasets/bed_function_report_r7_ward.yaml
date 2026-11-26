@@ -1,0 +1,61 @@
+id: bed_function_report_r7_ward
+title: 病床機能報告 令和7年度 病棟票（様式1・病院）
+publisher: 厚生労働省
+source_page: https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/open_data_00020.html
+license:
+  terms_url: https://www.mhlw.go.jp/chosakuken/index.html
+  attribution: 出典：厚生労働省「令和7年度病床機能報告公表データ」（病棟票）を加工して作成
+  notes: 加工した情報を、国が作成したかのような形で公表・利用しない。
+update_frequency: 年1回
+verified: false
+verified_note: データ定義（772列）は確認済み。公表ファイル（001717800〜001717806）はまだ読み込んでいない。
+parser: bed_function_report
+parser_options:
+  definition_file: notes
+  definition_member: 別紙１_令和７年度病床機能報告データ定義.xlsx
+  definition_sheet: 病床様式1病棟票
+  column_prefix: w
+related:
+- bed_function_report_r7_facility
+files:
+- key: notes
+  url: https://www.mhlw.go.jp/content/10800000/001717797.zip
+  format: zip
+  as_of: 令和7年度
+- key: hokkaido_tohoku
+  url: https://www.mhlw.go.jp/content/10800000/001717800.xlsx
+  format: xlsx
+  as_of: 令和7年7月1日
+- key: kanto_ibaraki_chiba
+  url: https://www.mhlw.go.jp/content/10800000/001717801.xlsx
+  format: xlsx
+  as_of: 令和7年7月1日
+- key: kanto_tokyo_kanagawa
+  url: https://www.mhlw.go.jp/content/10800000/001717802.xlsx
+  format: xlsx
+  as_of: 令和7年7月1日
+- key: chubu
+  url: https://www.mhlw.go.jp/content/10800000/001717803.xlsx
+  format: xlsx
+  as_of: 令和7年7月1日
+- key: kinki
+  url: https://www.mhlw.go.jp/content/10800000/001717804.xlsx
+  format: xlsx
+  as_of: 令和7年7月1日
+- key: chugoku_shikoku
+  url: https://www.mhlw.go.jp/content/10800000/001717805.xlsx
+  format: xlsx
+  as_of: 令和7年7月1日
+- key: kyushu_okinawa
+  url: https://www.mhlw.go.jp/content/10800000/001717806.xlsx
+  format: xlsx
+  as_of: 令和7年7月1日
+output: bed_function_report_r7_ward
+notes:
+- 1行＝1病棟。病棟の医療機能（現在・将来）、病床数、算定入院料、職員数、入退院患者の状況など。地域別7ファイルを縦に結合する。
+- 数値列の記号（*：月別1〜9件の秘匿、-：任意項目の未報告・非該当・不備、未報告又はデータ不備：必須項目の未報告・不備）は欠損にし、元の記号は <output>__flags.parquet に row_id・列・記号として残す。
+- データ定義で「未回答時にゼロを入力する項目」とされた列では、空欄の回答が0として入っている（コードブックの zero_if_blank）。0は「0件」と「無回答」を区別できない。
+- 列名は先頭の識別列のみ英字（od_facility_code など）、それ以外は表の種類の接頭辞＋位置番号。各列の意味は codebooks/<id>.csv を参照。
+- オープンデータ医療機関コードは前年度と同じ医療機関に同じコードが割り当てられる（名称変更・移転で変わる場合あり）。オープンデータ病棟コードは前年度と変わる場合がある。
+- 施設の状況は令和7年7月1日時点、通年の実績は令和6年4月1日〜令和7年3月31日。
+- 都道府県が個別に情報を更新している場合があり、最新の報告内容は各都道府県のサイトで確認する。

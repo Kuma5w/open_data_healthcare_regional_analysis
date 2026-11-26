@@ -2,7 +2,7 @@
 
   chiiki-od check                      データセット定義と指標カードを検証する
   chiiki-od list                       登録済みのデータセットと指標を一覧する
-  chiiki-od fetch <dataset>            元データを取得する（data/raw/）
+  chiiki-od fetch <dataset> [--from-dir D]  元データを取得する（data/raw/）
   chiiki-od convert <dataset>          Parquetに変換する（data/processed/）
   chiiki-od run <indicator> [--sample] 指標を計算する（data/outputs/）
   chiiki-od catalog                    site/catalog.json を作る
@@ -57,8 +57,9 @@ def main(argv: list[str] | None = None) -> int:
     sub.add_parser("list").set_defaults(func=_list)
     f = sub.add_parser("fetch")
     f.add_argument("dataset")
-    f.add_argument("--force", action="store_true")
-    f.set_defaults(func=lambda a: (fetch.fetch_dataset(a.dataset, force=a.force), 0)[1])
+    f.add_argument("--force", action="store_true", help="既にあるファイルも取り直す")
+    f.add_argument("--from-dir", help="手元に保存した公表ファイル（公表元と同じファイル名）のフォルダから取り込む")
+    f.set_defaults(func=lambda a: (fetch.fetch_dataset(a.dataset, force=a.force, from_dir=a.from_dir), 0)[1])
     c = sub.add_parser("convert")
     c.add_argument("dataset")
     c.set_defaults(func=lambda a: (convert.convert_dataset(a.dataset), 0)[1])

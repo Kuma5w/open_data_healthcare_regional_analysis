@@ -1,0 +1,114 @@
+id: zaitaku_renkei_trend_koso
+version: 0.1.0
+status: draft
+name: 在宅医療等連携機能の該当項目数の推移（構想区域別、FY2020〜2024）
+short_description: P・S・C判定の18項目のうち病床機能報告で毎年追える11項目について、構想区域の病院が1病院あたりいくつ満たしているかを年度ごとに示す
+unit_of_analysis: koso_kuiki
+unit_note: >
+  1行＝構想区域×年度（実績年度。FY2020＝令和3年度報告 … FY2024＝令和7年度報告）。表・地図・都道府県の値は最新の年度（FY2024）、
+  推移のグラフはすべての年度。区域は令和7年度の構想区域にそろえた（令和7年度の病院につながる病院はその病院の区域、
+  つながらない病院は所在地の市区町村から割り当てた）。対象の病院がない区域・年度は値なし。
+
+numerator:
+  description: 対象の病院（一般・療養病床を持つ病院）が満たした項目の数の合計（11項目。P4、S1〜S6、C1〜C4）。判定の基準は P・S・C判定（zaitaku_renkei_psc_hospital）と同じ
+  dataset: bed_function_report_r7_ward
+  as_of: 各年度の7月1日（病床）・前年度の実績
+denominator:
+  description: 対象の病院の数
+  dataset: bed_function_report_r7_ward
+  as_of: 各年度の7月1日
+datasets:
+  - bed_function_report_r7_form2_monthly
+  - bed_function_report_r7_form2_annual
+  - bed_function_report_r6_ward
+  - bed_function_report_r6_form2_monthly
+  - bed_function_report_r5_ward
+  - bed_function_report_r5_form2_monthly
+  - bed_function_report_r4_ward
+  - bed_function_report_r4_form2_monthly
+  - bed_function_report_r3_ward
+  - bed_function_report_r3_form2_monthly
+formula: 年度ごとに、区域の病院の該当項目数（0〜11）の合計 ÷ 区域の病院の数（1病院あたりの該当項目数）
+
+intent: >
+  在宅医療等連携機能（P・S・C）の判定のうち、病床機能報告で毎年追える11項目を、令和7年度と同じ基準で各年度に当てはめ、
+  構想区域の病院が在宅医療にどれだけ幅広く関わるようになってきたか（または減ってきたか）を5年度で見るための指標。
+  千葉県で D.S.氏が調整会議の資料（医療圏の推移・病院別の該当項目数の推移）として作った方法を、全国に同じ基準で当てはめた。
+  届出（P5・S7）、外来機能報告の件数（P1〜P3）、看取り（P6・C5）は過年度を同じ形でそろえられないため含めない。
+  そのため、類型（P・S・C）の判定は年度ごとには行わず、該当項目数で推移を見る。項目ごとの○の病院数も列に出す。
+
+why_this_denominator: >
+  区域の病院の数で割り、1病院あたりの該当項目数にした。病院の数が多い区域ほど合計が大きくなるのを避け、区域どうし・年度どうしを比べられるようにするため。
+  病院の新設・廃止で分母が変わるので、病院の数（hospitals）の列と合わせて見る。
+  人口あたりにはしていない（P・S・C判定の構想区域別の指標と同じく、病院の機能の広がりを見る指標のため）。
+
+interpretation: >
+  値が大きいほど、区域の病院が11項目のうち多くを満たしている（在宅医療等連携機能に幅広く関わっている）。最大は11。
+  年度の間の変化には、病院の実績の変化のほか、病院の新設・廃止・病床の転換、報告の誤りや未報告、診療報酬改定による算定の変化（入退院支援加算3は令和7年度報告から）が含まれる。
+  項目ごとの○の病院数（n_P4 など）で、どの項目が増えたかを確かめる。判定は実績要件に照らした機械的なもので、特定の病院の役割を決めるものではない。
+
+policy_questions:
+  - 在宅医療等連携機能に関わる病院の実績は、構想区域ごとに5年間で広がっているか
+  - 増えた（減った）のは、後方支援（S）・介護施設等との連携（C）のどの項目か
+
+caveats:
+  - 様式2の件数（S1〜S6・C4）は、すべての年度で月別票から推計した（公表値の合計＋非公表「*」の月数×補完値）。過年度には年間合計票がないため、令和7年度も同じ方法にそろえた。そのため令和7年度（FY2024）の判定は、P・S・C判定の星取り表（年間合計票の実数による）と一部ずれる（全国で S3 520病院、S4 186、S6 137 など。千葉県で最大は S3 の22病院で、D.S.氏の結果と同じ）。
+  - 補完値は、令和7年度の年間合計票の実数と月別票の公表値の差を、非公表の月数で割った値（都道府県ごと・項目ごと、1〜9に丸める。非公表の月がない都道府県は全国の値）。千葉県の値は D.S.氏の値と一致した。全国の値は注記（notes）に出す。
+  - 入退院支援加算３は令和7年度報告から様式2の項目になったため、FY2020〜2023 は0としてS1を判定した（S1の件数がわずかに小さくなりうる）。
+  - 病床初期加算は令和4年度改定で再編された。R3・R4報告の「救急・在宅等支援（療養）病床初期加算及び有床診療所一般病床初期加算」を、令和7年度の「救急・在宅等支援病床初期加算、在宅患者支援療養病床初期加算…」の列に対応させた。
+  - 年度によって列の位置と見出しが変わるため、見出しで令和7年度の列に対応づけた（対応表は reference/bfr_item_map.csv）。
+  - 病院の数は年度ごとの病棟票による。病院名・医療機関コードが変わった病院や、報告しなかった年度のある病院があり、病院の数の変化がそのまま新設・廃止を表すわけではない。
+  - 判定不能（「－」）：様式1の患者数が桁違いの病院（1床当たりの新規入棟または退棟が年100人超）は P4・C1〜C3 を「－」にし、該当しないものとして数えた。
+  - P4の「退院後1か月以内に自院が在宅医療を提供する予定の患者」は実施予定「不明」が多い病院があり、過小になりうる。
+  - 基準値は千葉県R7報告で決めたものを全国・全年度に当てはめている。
+  - 対象は一般・療養病床を持つ病院。有床診療所は含まない。患者が区域をまたぐ流出入は反映しない。
+
+alternatives:
+  - id: zaitaku_renkei_trend_hospital
+    reason: 病院ごとの該当項目数の推移（病院名は伏せる）
+  - id: zaitaku_renkei_psc_koso
+    reason: 令和7年度の18項目で、P・S・Cの類型に該当する病院の数を数える
+
+authors:
+  - name: D.S.
+
+script: indicators/zaitaku_renkei_trend_koso.py
+
+output:
+  area_code: koso_kuiki_code
+  area_name: koso_kuiki_name
+  value: items_per_hospital
+  numerator: items_met_sum
+  denominator: hospitals
+  scale: 1
+  digits: 2
+  unit: 項目（11項目中、1病院あたり）
+  time: fiscal_year
+  columns:
+    - {name: pref_code, label: 都道府県コード}
+    - {name: koso_kuiki_code, label: 構想区域コード}
+    - {name: koso_kuiki_name, label: 構想区域名}
+    - {name: fiscal_year, label: 実績年度}
+    - {name: hospitals, label: 対象の病院（一般・療養病床を持つ病院）, unit: 病院}
+    - {name: items_met_sum, label: 該当項目数の合計, unit: 項目}
+    - {name: items_per_hospital, label: 1病院あたりの該当項目数, unit: 項目}
+    - {name: n_P4, label: P4 退院患者への自院在宅医療の提供 を満たす病院, unit: 病院}
+    - {name: n_S1, label: S1 入退院支援加算1〜3 を満たす病院, unit: 病院}
+    - {name: n_S2, label: S2 入院時支援加算1・2 を満たす病院, unit: 病院}
+    - {name: n_S3, label: S3 介護支援連携指導料 を満たす病院, unit: 病院}
+    - {name: n_S4, label: S4 退院時共同指導料2 を満たす病院, unit: 病院}
+    - {name: n_S5, label: S5 退院前訪問指導料 を満たす病院, unit: 病院}
+    - {name: n_S6, label: S6 在宅患者の緊急入院の受入 を満たす病院, unit: 病院}
+    - {name: n_C1, label: C1 介護施設等からの入院 を満たす病院, unit: 病院}
+    - {name: n_C2, label: C2 介護保険施設への退院 を満たす病院, unit: 病院}
+    - {name: n_C3, label: C3 有料老人ホーム等への退院 を満たす病院, unit: 病院}
+    - {name: n_C4, label: C4 病床初期加算 を満たす病院, unit: 病院}
+
+references:
+  - title: 病床機能報告（厚生労働省）令和3〜7年度の公表データ
+    url: https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/0000055891.html
+  - title: 地域医療構想策定ガイドライン（厚生労働省医政局）在宅医療の章（在宅医療等連携機能を担う医療機関の役割）
+  - title: D.S.「在宅医療等連携機能：実数基準のP・S・C判定」年次推移（千葉県で作成。未公表）
+
+created: "2026-11-26"
+updated: "2026-11-26"

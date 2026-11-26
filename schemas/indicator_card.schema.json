@@ -6,35 +6,117 @@
   "type": "object",
   "additionalProperties": false,
   "required": [
-    "id", "version", "status", "name", "unit_of_analysis",
-    "numerator", "denominator", "formula",
-    "intent", "why_this_denominator", "caveats", "authors", "script"
+    "id",
+    "version",
+    "status",
+    "name",
+    "unit_of_analysis",
+    "numerator",
+    "denominator",
+    "formula",
+    "intent",
+    "why_this_denominator",
+    "caveats",
+    "authors",
+    "script"
   ],
   "properties": {
-    "id": {"type": "string", "pattern": "^[a-z0-9_]+$", "description": "ファイル名と同じ。英小文字・数字・_"},
-    "version": {"type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$"},
-    "status": {"enum": ["draft", "reviewed", "deprecated"]},
-    "name": {"type": "string", "minLength": 4},
-    "short_description": {"type": "string"},
-    "unit_of_analysis": {
-      "enum": ["municipality", "designated_city_ward", "secondary_medical_area", "koso_kuiki", "prefecture", "facility", "ward_unit"]
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9_]+$",
+      "description": "ファイル名と同じ。英小文字・数字・_"
     },
-    "unit_note": {"type": "string"},
-    "numerator": {"$ref": "#/$defs/term"},
-    "denominator": {"$ref": "#/$defs/term"},
-    "formula": {"type": "string"},
-    "intent": {"type": "string", "minLength": 30, "description": "この指標で何を見たいのか。地域医療構想のどの議論に使うのか"},
-    "why_this_denominator": {"type": "string", "minLength": 20, "description": "なぜこの分母（または比較対象）を選んだのか。他の候補を選ばなかった理由"},
-    "interpretation": {"type": "string"},
-    "policy_questions": {"type": "array", "items": {"type": "string"}},
-    "caveats": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "status": {
+      "enum": [
+        "draft",
+        "reviewed",
+        "deprecated"
+      ]
+    },
+    "name": {
+      "type": "string",
+      "minLength": 4
+    },
+    "short_description": {
+      "type": "string"
+    },
+    "unit_of_analysis": {
+      "enum": [
+        "municipality",
+        "designated_city_ward",
+        "secondary_medical_area",
+        "koso_kuiki",
+        "prefecture",
+        "facility",
+        "ward_unit"
+      ]
+    },
+    "unit_note": {
+      "type": "string"
+    },
+    "numerator": {
+      "$ref": "#/$defs/term"
+    },
+    "denominator": {
+      "$ref": "#/$defs/term"
+    },
+    "datasets": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "分子・分母のほかに計算に使うデータセットのid（再現の手順と出典に載せる）"
+    },
+    "formula": {
+      "type": "string"
+    },
+    "intent": {
+      "type": "string",
+      "minLength": 30,
+      "description": "この指標で何を見たいのか。地域医療構想のどの議論に使うのか"
+    },
+    "why_this_denominator": {
+      "type": "string",
+      "minLength": 20,
+      "description": "なぜこの分母（または比較対象）を選んだのか。他の候補を選ばなかった理由"
+    },
+    "interpretation": {
+      "type": "string"
+    },
+    "policy_questions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "caveats": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
     "alternatives": {
       "type": "array",
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["id", "reason"],
-        "properties": {"id": {"type": "string"}, "reason": {"type": "string"}}
+        "required": [
+          "id",
+          "reason"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          }
+        }
       }
     },
     "authors": {
@@ -43,42 +125,105 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["name"],
+        "required": [
+          "name"
+        ],
         "properties": {
-          "name": {"type": "string"},
-          "affiliation": {"type": "string"},
-          "orcid": {"type": "string"}
+          "name": {
+            "type": "string"
+          },
+          "affiliation": {
+            "type": "string"
+          },
+          "orcid": {
+            "type": "string"
+          }
         }
       }
     },
-    "script": {"type": "string", "pattern": "^indicators/[a-z0-9_]+\\.py$"},
+    "script": {
+      "type": "string",
+      "pattern": "^indicators/[a-z0-9_]+\\.py$"
+    },
     "output": {
       "type": "object",
       "description": "計算結果の表の読み方。サイトの「結果を見る」はこの欄を使って表・グラフ・CSVを出す",
       "additionalProperties": false,
-      "required": ["area_code", "area_name", "value", "columns"],
+      "required": [
+        "area_code",
+        "area_name",
+        "value",
+        "columns"
+      ],
       "properties": {
-        "area_code": {"type": "string", "description": "地域コードの列。先頭2桁が都道府県コードであること"},
-        "area_name": {"type": "string", "description": "地域名の列"},
-        "value": {"type": "string", "description": "指標の値の列"},
-        "numerator": {"type": "string", "description": "分子の列。分母の列・scale と合わせて、都道府県計・全国計を計算する"},
-        "denominator": {"type": "string", "description": "分母の列"},
-        "scale": {"type": "number", "exclusiveMinimum": 0, "description": "分子÷分母に掛ける数（1万人あたりなら10000、％なら100）"},
-        "digits": {"type": "integer", "minimum": 0, "maximum": 6, "description": "値を表示する小数点以下の桁数"},
-        "unit": {"type": "string", "description": "値の単位（例：事業所／65歳以上1万人）"},
+        "area_code": {
+          "type": "string",
+          "description": "地域コードの列。先頭2桁が都道府県コードであること"
+        },
+        "area_name": {
+          "type": "string",
+          "description": "地域名の列"
+        },
+        "value": {
+          "type": "string",
+          "description": "指標の値の列"
+        },
+        "numerator": {
+          "type": "string",
+          "description": "分子の列。分母の列・scale と合わせて、都道府県計・全国計を計算する"
+        },
+        "denominator": {
+          "type": "string",
+          "description": "分母の列"
+        },
+        "scale": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "description": "分子÷分母に掛ける数（1万人あたりなら10000、％なら100）"
+        },
+        "digits": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 6,
+          "description": "値を表示する小数点以下の桁数"
+        },
+        "unit": {
+          "type": "string",
+          "description": "値の単位（例：事業所／65歳以上1万人）"
+        },
         "columns": {
           "type": "array",
           "minItems": 1,
           "items": {
             "type": "object",
             "additionalProperties": false,
-            "required": ["name", "label"],
+            "required": [
+              "name",
+              "label"
+            ],
             "properties": {
-              "name": {"type": "string", "description": "計算スクリプトが返す表の列名"},
-              "label": {"type": "string", "description": "サイトとCSVで使う日本語の見出し"},
-              "unit": {"type": "string"}
+              "name": {
+                "type": "string",
+                "description": "計算スクリプトが返す表の列名"
+              },
+              "label": {
+                "type": "string",
+                "description": "サイトとCSVで使う日本語の見出し"
+              },
+              "unit": {
+                "type": "string"
+              }
             }
           }
+        },
+        "time": {
+          "type": "string",
+          "description": "年度などの時点の列（推移を持つ指標）。結果の表・地図・都道府県計は最新の時点で作り、推移は series に入れる"
+        },
+        "time_stat": {
+          "type": "string",
+          "enum": ["pooled", "median", "mean"],
+          "description": "推移のグラフで全国・都道府県の線に使う値（計・中央値・平均）。省略すると、分子・分母があれば計、なければ中央値"
         }
       }
     },
@@ -87,23 +232,50 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["title"],
-        "properties": {"title": {"type": "string"}, "url": {"type": "string"}}
+        "required": [
+          "title"
+        ],
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          }
+        }
       }
     },
-    "created": {"type": "string"},
-    "updated": {"type": "string"}
+    "created": {
+      "type": "string"
+    },
+    "updated": {
+      "type": "string"
+    }
   },
   "$defs": {
     "term": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["description", "dataset"],
+      "required": [
+        "description",
+        "dataset"
+      ],
       "properties": {
-        "description": {"type": "string"},
-        "dataset": {"type": "string", "description": "datasets/ にあるデータセットのid"},
-        "as_of": {"type": "string", "description": "データの時点"},
-        "filter": {"type": "string", "description": "対象の絞り込み条件（あれば）"}
+        "description": {
+          "type": "string"
+        },
+        "dataset": {
+          "type": "string",
+          "description": "datasets/ にあるデータセットのid"
+        },
+        "as_of": {
+          "type": "string",
+          "description": "データの時点"
+        },
+        "filter": {
+          "type": "string",
+          "description": "対象の絞り込み条件（あれば）"
+        }
       }
     }
   }

@@ -69,3 +69,29 @@ def test_published_results_pass_check():
     if not (paths.SITE / "results").exists():
         pytest.skip("site/results がまだありません")
     assert results.check().errors == []
+
+
+def test_time_series_for_trend_indicators(tmp_path):
+    # 推移を持つ指標：表は最新の年度、series は年度ごとの全国・都道府県・地域の値、CSV はすべての年度
+    doc = _export(tmp_path, "zaitaku_renkei_trend_koso")
+    names = [c["name"] for c in doc["columns"]]
+    rows = [dict(zip(names, r, strict=True)) for r in doc["rows"]]
+    assert {r["fiscal_year"] for r in rows} == {"FY2024"}
+    s = doc["series"]
+    assert s["time_column"] == "fiscal_year" and s["times"] == ["FY2022", "FY2023", "FY2024"]
+    assert s["kind"] == "pooled"
+    assert s["national"] == [2.5, 1.0, 2.0]  # (1+4)/2、(0+0+3)/3、(1+4+3+0)/4
+    assert s["by_pref"]["43"] == s["national"]
+    assert s["areas"]["4312"] == [1.0, 0.0, 2.5] and s["areas"]["4302"] == [None, None, None]
+    import pandas as pd
+
+    csv = pd.read_csv(tmp_path / "zaitaku_renkei_trend_koso.csv", dtype=str)
+    assert sorted(csv["fiscal_year"].unique()) == s["times"]
+
+
+def test_time_series_mean_for_hospitals(tmp_path):
+    doc = _export(tmp_path, "zaitaku_renkei_trend_hospital")
+    s = doc["series"]
+    assert s["kind"] == "mean"
+    assert s["national"][-1] == pytest.approx(2.0)  # 4病院の該当項目数 1・4・3・0 の平均
+    assert len(doc["rows"]) == 4

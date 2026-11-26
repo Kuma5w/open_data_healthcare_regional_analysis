@@ -256,23 +256,36 @@ def evaluate(facility, wards, form2, outpatient, filings, scale: float = 1.0) ->
     return pd.concat([h, judge(h, scale=scale)], axis=1), notes
 
 
+def _id_order(s: pd.Series) -> pd.Series:
+    """「4312-B」「4312-AA」を、構想区域の中で A, B, …, Z, AA の順に並べるためのキー。"""
+    parts = s.str.split("-", n=1, expand=True)
+    return parts[0] + "-" + parts[1].str.len().astype(str).str.zfill(2) + parts[1]
+
+
 def _anon_order(code: str) -> str:
     import hashlib
 
     return hashlib.sha1(code.encode()).hexdigest()
 
 
-def hospital_table(r: pd.DataFrame) -> pd.DataFrame:
-    """病院別の結果（病院名と医療機関コードは載せず、構想区域ごとに A病院・B病院… と伏せる）。
+def mask_ids(r: pd.DataFrame) -> pd.DataFrame:
+    """病院名と医療機関コードの代わりに使う番号（構想区域ごとに A病院・B病院…）。
 
     伏せた名前の順は、該当項目数の多い順、同じ数の中は医療機関コードから作った乱数の順（公表ファイルの並びと関係しない）。
+    r は evaluate の結果（令和7年度・18項目）。年次推移の病院別の表も、この番号を使う。
+    戻り値：r と同じ行の順で、列 hospital_id・hospital_label。
     """
-    r = r.copy()
-    r["_order"] = r["od_facility_code"].map(_anon_order)
-    r = r.sort_values(["koso_kuiki_code", "items_met", "_order"], ascending=[True, False, True])
-    r["seq"] = r.groupby("koso_kuiki_code").cumcount().map(letters)
-    r["hospital_id"] = r["koso_kuiki_code"] + "-" + r["seq"]
-    r["hospital_label"] = r["koso_kuiki_name"] + "・" + r["seq"] + "病院"
+    order = r["od_facility_code"].map(_anon_order)
+    s = r.assign(_order=order).sort_values(["koso_kuiki_code", "items_met", "_order"], ascending=[True, False, True])
+    seq = s.groupby("koso_kuiki_code").cumcount().map(letters)
+    ids = pd.DataFrame({"hospital_id": s["koso_kuiki_code"] + "-" + seq,
+                        "hospital_label": s["koso_kuiki_name"] + "・" + seq + "病院"}, index=s.index)
+    return ids.reindex(r.index)
+
+
+def hospital_table(r: pd.DataFrame) -> pd.DataFrame:
+    """病院別の結果（病院名と医療機関コードは載せず、構想区域ごとに A病院・B病院… と伏せる。mask_ids）。"""
+    r = pd.concat([r, mask_ids(r)], axis=1).sort_values("hospital_id", key=_id_order)
     cols = ["hospital_id", "hospital_label", "pref_code", "koso_kuiki_code", "koso_kuiki_name", "type",
             "items_met", "P_count", "S_count", "C_count"]
     cols += [i.code for i in ITEMS] + [f"{i.code}_value" for i in ITEMS] + ["shien_kind"]

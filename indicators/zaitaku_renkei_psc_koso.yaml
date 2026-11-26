@@ -1,5 +1,5 @@
 id: zaitaku_renkei_psc_koso
-version: 0.1.0
+version: 0.1.1
 status: draft
 name: 在宅医療等連携機能の類型（P・S・C）に該当する病院の数（構想区域別）
 short_description: 在宅医療等連携機能のP・S・Cのいずれかの類型に該当する病院が、構想区域ごとにいくつあるかを数える
@@ -14,6 +14,11 @@ denominator:
   description: なし（病院の数をそのまま示す）。比べる目安として、対象の病院（一般・療養病床を持つ病院）の数を列に出す
   dataset: bed_function_report_r7_facility
   as_of: 令和7年7月1日
+datasets:
+  - bed_function_report_r7_facility
+  - bed_function_report_r7_form2_annual
+  - outpatient_function_report_r7_form2
+  - kouseikyoku_todokede_ika_r8
 formula: 構想区域ごとに、類型に該当する病院の数を数える
 
 intent: >
@@ -57,6 +62,8 @@ caveats:
 alternatives:
   - id: zaitaku_renkei_psc_hospital
     reason: 病院ごとの類型と18項目の○×（星取り表）を見る
+  - id: zaitaku_renkei_trend_koso
+    reason: 構想区域ごとの、毎年追える11項目の1病院あたり該当数の推移（FY2020〜2024）
 
 authors:
   - name: D.S.

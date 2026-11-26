@@ -154,6 +154,15 @@ details.rd summary{cursor:pointer;min-height:44px;display:flex;align-items:cente
 .map path.a[tabindex]{cursor:pointer;outline:none}
 .map path.a[tabindex]:focus-visible{stroke:var(--link);stroke-width:3}
 .map .msg{padding:24px;color:var(--mut);font-size:14px}
+.trw{margin:10px 0 4px;break-inside:avoid}
+.trw .sv{overflow-x:auto}.trw svg{display:block;width:100%;min-width:600px;height:auto;max-width:760px;overflow:visible}
+.trw .ax{stroke:var(--grid);stroke-width:1}.trw .axl{fill:var(--mut);font:12px "Hanken Grotesk","BIZ UDPGothic",sans-serif;font-variant-numeric:tabular-nums}
+.trw .ln{fill:none;stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round}.trw .pt{stroke:var(--bg);stroke-width:1.5}
+.trw .lb{font:600 12px "Hanken Grotesk","BIZ UDPGothic",sans-serif;font-variant-numeric:tabular-nums}
+:root{--t0:light-dark(#141414,#f1f1ec);--t1:light-dark(#257de0,#6aabf1);--t2:light-dark(#c2410c,#fb923c);--t3:light-dark(#15803d,#4ade80);--t4:light-dark(#7e22ce,#c084fc)}
+.trw .t0{stroke:var(--t0);fill:var(--t0)}.trw .t1{stroke:var(--t1);fill:var(--t1)}.trw .t2{stroke:var(--t2);fill:var(--t2)}.trw .t3{stroke:var(--t3);fill:var(--t3)}.trw .t4{stroke:var(--t4);fill:var(--t4)}
+.trw .ln.t0,.trw .ln.t1,.trw .ln.t2,.trw .ln.t3,.trw .ln.t4{fill:none}.trw .lb{stroke:none}
+.trw table td .sw{display:inline-block;width:14px;height:3px;vertical-align:middle;margin-right:6px;print-color-adjust:exact;-webkit-print-color-adjust:exact}
 .legend{display:flex;flex-wrap:wrap;align-items:center;gap:4px 14px;margin:8px 0 2px;font-size:13px}
 .legend .k{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;font-family:"Hanken Grotesk","BIZ UDPGothic",sans-serif;font-variant-numeric:tabular-nums}
 .legend .sw{width:16px;height:12px;border-radius:2px;print-color-adjust:exact;-webkit-print-color-adjust:exact}
@@ -468,6 +477,47 @@ function recordHtml() {
   <p>${ins.map((i) => esc(i.attribution)).join("<br>")}${CAT.geo?.length ? `<br>${esc(CAT.geo[0].attribution)}（地図の境界）` : ""}</p></details>`;
 }
 
+// ---- 推移（結果のファイルの series。値は Python が作ったものをそのまま描く） ----------------
+function trendHtml(v) {
+  const sr = RS.doc.series; if (!sr || !sr.times?.length) return "";
+  const { d, o } = v, kindWord = { pooled: "計", mean: "の平均" }[sr.kind] || "の中央値";
+  const tcol = RS.doc.columns.find((x) => x.name === sr.time_column);
+  const sd = sr.kind === "mean" ? Math.max(d, 2) : d; // 平均は整数の値でも小数で示す
+  const lines = [{ name: sr.kind === "pooled" ? "全国計" : `全国${kindWord}`, vals: sr.national, c: "t0", dg: sd }];
+  if (RS.pref) lines.push({ name: `${v.region}${kindWord}`, vals: sr.by_pref?.[RS.pref] || [], c: "t1", dg: sd });
+  v.items.filter((x) => v.hl.has(x.code)).slice(0, 3).forEach((x, i) => lines.push({ name: x.name, vals: sr.areas?.[x.code] || [], c: `t${i + 2}`, dg: d }));
+  const all = lines.flatMap((l) => l.vals).filter((x) => x !== null && x !== undefined);
+  if (!all.length) return "";
+  const W = 720, H = 250, L = 52, R = 170, T = 14, B = 30, n = sr.times.length;
+  const hi = Math.max(...all), lo = Math.min(0, ...all);
+  const step = (() => { const raw = (hi - lo) / 4 || 1, p = 10 ** Math.floor(Math.log10(raw)); return [1, 2, 2.5, 5, 10].map((m) => m * p).find((m) => m >= raw); })();
+  const top = Math.ceil(hi / step) * step || step, bot = Math.floor(lo / step) * step;
+  const X = (i) => L + (n === 1 ? (W - L - R) / 2 : (i * (W - L - R)) / (n - 1));
+  const Y = (y) => T + ((top - y) / (top - bot || 1)) * (H - T - B);
+  let g = "";
+  for (let y = bot; y <= top + 1e-9; y += step) g += `<line class="ax" x1="${L}" x2="${W - R + 8}" y1="${Y(y)}" y2="${Y(y)}"/><text class="axl" x="${L - 8}" y="${Y(y) + 4}" text-anchor="end">${fmt(y, step < 1 ? Math.min(2, d) : 0)}</text>`;
+  sr.times.forEach((tm, i) => { g += `<text class="axl" x="${X(i)}" y="${H - 8}" text-anchor="middle">${esc(tm)}</text>`; });
+  const ends = [];
+  for (const l of lines) {
+    const pts = l.vals.map((y, i) => (y === null || y === undefined ? null : [X(i), Y(y)]));
+    let seg = [], path = "";
+    pts.forEach((p) => { if (p) seg.push(p); else { if (seg.length > 1) path += `M${seg.map((q) => q.join(",")).join("L")}`; seg = []; } });
+    if (seg.length > 1) path += `M${seg.map((q) => q.join(",")).join("L")}`;
+    if (path) g += `<path class="ln ${l.c}" d="${path}"/>`;
+    pts.forEach((p, i) => { if (p) g += `<circle class="pt ${l.c}" cx="${p[0]}" cy="${p[1]}" r="3.5"><title>${esc(l.name)} ${esc(sr.times[i])}：${fmt(l.vals[i], l.dg)}</title></circle>`; });
+    const last = pts.map((p, i) => [p, i]).filter(([p]) => p).pop();
+    if (last) ends.push({ y: last[0][1], x: last[0][0], text: `${l.name} ${fmt(l.vals[last[1]], l.dg)}`, c: l.c });
+  }
+  ends.sort((a, b) => a.y - b.y);
+  for (let i = 1; i < ends.length; i++) ends[i].y = Math.max(ends[i].y, ends[i - 1].y + 15);
+  for (const e of ends) g += `<text class="lb ${e.c}" x="${e.x + 8}" y="${e.y + 4}">${esc(e.text.length > 18 ? e.text.slice(0, 17) + "…" : e.text)}</text>`;
+  const rows = lines.map((l) => `<tr><td><span class="sw" style="background:var(--${l.c})"></span>${esc(l.name)}</td>${l.vals.map((x) => `<td class="num">${fmt(x, l.dg)}</td>`).join("")}</tr>`).join("");
+  return `<section class="trw" aria-labelledby="tr-h"><p class="ch" id="tr-h">推移（${esc(o.unit || "")}）</p>
+  <div class="sv"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(lines.map((l) => l.name).join("・"))}の${esc(tcol?.label || "時点")}ごとの値">${g}</svg></div>
+  <div class="tw"><table class="rt"><thead><tr><th>${esc(tcol?.label || "時点")}</th>${sr.times.map((tm) => `<th class="num">${esc(tm)}</th>`).join("")}</tr></thead><tbody>${rows}</tbody></table></div>
+  <p class="note">表・地図・棒グラフは最新の${esc(tcol?.label || "時点")}（${esc(sr.times[n - 1])}）の値です。${RS.pref ? "" : "都道府県を選ぶと、その都道府県の線が加わります。"}地域を強調すると（グラフや地図で選ぶ、チャットで頼む）、その地域の線も描きます（3つまで）。すべての時点の値は「スクリプトの列名のままのCSV」に入っています。</p></section>`;
+}
+
 function drawResult() {
   const el = $("res"); if (!el || !RS) return;
   const { c, doc, meta, pref } = RS;
@@ -496,6 +546,7 @@ function drawResult() {
   ${hlItems.length ? `<div class="hlbar"><span>強調している地域：${hlItems.map((x) => esc(x.name)).join("、")}（グラフと表の太字の行）</span><button class="btn ghost np" type="button" id="hl-off">強調をやめる</button></div>` : ""}
   <div class="kpis">${kpis}</div>
   <p class="note">「計」は、表の行の分子と分母をそれぞれ合計して計算した値です。中央値は${esc(v.unitWord)}ごとの値の中央値です。どちらも計算スクリプトの出力から作成しています。</p>
+  ${trendHtml(v)}
   ${CAT.geo?.length ? `<section class="mapw" id="mapw" aria-labelledby="map-h"><p class="ch" id="map-h">${pref ? `${esc(v.region)}の` : "全国の"}${esc(v.unitWord)}ごとの値（地図）${pref ? "" : `<span class="note np" style="font-weight:400">　地域を押すと、その都道府県を表示します</span>`}</p><div class="map" id="map"><p class="msg">地図を読み込んでいます…</p></div><div class="legend" id="legend"></div><div class="maptools" id="maptools"></div></section>` : ""}
   <p class="ch">${pref ? `${esc(v.region)}の${esc(v.unitWord)}ごとの値` : `都道府県ごとの${v.pooled ? "計" : "中央値"}`}（${esc(o.unit || "")}）${pref ? "" : `<span class="note np" style="font-weight:400">　棒を押すと、その都道府県の${esc(v.unitWord)}ごとの値を表示します</span>`}</p>
   ${barsHtml(v, !pref)}

@@ -1,5 +1,5 @@
 id: zaitaku_renkei_psc_hospital
-version: 0.1.0
+version: 0.1.1
 status: draft
 name: 在宅医療等連携機能の類型（P・S・C）と星取り表（病院別）
 short_description: 病院ごとに在宅医療に関わる18項目を実数の基準と比べ、P・S・Cの3類型を判定し、どの項目を満たすかを○×で示す
@@ -16,6 +16,11 @@ denominator:
   description: 割合の基準の分母。P4・S1・S3は退院患者数、C1は新規入棟患者数、C2・C3は退棟患者数（いずれも病棟票、病院ごとに合計）
   dataset: bed_function_report_r7_ward
   as_of: 令和6年度実績
+datasets:
+  - bed_function_report_r7_facility
+  - bed_function_report_r7_form2_annual
+  - outpatient_function_report_r7_form2
+  - kouseikyoku_todokede_ika_r8
 formula: 項目ごとに「件数の基準以上、または割合の基準以上」で○。P 6項目中3以上・S 7項目中4以上・C 5項目中3以上で類型に該当（複数は併記、なしは「—」）
 
 intent: >
@@ -59,6 +64,8 @@ caveats:
 alternatives:
   - id: zaitaku_renkei_psc_koso
     reason: 構想区域ごとに、類型に該当する病院の数を数える（地図に載る）
+  - id: zaitaku_renkei_trend_hospital
+    reason: 病院ごとの、毎年追える11項目の該当数の推移（FY2020〜2024）
 
 authors:
   - name: D.S.

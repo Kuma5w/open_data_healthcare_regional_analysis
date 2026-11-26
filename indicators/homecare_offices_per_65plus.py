@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import pandas as pd
 
-from chiiki_od import codes, paths
+from chiiki_od import codes, inputs, paths
 from chiiki_od.convert import read_with_spec
 
 SCALE = 10_000
@@ -21,20 +21,18 @@ def _safe_code5(value) -> str | None:
         return None
 
 
+POPULATION = "population_jumin_r8"  # 事業所の時点（2026年6月末）に近い令和8年1月1日
+
+
 def load_inputs(sample: bool = False) -> dict[str, pd.DataFrame]:
+    pop = inputs.population(POPULATION, sample=sample)
+    # 郡・島しょの合計行と全国は除く（政令市の合計と区の扱いは compute で決める）
+    pop = pop[~pop["level"].isin(["county", "islands", "national"])]
     if sample:
-        return {
-            "offices": read_with_spec(
-                "kaigo_jigyosho_110", paths.FIXTURES / "kaigo_jigyosho_110_sample.csv"
-            ),
-            "population": read_with_spec(
-                "population_65plus", paths.FIXTURES / "population_65plus_sample.csv"
-            ),
-        }
-    return {
-        "offices": pd.read_parquet(paths.PROCESSED / "kaigo_jigyosho_110.parquet"),
-        "population": pd.read_parquet(paths.PROCESSED / "population_65plus.parquet"),
-    }
+        offices = read_with_spec("kaigo_jigyosho_110", paths.FIXTURES / "kaigo_jigyosho_110_sample.csv")
+    else:
+        offices = pd.read_parquet(paths.PROCESSED / "kaigo_jigyosho_110.parquet")
+    return {"offices": offices, "population": pop}
 
 
 def compute(

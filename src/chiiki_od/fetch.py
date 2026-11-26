@@ -32,7 +32,8 @@ def fetch_dataset(dataset_id: str, force: bool = False, from_dir: str | Path | N
     """データセットの全ファイルを data/raw/ に用意する。
 
     from_dir を指定すると、公表元URLと同じファイル名（例: 001717798.xlsx）のファイルを
-    そのフォルダから探して取り込む（ダウンロードしない）。
+    そのフォルダから探して取り込む（ダウンロードしない）。ファイル名が公表元と違う場合は
+    datasets/<id>.yaml の local_name に書く。
     """
     ds = specs.load_dataset(dataset_id)
     man = manifest.load(dataset_id)
@@ -50,13 +51,18 @@ def fetch_dataset(dataset_id: str, force: bool = False, from_dir: str | Path | N
             print(f"既にあります（--force で取り直し）: {dest.relative_to(paths.ROOT)}")
             fetched_at = previous.get("fetched_at") or manifest.now()
         elif from_dir is not None:
-            src = Path(from_dir) / Path(urlparse(url).path).name
+            src = Path(from_dir) / (fs.get("local_name") or Path(urlparse(url).path).name)
             if not src.exists():
                 missing.append(src.name)
                 continue
             shutil.copy2(src, dest)
             fetched_at, how = manifest.now(), "local_copy"
             print(f"取り込み: {src} → {dest.relative_to(paths.ROOT)}")
+        elif fs.get("manual_download"):
+            raise ValueError(
+                f"{dataset_id}/{fs['key']} は直接ダウンロードできません。{url} から手動でダウンロードし、"
+                f"--from-dir でそのフォルダを指定してください（ファイル名: {fs.get('local_name', '任意')}）"
+            )
         else:
             _download(url, dest)
             fetched_at, how = manifest.now(), "download"

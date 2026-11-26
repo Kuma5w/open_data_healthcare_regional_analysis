@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-11-26T02:37:33+00:00",
+  "generated_at": "2026-11-26T02:52:03+00:00",
   "indicators": [
     {
       "id": "homecare_offices_per_65plus",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "status": "draft",
       "name": "65歳以上人口1万人あたり訪問介護事業所数",
       "short_description": "高齢者人口に対する訪問介護の拠点の多さを、市区町村ごとに同じ方法で比べる入口の指標",
@@ -16,7 +16,7 @@
       },
       "denominator": {
         "description": "65歳以上人口（総計＝日本人住民＋外国人住民）",
-        "dataset": "population_65plus",
+        "dataset": "population_jumin_r8",
         "as_of": "2026年1月1日"
       },
       "formula": "訪問介護事業所数 ÷ 65歳以上人口 × 10,000",
@@ -61,6 +61,147 @@
         {
           "title": "住民基本台帳に基づく人口、人口動態及び世帯数（総務省）",
           "url": "https://www.soumu.go.jp/main_sosiki/jichi_gyousei/daityo/jinkou_jinkoudoutai-setaisuu.html"
+        }
+      ],
+      "created": "2026-11-26",
+      "updated": "2026-11-26"
+    },
+    {
+      "id": "recovery_bed_share_koso",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": "構想区域ごとの回復期病床の割合（休棟中を除く許可病床数に占める割合）",
+      "short_description": "病床機能報告で回復期と報告された病床が、区域の病床全体の何％かを構想区域ごとに比べる指標",
+      "unit_of_analysis": "koso_kuiki",
+      "unit_note": "病棟票の構想区域コード（医療機関が報告したもの）で集計する。",
+      "numerator": {
+        "description": "2025年7月1日時点の医療機能を「回復期」と報告した病棟の許可病床数（一般病床 w019 ＋ 療養病床 w023）",
+        "dataset": "bed_function_report_r7_ward",
+        "as_of": "2025年7月1日"
+      },
+      "denominator": {
+        "description": "高度急性期・急性期・回復期・慢性期と報告した病棟の許可病床数の合計（休棟中の病棟を除く）",
+        "dataset": "bed_function_report_r7_ward",
+        "as_of": "2025年7月1日"
+      },
+      "formula": "回復期の許可病床数 ÷ 4機能の許可病床数の合計 × 100（％）",
+      "intent": "地域医療構想で長く議論されてきた「回復期の不足」が、構想区域によってどれくらい違うかを同じ方法で比べるための入口の指標。病床機能報告上の機能の構成を見るもので、実際に提供されている医療や必要な量そのものではない。必要病床数の構成比と並べて、差の大きい区域を議論の出発点にすることを想定している。",
+      "why_this_denominator": "休棟中の病床を分母に含めると、休棟が多い区域ほど割合が低く出るため除いた。許可病床数を使ったのは、必須項目で欠損がなく区域間で比べやすいため。実際に使われている病床で見たい場合は、最大使用病床数（w020・w024）を使う別の指標が考えられる。",
+      "interpretation": "割合が低い区域は、回復期として報告された病床が少ない。ただし急性期や慢性期と報告された病棟でも回復期の医療が提供されている場合があり、割合が低いことから直ちに「回復期の医療が不足している」とは言えない。病床の少ない区域では、1病棟の機能の変更で割合が大きく変わる。",
+      "policy_questions": [
+        "必要病床数の構成と比べて、回復期と報告された病床が少ない構想区域はどこか",
+        "定量的な基準で補正すると、区域の順位はどう変わるか"
+      ],
+      "caveats": [
+        "医療機能は、定性的な基準を参考に各医療機関が病棟ごとに1つ選んで報告したもの。実際の病棟には様々な病期の患者が入院している。",
+        "回復期機能は回復期リハビリテーション病棟や地域包括ケア病棟に限られるという誤解などから、主に回復期の医療を担う病棟が急性期と報告されている例があると、厚生労働省の通知（平成30年8月16日）で指摘されている。都道府県によっては定量的な基準で補正している。",
+        "有床診療所の病床は含まない（診療所票は医療機能を診療所単位で報告しており、病棟票と単位が違う）。",
+        "構想区域は、病床機能報告に医療機関が報告した構想区域コードによる（令和7年度の構想区域マスタ）。",
+        "令和8年度以降の報告では回復期機能が「包括期機能」に見直されるため、年度をまたぐ比較では定義の違いに注意する。",
+        "都道府県が個別に報告内容を更新している場合があり、都道府県の公表値と一致しないことがある。",
+        "許可病床数で数えており、実際に稼働している病床数とは異なる。"
+      ],
+      "alternatives": [
+        {
+          "id": "recovery_beds_per_100k_75plus_koso",
+          "reason": "割合ではなく、75歳以上人口あたりの回復期病床の量で比べる"
+        },
+        {
+          "id": "recovery_share_max_used_koso",
+          "reason": "許可病床数の代わりに最大使用病床数で数え、実際に使われている病床で見る"
+        },
+        {
+          "id": "recovery_share_quantitative_koso",
+          "reason": "都道府県の定量的な基準で、急性期と報告された病棟の一部を回復期相当として数え直す"
+        }
+      ],
+      "authors": [
+        {
+          "name": "（作成者名）",
+          "affiliation": "（所属）"
+        }
+      ],
+      "script": "indicators/recovery_bed_share_koso.py",
+      "references": [
+        {
+          "title": "令和7年度病床機能報告公表データ（厚生労働省）",
+          "url": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/open_data_00020.html"
+        },
+        {
+          "title": "地域医療構想調整会議の活性化のための地域の実情に応じた定量的な基準の導入について（平成30年8月16日 医政地発0816第1号）",
+          "url": "https://www.mhlw.go.jp/content/10800000/001621966.pdf"
+        }
+      ],
+      "created": "2026-11-26",
+      "updated": "2026-11-26"
+    },
+    {
+      "id": "recovery_beds_per_100k_75plus_koso",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": "構想区域ごとの75歳以上人口10万人あたり回復期病床数",
+      "short_description": "回復期と報告された病床の量を、75歳以上人口に対して構想区域ごとに比べる指標",
+      "unit_of_analysis": "koso_kuiki",
+      "unit_note": "病床は病棟票の構想区域コードで、人口は reference/koso_kuiki.csv で市区町村（政令市は区）から構想区域に集計する。",
+      "numerator": {
+        "description": "2025年7月1日時点の医療機能を「回復期」と報告した病棟の許可病床数（一般病床 w019 ＋ 療養病床 w023）",
+        "dataset": "bed_function_report_r7_ward",
+        "as_of": "2025年7月1日"
+      },
+      "denominator": {
+        "description": "75歳以上人口（総計＝日本人住民＋外国人住民）。市区町村と政令市の区の行を構想区域ごとに合計",
+        "dataset": "population_jumin_r7",
+        "as_of": "2025年1月1日"
+      },
+      "formula": "回復期の許可病床数 ÷ 75歳以上人口 × 100,000",
+      "intent": "回復期の病床の量を、需要の中心になる高齢者の人口に対して構想区域ごとに比べるための指標。回復期の割合（recovery_bed_share_koso）だけでは、区域全体の病床が多いのか少ないのかが分からないため、人口あたりの量で補う。",
+      "why_this_denominator": "回復期の入院（大腿骨骨折や脳卒中の後のリハビリ、高齢者の急性疾患の後の在宅復帰支援など）は75歳以上に多く、2040年に向けた新たな地域医療構想でも高齢者救急と在宅復帰支援が需要の中心になるため、75歳以上人口を選んだ。総人口を分母にすると、若い人口の多い都市部で値が小さく出る。65歳以上を分母にした版は別の指標として並べられる。",
+      "interpretation": "値が大きいほど、75歳以上人口に対して回復期と報告された病床が多い。患者が構想区域をまたいで入院する流出入は反映しないため、隣接する区域と合わせて見る。",
+      "policy_questions": [
+        "高齢者人口に対して回復期の病床が少ない構想区域はどこか",
+        "回復期の割合が低い区域は、人口あたりの量でも少ないのか"
+      ],
+      "caveats": [
+        "医療機能は、定性的な基準を参考に各医療機関が病棟ごとに1つ選んで報告したもの。実際の病棟には様々な病期の患者が入院している。",
+        "回復期機能は回復期リハビリテーション病棟や地域包括ケア病棟に限られるという誤解などから、主に回復期の医療を担う病棟が急性期と報告されている例があると、厚生労働省の通知（平成30年8月16日）で指摘されている。都道府県によっては定量的な基準で補正している。",
+        "有床診療所の病床は含まない（診療所票は医療機能を診療所単位で報告しており、病棟票と単位が違う）。",
+        "構想区域は、病床機能報告に医療機関が報告した構想区域コードによる（令和7年度の構想区域マスタ）。",
+        "令和8年度以降の報告では回復期機能が「包括期機能」に見直されるため、年度をまたぐ比較では定義の違いに注意する。",
+        "都道府県が個別に報告内容を更新している場合があり、都道府県の公表値と一致しないことがある。",
+        "患者の構想区域間の流出入を反映しない。",
+        "分子（2025年7月1日）と分母（2025年1月1日）の時点が半年ずれている。",
+        "外国人住民が少ない市区町村では外国人住民の年齢内訳が非公表のため、75歳以上人口がわずかに少なく数えられる（人口データの age_sum_gap）。",
+        "北方領土の6村は人口0で構想区域の対応表にないため、集計から除外される（影響なし）。"
+      ],
+      "alternatives": [
+        {
+          "id": "recovery_bed_share_koso",
+          "reason": "人口ではなく、区域の病床全体に占める割合で比べる"
+        },
+        {
+          "id": "recovery_beds_per_100k_65plus_koso",
+          "reason": "65歳以上人口を分母にし、他の高齢者向け指標と分母を揃える"
+        }
+      ],
+      "authors": [
+        {
+          "name": "（作成者名）",
+          "affiliation": "（所属）"
+        }
+      ],
+      "script": "indicators/recovery_beds_per_100k_75plus_koso.py",
+      "references": [
+        {
+          "title": "令和7年度病床機能報告公表データ（厚生労働省）",
+          "url": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/open_data_00020.html"
+        },
+        {
+          "title": "住民基本台帳に基づく人口、人口動態及び世帯数（総務省）",
+          "url": "https://www.soumu.go.jp/main_sosiki/jichi_gyousei/daityo/jinkou_jinkoudoutai-setaisuu.html"
+        },
+        {
+          "title": "地域医療構想調整会議の活性化のための地域の実情に応じた定量的な基準の導入について（平成30年8月16日 医政地発0816第1号）",
+          "url": "https://www.mhlw.go.jp/content/10800000/001621966.pdf"
         }
       ],
       "created": "2026-11-26",
@@ -306,41 +447,50 @@
       "codebook": null
     },
     {
-      "id": "population_65plus",
-      "title": "市区町村別 65歳以上人口（住民基本台帳に基づく人口）",
+      "id": "population_jumin_r7",
+      "title": "住民基本台帳 年齢階級別人口（市区町村別・総計）令和7年1月1日",
+      "publisher": "総務省",
+      "source_page": "https://www.soumu.go.jp/main_sosiki/jichi_gyousei/daityo/jinkou_jinkoudoutai-setaisuu.html",
+      "attribution": "出典：総務省「住民基本台帳に基づく人口、人口動態及び世帯数」（令和7年1月1日現在）を加工して作成",
+      "update_frequency": "年1回（1月1日現在）",
+      "verified": true,
+      "columns": [],
+      "notes": [
+        "令和7年の結果は総務省のページから外れ、e-Statに掲載されている。e-Statの「住民基本台帳に基づく人口、人口動態及び世帯数」の令和7年から【総計】年齢階級別人口（市区町村別）を手動でダウンロードする。",
+        "【総計】は日本人住民と外国人住民の合計。",
+        "1団体につき sex が total・male・female の3行。level 列で national・prefecture・designated_city（政令市の合計）・ward（政令市の区）・county（郡の合計）・islands（東京都の島しょの合計）・municipality を区別する。",
+        "市区町村単位で足し上げるときは level が municipality と ward の行だけを使う（郡・島しょ・政令市の合計・都道府県は集計行なので二重計上になる）。",
+        "pop_65plus・pop_75plus などは5歳階級を足したもの。外国人住民が少ない市区町村では外国人住民の年齢内訳が非公表のため、総数と年齢階級の合計が合わない（差は age_sum_gap 列）。",
+        "外国人住民のうち性別欄が空欄の人は男女に計上されず総計にのみ計上されるため、male＋female が total と一致しない場合がある。",
+        "市区町村コードは6桁（検査数字付き）から5桁に揃えている。構想区域との対応は reference/koso_kuiki.csv（政令市は区単位）。"
+      ],
+      "related": [
+        "population_jumin_r7",
+        "population_jumin_r8"
+      ],
+      "codebook": null
+    },
+    {
+      "id": "population_jumin_r8",
+      "title": "住民基本台帳 年齢階級別人口（市区町村別・総計）令和8年1月1日",
       "publisher": "総務省",
       "source_page": "https://www.soumu.go.jp/main_sosiki/jichi_gyousei/daityo/jinkou_jinkoudoutai-setaisuu.html",
       "attribution": "出典：総務省「住民基本台帳に基づく人口、人口動態及び世帯数」（令和8年1月1日現在）を加工して作成",
       "update_frequency": "年1回（1月1日現在）",
-      "verified": false,
-      "columns": [
-        {
-          "name": "municipality_code",
-          "type": "str",
-          "description": "5桁"
-        },
-        {
-          "name": "municipality_name",
-          "type": "str"
-        },
-        {
-          "name": "pop_total",
-          "type": "int"
-        },
-        {
-          "name": "pop_65plus",
-          "type": "int"
-        },
-        {
-          "name": "as_of",
-          "type": "str"
-        }
-      ],
+      "verified": true,
+      "columns": [],
       "notes": [
-        "変換後は「1行＝1市区町村」の縦長の表にする。政令市は市の合計行と区の行の両方を残し、どちらを使うかは指標側で決める（二重計上に注意）。",
-        "【総計】は日本人住民と外国人住民の合計。"
+        "【総計】は日本人住民と外国人住民の合計。",
+        "1団体につき sex が total・male・female の3行。level 列で national・prefecture・designated_city（政令市の合計）・ward（政令市の区）・county（郡の合計）・islands（東京都の島しょの合計）・municipality を区別する。",
+        "市区町村単位で足し上げるときは level が municipality と ward の行だけを使う（郡・島しょ・政令市の合計・都道府県は集計行なので二重計上になる）。",
+        "pop_65plus・pop_75plus などは5歳階級を足したもの。外国人住民が少ない市区町村では外国人住民の年齢内訳が非公表のため、総数と年齢階級の合計が合わない（差は age_sum_gap 列）。",
+        "外国人住民のうち性別欄が空欄の人は男女に計上されず総計にのみ計上されるため、male＋female が total と一致しない場合がある。",
+        "市区町村コードは6桁（検査数字付き）から5桁に揃えている。構想区域との対応は reference/koso_kuiki.csv（政令市は区単位）。"
       ],
-      "related": [],
+      "related": [
+        "population_jumin_r7",
+        "population_jumin_r8"
+      ],
       "codebook": null
     }
   ]

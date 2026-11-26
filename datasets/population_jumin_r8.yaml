@@ -1,0 +1,28 @@
+publisher: 総務省
+source_page: https://www.soumu.go.jp/main_sosiki/jichi_gyousei/daityo/jinkou_jinkoudoutai-setaisuu.html
+license:
+  terms_url: https://www.soumu.go.jp/menu_kyotsuu/policy/tyosaku.html
+  attribution: 出典：総務省「住民基本台帳に基づく人口、人口動態及び世帯数」（令和8年1月1日現在）を加工して作成
+  notes: 利用規約のURLは要確認。
+update_frequency: 年1回（1月1日現在）
+verified: true
+parser: population_jumin_age
+related:
+- population_jumin_r7
+- population_jumin_r8
+id: population_jumin_r8
+output: population_jumin_r8
+title: 住民基本台帳 年齢階級別人口（市区町村別・総計）令和8年1月1日
+verified_note: 2026-11-26に公表ファイル（000892953.xlsx、6,828行×26列）で確認。
+files:
+- key: main
+  url: https://www.soumu.go.jp/main_content/000892953.xlsx
+  format: xlsx
+  as_of: 令和8年1月1日
+notes:
+- 【総計】は日本人住民と外国人住民の合計。
+- 1団体につき sex が total・male・female の3行。level 列で national・prefecture・designated_city（政令市の合計）・ward（政令市の区）・county（郡の合計）・islands（東京都の島しょの合計）・municipality を区別する。
+- 市区町村単位で足し上げるときは level が municipality と ward の行だけを使う（郡・島しょ・政令市の合計・都道府県は集計行なので二重計上になる）。
+- pop_65plus・pop_75plus などは5歳階級を足したもの。外国人住民が少ない市区町村では外国人住民の年齢内訳が非公表のため、総数と年齢階級の合計が合わない（差は age_sum_gap 列）。
+- 外国人住民のうち性別欄が空欄の人は男女に計上されず総計にのみ計上されるため、male＋female が total と一致しない場合がある。
+- 市区町村コードは6桁（検査数字付き）から5桁に揃えている。構想区域との対応は reference/koso_kuiki.csv（政令市は区単位）。

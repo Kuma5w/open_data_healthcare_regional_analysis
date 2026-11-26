@@ -28,8 +28,16 @@ def parse_medical_facility_survey(ds: dict):
     return parse_dataset(ds)
 
 
+def parse_kouseikyoku(ds: dict):
+    """地方厚生局の届出受理医療機関名簿（施設基準の届出）。詳細は chiiki_od.kouseikyoku。"""
+    from .kouseikyoku import parse_dataset
+
+    return parse_dataset(ds)
+
+
 PARSERS = {
     "population_jumin_age": parse_population_jumin_age,
     "bed_function_report": parse_bed_function_report,
     "medical_facility_survey": parse_medical_facility_survey,
+    "kouseikyoku": parse_kouseikyoku,
 }

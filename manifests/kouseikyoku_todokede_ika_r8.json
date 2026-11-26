@@ -1,0 +1,921 @@
+{
+  "dataset": "kouseikyoku_todokede_ika_r8",
+  "files": {
+    "p01": {
+      "url": "https://kouseikyoku.mhlw.go.jp/hokkaido/",
+      "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+      "raw_path": "data/raw/kouseikyoku_todokede_ika_r8/p01.xlsx",
+      "bytes": 3551117,
+      "sha256": "f78f9d268a30e7788bef74ec28e4abee37deaa16781cac0b221f62ed678e8ea8",
+      "fetched_at": "2026-11-26T06:50:00+00:00",
+      "obtained": "local_copy"
+    },
+    "tohoku": {
+      "url": "https://kouseikyoku.mhlw.go.jp/tohoku/",
+      "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+      "raw_path": "data/raw/kouseikyoku_todokede_ika_r8/tohoku.xlsx",
+      "bytes": 7327772,
+      "sha256": "fc8f37cba4a300fae6ae5a90cc0939ed5fb38a010823952406f3eea4bb693844",
+      "fetched_at": "2026-11-26T06:50:00+00:00",
+      "obtained": "local_copy"
+    },
+    "p08": {
+      "url": "https://kouseikyoku.mhlw.go.jp/kantoshinetsu/",
+      "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+      "raw_path": "data/raw/kouseikyoku_todokede_ika_r8/p08.xlsx",
+      "bytes": 1779131,
+      "sha256": "6539daf862e951927cab9f86951bfcd9478f81bc2e833a5c95cd1ad2312b7955",
+      "fetched_at": "2026-11-26T06:50:00+00:00",
+      "obtained": "local_copy"
+    },
+    "p09": {
+      "url": "https://kouseikyoku.mhlw.go.jp/kantoshinetsu/",
+      "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+      "raw_path": "data/raw/kouseikyoku_todokede_ika_r8/p09.xlsx",
+      "bytes": 1358229,
+      "sha256": "70cbda78aeeae368434c0ed46d964886eba3ed988a9be7f308dbf317e6c90c40",
+      "fetched_at": "2026-11-26T06:50:00+00:00",
+      "obtained": "local_copy"
+    },
+    "p10": {
+      "url": "https://kouseikyoku.mhlw.go.jp/kantoshinetsu/",
+      "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+      "raw_path": "data/raw/kouseikyoku_todokede_ika_r8/p10.xlsx",
+      "bytes": 1636908,
+      "sha256": "e04b1d76cbbe50fd54770369614f231c191d6f9ea9d2782d5cb9327d0019f092",
+      "fetched_at": "2026-11-26T06:50:00+00:00",
+      "obtained": "local_copy"
+    },
+    "p11": {
+      "url": "https://kouseikyoku.mhlw.go.jp/kantoshinetsu/",
+      "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+      "raw_path": "data/raw/kouseikyoku_todokede_ika_r8/p11.xlsx",
+      "bytes": 3584028,
+      "sha256": "54c5ff2cf8b61771a91b66aad27bc10c14b3857cbb69f906336a4d7d7bfe9200",
+      "fetched_at": "2026-11-26T06:50:00+00:00",
+      "obtained": "local_copy"
+    },
+    "p12": {
+      "url": "https://kouseikyoku.mhlw.go.jp/kantoshinetsu/",
+      "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+      "raw_path": "data/raw/kouseikyoku_todokede_ika_r8/p12.xlsx",
+      "bytes": 3611319,
+      "sha256": "c0a06f6fb6e8292784f0547fce6fc95ed5fa56a5f76c89edb2ed2979c59a48a1",
+      "fetched_at": "2026-11-26T06:50:00+00:00",
+      "obtained": "local_copy"
+    },
+    "p13": {
+      "url": "https://kouseikyoku.mhlw.go.jp/kantoshinetsu/",
+      "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+      "raw_path": "data/raw/kouseikyoku_todokede_ika_r8/p13.xlsx",
+      "bytes": 9634148,
+      "sha256": "206f78d09eee977ea8cd76b81ce9bcdc63345191dd1b321f2f5bf05b8ba78364",
+      "fetched_at": "2026-11-26T06:50:00+00:00",
+      "obtained": "local_copy"
+    },
+    "p14": {
+      "url": "https://kouseikyoku.mhlw.go.jp/kantoshinetsu/",
+      "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+      "raw_path": "data/raw/kouseikyoku_todokede_ika_r8/p14.xlsx",
+      "bytes": 5066109,
+      "sha256": "5206cec47ffb773c88631e1957c553218e5b2fea5937563f1e0d684dcba49312",
+      "fetched_at": "2026-11-26T06:50:00+00:00",
+      "obtained": "local_copy"
+    },
+    "p15": {
+      "url": "https://kouseikyoku.mhlw.go.jp/kantoshinetsu/",
+      "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+      "raw_path": "data/raw/kouseikyoku_todokede_ika_r8/p15.xlsx",
+      "bytes": 1415975,
+      "sha256": "d4416073d997c410da4692ff31a9ede8c52c156e0b78fb784fe8b34b55398f4d",
+      "fetched_at": "2026-11-26T06:50:00+00:00",
+      "obtained": "local_copy"
+    },
+    "p19": {
+      "url": "https://kouseikyoku.mhlw.go.jp/kantoshinetsu/",
+      "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+      "raw_path": "data/raw/kouseikyoku_todokede_ika_r8/p19.xlsx",
+      "bytes": 509642,
+      "sha256": "e7f5a00d70735534bb1483c563f1a8a15065c6b96b44150e83072b4820a80b95",
+      "fetched_at": "2026-11-26T06:50:00+00:00",
+      "obtained": "local_copy"
+    },
+    "p20": {
+      "url": "https://kouseikyoku.mhlw.go.jp/kantoshinetsu/",
+      "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+      "raw_path": "data/raw/kouseikyoku_todokede_ika_r8/p20.xlsx",
+      "bytes": 1776285,
+      "sha256": "01d39b7a1725c8df33c3a41919402bdace863b583ca1859fc1ebb057acaeb516",
+      "fetched_at": "2026-11-26T06:50:00+00:00",
+      "obtained": "local_copy"
+    },
+    "p16": {
+      "url": "https://kouseikyoku.mhlw.go.jp/tokaihokuriku/",
+      "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+      "raw_path": "data/raw/kouseikyoku_todokede_ika_r8/p16.xlsx",
+      "bytes": 1134629,
+      "sha256": "ed87d91fb610814bc4a5f6f2a3534e50c7542883a9c1bcb19493a6887aeb9de6",
+      "fetched_at": "2026-11-26T06:50:00+00:00",
+      "obtained": "local_copy"
+    },
+    "p17": {
+      "url": "https://kouseikyoku.mhlw.go.jp/tokaihokuriku/",
+      "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+      "raw_path": "data/raw/kouseikyoku_todokede_ika_r8/p17.xlsx",
+      "bytes": 1291422,
+      "sha256": "a5fe5ab30e5c7be59b7174932f1cbc0f9691a51db0fb26b854bb34ca0dd81693",
+      "fetched_at": "2026-11-26T06:50:00+00:00",
+      "obtained": "local_copy"
+    },
+    "p21": {
+      "url": "https://kouseikyoku.mhlw.go.jp/tokaihokuriku/",
+      "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+      "raw_path": "data/raw/kouseikyoku_todokede_ika_r8/p21.xlsx",
+      "bytes": 1921192,
+      "sha256": "94af9c9f90c0aeace516760627f6ed645be1a90c096209423114221ab4bff01d",
+      "fetched_at": "2026-11-26T06:50:00+00:00",
+      "obtained": "local_copy"
+    },
+    "p22": {
+      "url": "https://kouseikyoku.mhlw.go.jp/tokaihokuriku/",
+      "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+      "raw_path": "data/raw/kouseikyoku_todokede_ika_r8/p22.xlsx",
+      "bytes": 3019881,
+      "sha256": "629d0eda06db289561e592b2a8fe41000d9ea8f1042bc05de0381531b7f9ee11",
+      "fetched_at": "2026-11-26T06:50:00+00:00",
+      "obtained": "local_copy"
+    },
+    "p23": {
+      "url": "https://kouseikyoku.mhlw.go.jp/tokaihokuriku/",
+      "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+      "raw_path": "data/raw/kouseikyoku_todokede_ika_r8/p23.xlsx",
+      "bytes": 6448112,
+      "sha256": "a4c6264878f155e64ae497cef236a4f73518a54b8cf72257ce90f78012dbed3e",
+      "fetched_at": "2026-11-26T06:50:00+00:00",
+      "obtained": "local_copy"
+    },
+    "p24": {
+      "url": "https://kouseikyoku.mhlw.go.jp/tokaihokuriku/",
+      "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+      "raw_path": "data/raw/kouseikyoku_todokede_ika_r8/p24.xlsx",
+      "bytes": 1585236,
+      "sha256": "29aec03e38a6ddafc5d70a5fbaff7cb883da169a4bf5199128256be1984c90fc",
+      "fetched_at": "2026-11-26T06:50:00+00:00",
+      "obtained": "local_copy"
+    },
+    "p18": {
+      "url": "https://kouseikyoku.mhlw.go.jp/kinki/",
+      "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+      "raw_path": "data/raw/kouseikyoku_todokede_ika_r8/p18.xlsx",
+      "bytes": 566038,
+      "sha256": "ef5a6e6ccb7f17b5d3994c0038dc0bc2321abc730fe95d52aa92a78f78445e72",
+      "fetched_at": "2026-11-26T06:50:00+00:00",
+      "obtained": "local_copy"
+    },
+    "p25": {
+      "url": "https://kouseikyoku.mhlw.go.jp/kinki/",
+      "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+      "raw_path": "data/raw/kouseikyoku_todokede_ika_r8/p25.xlsx",
+      "bytes": 949533,
+      "sha256": "1e8d2fab9c1eb72c6be1053d9a54950edf294d629975341520be8a20e60626ba",
+      "fetched_at": "2026-11-26T06:50:00+00:00",
+      "obtained": "local_copy"
+    },
+    "p26": {
+      "url": "https://kouseikyoku.mhlw.go.jp/kinki/",
+      "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+      "raw_path": "data/raw/kouseikyoku_todokede_ika_r8/p26.xlsx",
+      "bytes": 2066988,
+      "sha256": "341644f18a08365e8fae3bbc4c28e952f1724e9cd35e303622be5f48969f7226",
+      "fetched_at": "2026-11-26T06:50:00+00:00",
+      "obtained": "local_copy"
+    },
+    "p27": {
+      "url": "https://kouseikyoku.mhlw.go.jp/kinki/",
+      "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+      "raw_path": "data/raw/kouseikyoku_todokede_ika_r8/p27.xlsx",
+      "bytes": 7234461,
+      "sha256": "cb66e110b825800313a516bfb0fd9d09252ec3fc38d3bf419e4f9d38f93a2d50",
+      "fetched_at": "2026-11-26T06:50:00+00:00",
+      "obtained": "local_copy"
+    },
+    "p28": {
+      "url": "https://kouseikyoku.mhlw.go.jp/kinki/",
+      "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+      "raw_path": "data/raw/kouseikyoku_todokede_ika_r8/p28.xlsx",
+      "bytes": 4288506,
+      "sha256": "156a4bdc35b46555a14ee64e45952cd58a7dfac1999e0e11a9cb58f33a2a3a95",
+      "fetched_at": "2026-11-26T06:50:00+00:00",
+      "obtained": "local_copy"
+    },
+    "p29": {
+      "url": "https://kouseikyoku.mhlw.go.jp/kinki/",
+      "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+      "raw_path": "data/raw/kouseikyoku_todokede_ika_r8/p29.xlsx",
+      "bytes": 960592,
+      "sha256": "62b7340629b924113ab1a741275e0e7d98206063acda6ddedab34d1fccb56b6e",
+      "fetched_at": "2026-11-26T06:50:00+00:00",
+      "obtained": "local_copy"
+    },
+    "p30": {
+      "url": "https://kouseikyoku.mhlw.go.jp/kinki/",
+      "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+      "raw_path": "data/raw/kouseikyoku_todokede_ika_r8/p30.xlsx",
+      "bytes": 829969,
+      "sha256": "66bacff60871734b6d63626139b99dc7d85ded8bf8b02be35e7487f23f16664d",
+      "fetched_at": "2026-11-26T06:50:00+00:00",
+      "obtained": "local_copy"
+    },
+    "p31": {
+      "url": "https://kouseikyoku.mhlw.go.jp/chugokushikoku/",
+      "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+      "raw_path": "data/raw/kouseikyoku_todokede_ika_r8/p31.xlsx",
+      "bytes": 1140811,
+      "sha256": "57fe1ef56d9b1da96fdf59867fc9b8ff8d07dbd7a26e8c01b4c46fc413d88a41",
+      "fetched_at": "2026-11-26T06:50:00+00:00",
+      "obtained": "local_copy"
+    },
+    "p32": {
+      "url": "https://kouseikyoku.mhlw.go.jp/chugokushikoku/",
+      "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+      "raw_path": "data/raw/kouseikyoku_todokede_ika_r8/p32.xlsx",
+      "bytes": 1359225,
+      "sha256": "508f3e8f93de7455b42768e7c01c77a549e693c7de6f0f514f769902e26d865b",
+      "fetched_at": "2026-11-26T06:50:00+00:00",
+      "obtained": "local_copy"
+    },
+    "p33": {
+      "url": "https://kouseikyoku.mhlw.go.jp/chugokushikoku/",
+      "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+      "raw_path": "data/raw/kouseikyoku_todokede_ika_r8/p33.xlsx",
+      "bytes": 3860522,
+      "sha256": "6a065df35a0701acaf8883af517d172dbd571185df2b6204c4f9a581587dc888",
+      "fetched_at": "2026-11-26T06:50:00+00:00",
+      "obtained": "local_copy"
+    },
+    "p34": {
+      "url": "https://kouseikyoku.mhlw.go.jp/chugokushikoku/",
+      "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+      "raw_path": "data/raw/kouseikyoku_todokede_ika_r8/p34.xlsx",
+      "bytes": 5745009,
+      "sha256": "1d9ddec3472313596790e51f3b0301147afc0343f908adbd90940764f5278b94",
+      "fetched_at": "2026-11-26T06:50:00+00:00",
+      "obtained": "local_copy"
+    },
+    "p35": {
+      "url": "https://kouseikyoku.mhlw.go.jp/chugokushikoku/",
+      "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+      "raw_path": "data/raw/kouseikyoku_todokede_ika_r8/p35.xlsx",
+      "bytes": 2663682,
+      "sha256": "0a7f99d858f2abdd85ca5ebb4b0752efedc28df94aaeae4bfc686e4b735c7a2c",
+      "fetched_at": "2026-11-26T06:50:00+00:00",
+      "obtained": "local_copy"
+    },
+    "p36": {
+      "url": "https://kouseikyoku.mhlw.go.jp/shikoku/",
+      "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+      "raw_path": "data/raw/kouseikyoku_todokede_ika_r8/p36.xlsx",
+      "bytes": 1087948,
+      "sha256": "3d48eef599967bbf5db73ad0e59b047be556aa7b04692eb6e286141b553344a5",
+      "fetched_at": "2026-11-26T06:50:00+00:00",
+      "obtained": "local_copy"
+    },
+    "p37": {
+      "url": "https://kouseikyoku.mhlw.go.jp/shikoku/",
+      "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+      "raw_path": "data/raw/kouseikyoku_todokede_ika_r8/p37.xlsx",
+      "bytes": 1156089,
+      "sha256": "a4352f36f7cfabaca4a5b09155908ca4110caa547957bb011ea406679a8d0e10",
+      "fetched_at": "2026-11-26T06:50:00+00:00",
+      "obtained": "local_copy"
+    },
+    "p38": {
+      "url": "https://kouseikyoku.mhlw.go.jp/shikoku/",
+      "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+      "raw_path": "data/raw/kouseikyoku_todokede_ika_r8/p38.xlsx",
+      "bytes": 1545016,
+      "sha256": "ca640aca98301a39a37605796158ca889bbb240793abf6a3ed3f209136fe475b",
+      "fetched_at": "2026-11-26T06:50:00+00:00",
+      "obtained": "local_copy"
+    },
+    "p39": {
+      "url": "https://kouseikyoku.mhlw.go.jp/shikoku/",
+      "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+      "raw_path": "data/raw/kouseikyoku_todokede_ika_r8/p39.xlsx",
+      "bytes": 969391,
+      "sha256": "7aceec8daa396b43b42bcd3c93a6d52bdcdf2cb1abc2f022675c572d886ed89b",
+      "fetched_at": "2026-11-26T06:50:00+00:00",
+      "obtained": "local_copy"
+    },
+    "p40": {
+      "url": "https://kouseikyoku.mhlw.go.jp/kyushu/",
+      "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+      "raw_path": "data/raw/kouseikyoku_todokede_ika_r8/p40.xlsx",
+      "bytes": 5937692,
+      "sha256": "8aba19ebb1a46605ad614d205762b9c54c2b1198bd394bb26850d6e02e8ce8b9",
+      "fetched_at": "2026-11-26T06:50:00+00:00",
+      "obtained": "local_copy"
+    },
+    "p41": {
+      "url": "https://kouseikyoku.mhlw.go.jp/kyushu/",
+      "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+      "raw_path": "data/raw/kouseikyoku_todokede_ika_r8/p41.xlsx",
+      "bytes": 1107632,
+      "sha256": "6a37900edaf2c5cc4b9180f4e73a4924514521b03c7ec1f60f82416fcdb55d06",
+      "fetched_at": "2026-11-26T06:50:00+00:00",
+      "obtained": "local_copy"
+    },
+    "p42": {
+      "url": "https://kouseikyoku.mhlw.go.jp/kyushu/",
+      "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+      "raw_path": "data/raw/kouseikyoku_todokede_ika_r8/p42.xlsx",
+      "bytes": 1725210,
+      "sha256": "e0f47268c1be1a8393e4b2e4bfc9b65e6f35ae2cc315d570a6d6adf6bc8ba610",
+      "fetched_at": "2026-11-26T06:50:00+00:00",
+      "obtained": "local_copy"
+    },
+    "p43": {
+      "url": "https://kouseikyoku.mhlw.go.jp/kyushu/",
+      "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+      "raw_path": "data/raw/kouseikyoku_todokede_ika_r8/p43.xlsx",
+      "bytes": 2265021,
+      "sha256": "031d1c6de7aebffd52b6fa25a443d65af122002aa49fd426eb9565a802c8adb6",
+      "fetched_at": "2026-11-26T06:50:00+00:00",
+      "obtained": "local_copy"
+    },
+    "p44": {
+      "url": "https://kouseikyoku.mhlw.go.jp/kyushu/",
+      "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+      "raw_path": "data/raw/kouseikyoku_todokede_ika_r8/p44.xlsx",
+      "bytes": 1666697,
+      "sha256": "f9230b0be8fe8412ccb4f600b7a7c74f0b127fe06758fb9c7b9fce65902c86e9",
+      "fetched_at": "2026-11-26T06:50:00+00:00",
+      "obtained": "local_copy"
+    },
+    "p45": {
+      "url": "https://kouseikyoku.mhlw.go.jp/kyushu/",
+      "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+      "raw_path": "data/raw/kouseikyoku_todokede_ika_r8/p45.xlsx",
+      "bytes": 1285450,
+      "sha256": "72cce2217e92330d49c517015e136fbdfa045eb2553b9eccf952f3a65ec10ec1",
+      "fetched_at": "2026-11-26T06:50:00+00:00",
+      "obtained": "local_copy"
+    },
+    "p46": {
+      "url": "https://kouseikyoku.mhlw.go.jp/kyushu/",
+      "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+      "raw_path": "data/raw/kouseikyoku_todokede_ika_r8/p46.xlsx",
+      "bytes": 2286372,
+      "sha256": "35419953636a780c632f0a37b9451783a18d7ad983fd5299b93f80af67795dce",
+      "fetched_at": "2026-11-26T06:50:00+00:00",
+      "obtained": "local_copy"
+    },
+    "p47": {
+      "url": "https://kouseikyoku.mhlw.go.jp/kyushu/",
+      "as_of": "令和8年10月1日（東北・関東信越）または11月1日現在",
+      "raw_path": "data/raw/kouseikyoku_todokede_ika_r8/p47.xlsx",
+      "bytes": 1251073,
+      "sha256": "8887c6a80fae3bacaf77b216b8706f846d0d69e8c108b6d21b36a83e99dd0fc4",
+      "fetched_at": "2026-11-26T06:50:00+00:00",
+      "obtained": "local_copy"
+    }
+  },
+  "output": {
+    "path": "data/processed/kouseikyoku_todokede_ika_r8.parquet",
+    "rows": 1238401,
+    "columns": [
+      "source_file",
+      "item_no",
+      "pref_code",
+      "pref_name",
+      "category",
+      "facility_number",
+      "attached_facility_number",
+      "facility_symbol",
+      "facility_name",
+      "postal_code",
+      "address",
+      "tel",
+      "fax",
+      "beds_text",
+      "filing_name",
+      "filing_symbol",
+      "filing_number",
+      "start_date",
+      "individual_start_date",
+      "remarks_heading",
+      "remarks_data",
+      "municipality_code",
+      "municipality_name",
+      "type_code",
+      "type_name",
+      "sheet",
+      "as_of",
+      "medical_code"
+    ],
+    "converted_at": "2026-11-26T06:50:32+00:00",
+    "converter_version": "0.1.0",
+    "extras": {},
+    "report": {
+      "files": {
+        "p01": {
+          "sheets": {
+            "Sheet1": {
+              "rows": 42951,
+              "as_of": "令和8年11月1日"
+            }
+          },
+          "rows_kept": 42951,
+          "rows_other_category": 0
+        },
+        "tohoku": {
+          "sheets": {
+            "青森県": {
+              "rows": 12240,
+              "as_of": "令和8年10月1日"
+            },
+            "岩手県": {
+              "rows": 13311,
+              "as_of": "令和8年10月1日"
+            },
+            "宮城県": {
+              "rows": 22087,
+              "as_of": "令和8年10月1日"
+            },
+            "秋田県": {
+              "rows": 10487,
+              "as_of": "令和8年10月1日"
+            },
+            "山形県": {
+              "rows": 11832,
+              "as_of": "令和8年10月1日"
+            },
+            "福島県": {
+              "rows": 19432,
+              "as_of": "令和8年10月1日"
+            }
+          },
+          "rows_kept": 89389,
+          "rows_other_category": 0
+        },
+        "p08": {
+          "sheets": {
+            "Sheet1": {
+              "rows": 17207,
+              "as_of": "令和8年10月1日"
+            }
+          },
+          "rows_kept": 17207,
+          "rows_other_category": 0
+        },
+        "p09": {
+          "sheets": {
+            "Sheet1": {
+              "rows": 12912,
+              "as_of": "令和8年10月1日"
+            }
+          },
+          "rows_kept": 12912,
+          "rows_other_category": 0
+        },
+        "p10": {
+          "sheets": {
+            "Sheet1": {
+              "rows": 15897,
+              "as_of": "令和8年10月1日"
+            }
+          },
+          "rows_kept": 15897,
+          "rows_other_category": 0
+        },
+        "p11": {
+          "sheets": {
+            "Sheet1": {
+              "rows": 42606,
+              "as_of": "令和8年10月1日"
+            }
+          },
+          "rows_kept": 42606,
+          "rows_other_category": 0
+        },
+        "p12": {
+          "sheets": {
+            "Sheet1": {
+              "rows": 35395,
+              "as_of": "令和8年10月1日"
+            }
+          },
+          "rows_kept": 35395,
+          "rows_other_category": 0
+        },
+        "p13": {
+          "sheets": {
+            "Sheet1": {
+              "rows": 110761,
+              "as_of": "令和8年10月1日"
+            }
+          },
+          "rows_kept": 110761,
+          "rows_other_category": 0
+        },
+        "p14": {
+          "sheets": {
+            "Sheet1": {
+              "rows": 59633,
+              "as_of": "令和8年10月1日"
+            }
+          },
+          "rows_kept": 59633,
+          "rows_other_category": 0
+        },
+        "p15": {
+          "sheets": {
+            "Sheet1": {
+              "rows": 13772,
+              "as_of": "令和8年10月1日"
+            }
+          },
+          "rows_kept": 13772,
+          "rows_other_category": 0
+        },
+        "p19": {
+          "sheets": {
+            "Sheet1": {
+              "rows": 5785,
+              "as_of": "令和8年10月1日"
+            }
+          },
+          "rows_kept": 5785,
+          "rows_other_category": 0
+        },
+        "p20": {
+          "sheets": {
+            "Sheet1": {
+              "rows": 17393,
+              "as_of": "令和8年10月1日"
+            }
+          },
+          "rows_kept": 17393,
+          "rows_other_category": 0
+        },
+        "p16": {
+          "sheets": {
+            "Sheet1": {
+              "rows": 14104,
+              "as_of": "令和8年11月1日"
+            }
+          },
+          "rows_kept": 14104,
+          "rows_other_category": 0
+        },
+        "p17": {
+          "sheets": {
+            "Sheet1": {
+              "rows": 15957,
+              "as_of": "令和8年11月1日"
+            }
+          },
+          "rows_kept": 15957,
+          "rows_other_category": 0
+        },
+        "p21": {
+          "sheets": {
+            "Sheet1": {
+              "rows": 23793,
+              "as_of": "令和8年11月1日"
+            }
+          },
+          "rows_kept": 23793,
+          "rows_other_category": 0
+        },
+        "p22": {
+          "sheets": {
+            "Sheet1": {
+              "rows": 37246,
+              "as_of": "令和8年11月1日"
+            }
+          },
+          "rows_kept": 37246,
+          "rows_other_category": 0
+        },
+        "p23": {
+          "sheets": {
+            "Sheet1": {
+              "rows": 79372,
+              "as_of": "令和8年11月1日"
+            }
+          },
+          "rows_kept": 79372,
+          "rows_other_category": 0
+        },
+        "p24": {
+          "sheets": {
+            "Sheet1": {
+              "rows": 19435,
+              "as_of": "令和8年11月1日"
+            }
+          },
+          "rows_kept": 19435,
+          "rows_other_category": 0
+        },
+        "p18": {
+          "sheets": {
+            "Sheet1": {
+              "rows": 6643,
+              "as_of": "令和8年11月1日"
+            }
+          },
+          "rows_kept": 6643,
+          "rows_other_category": 0
+        },
+        "p25": {
+          "sheets": {
+            "Sheet1": {
+              "rows": 11299,
+              "as_of": "令和8年11月1日"
+            }
+          },
+          "rows_kept": 11299,
+          "rows_other_category": 0
+        },
+        "p26": {
+          "sheets": {
+            "Sheet1": {
+              "rows": 24506,
+              "as_of": "令和8年11月1日"
+            }
+          },
+          "rows_kept": 24506,
+          "rows_other_category": 0
+        },
+        "p27": {
+          "sheets": {
+            "Sheet1": {
+              "rows": 86096,
+              "as_of": "令和8年11月1日"
+            }
+          },
+          "rows_kept": 86096,
+          "rows_other_category": 0
+        },
+        "p28": {
+          "sheets": {
+            "Sheet1": {
+              "rows": 51411,
+              "as_of": "令和8年11月1日"
+            }
+          },
+          "rows_kept": 51411,
+          "rows_other_category": 0
+        },
+        "p29": {
+          "sheets": {
+            "Sheet1": {
+              "rows": 11306,
+              "as_of": "令和8年11月1日"
+            }
+          },
+          "rows_kept": 11306,
+          "rows_other_category": 0
+        },
+        "p30": {
+          "sheets": {
+            "Sheet1": {
+              "rows": 9679,
+              "as_of": "令和8年11月1日"
+            }
+          },
+          "rows_kept": 9679,
+          "rows_other_category": 0
+        },
+        "p31": {
+          "sheets": {
+            "Sheet1": {
+              "rows": 13643,
+              "as_of": "令和8年11月1日"
+            }
+          },
+          "rows_kept": 8736,
+          "rows_other_category": 4907
+        },
+        "p32": {
+          "sheets": {
+            "Sheet1": {
+              "rows": 16284,
+              "as_of": "令和8年11月1日"
+            }
+          },
+          "rows_kept": 10615,
+          "rows_other_category": 5669
+        },
+        "p33": {
+          "sheets": {
+            "Sheet1": {
+              "rows": 46763,
+              "as_of": "令和8年11月1日"
+            }
+          },
+          "rows_kept": 28006,
+          "rows_other_category": 18757
+        },
+        "p34": {
+          "sheets": {
+            "Sheet1": {
+              "rows": 69408,
+              "as_of": "令和8年11月1日"
+            }
+          },
+          "rows_kept": 41592,
+          "rows_other_category": 27816
+        },
+        "p35": {
+          "sheets": {
+            "Sheet1": {
+              "rows": 32078,
+              "as_of": "令和8年11月1日"
+            }
+          },
+          "rows_kept": 19296,
+          "rows_other_category": 12782
+        },
+        "p36": {
+          "sheets": {
+            "Sheet1": {
+              "rows": 13331,
+              "as_of": "令和8年11月1日"
+            }
+          },
+          "rows_kept": 13331,
+          "rows_other_category": 0
+        },
+        "p37": {
+          "sheets": {
+            "Sheet1": {
+              "rows": 14181,
+              "as_of": "令和8年11月1日"
+            }
+          },
+          "rows_kept": 14181,
+          "rows_other_category": 0
+        },
+        "p38": {
+          "sheets": {
+            "Sheet1": {
+              "rows": 19021,
+              "as_of": "令和8年11月1日"
+            }
+          },
+          "rows_kept": 19021,
+          "rows_other_category": 0
+        },
+        "p39": {
+          "sheets": {
+            "Sheet1": {
+              "rows": 11946,
+              "as_of": "令和8年11月1日"
+            }
+          },
+          "rows_kept": 11946,
+          "rows_other_category": 0
+        },
+        "p40": {
+          "sheets": {
+            "Sheet1": {
+              "rows": 73239,
+              "as_of": "令和8年11月1日"
+            }
+          },
+          "rows_kept": 73239,
+          "rows_other_category": 0
+        },
+        "p41": {
+          "sheets": {
+            "Sheet1": {
+              "rows": 13726,
+              "as_of": "令和8年11月1日"
+            }
+          },
+          "rows_kept": 13726,
+          "rows_other_category": 0
+        },
+        "p42": {
+          "sheets": {
+            "Sheet1": {
+              "rows": 21404,
+              "as_of": "令和8年11月1日"
+            }
+          },
+          "rows_kept": 21404,
+          "rows_other_category": 0
+        },
+        "p43": {
+          "sheets": {
+            "Sheet1": {
+              "rows": 28254,
+              "as_of": "令和8年11月1日"
+            }
+          },
+          "rows_kept": 28254,
+          "rows_other_category": 0
+        },
+        "p44": {
+          "sheets": {
+            "Sheet1": {
+              "rows": 20826,
+              "as_of": "令和8年11月1日"
+            }
+          },
+          "rows_kept": 20826,
+          "rows_other_category": 0
+        },
+        "p45": {
+          "sheets": {
+            "Sheet1": {
+              "rows": 15810,
+              "as_of": "令和8年11月1日"
+            }
+          },
+          "rows_kept": 15810,
+          "rows_other_category": 0
+        },
+        "p46": {
+          "sheets": {
+            "Sheet1": {
+              "rows": 28472,
+              "as_of": "令和8年11月1日"
+            }
+          },
+          "rows_kept": 28472,
+          "rows_other_category": 0
+        },
+        "p47": {
+          "sheets": {
+            "Sheet1": {
+              "rows": 15398,
+              "as_of": "令和8年11月1日"
+            }
+          },
+          "rows_kept": 15398,
+          "rows_other_category": 0
+        }
+      },
+      "rows": 1238401,
+      "facilities": 95683,
+      "facility_number_not_7_digits": 0,
+      "prefectures": {
+        "01": 42951,
+        "02": 12240,
+        "03": 13311,
+        "04": 22087,
+        "05": 10487,
+        "06": 11832,
+        "07": 19432,
+        "08": 17207,
+        "09": 12912,
+        "10": 15897,
+        "11": 42606,
+        "12": 35395,
+        "13": 110761,
+        "14": 59633,
+        "15": 13772,
+        "16": 14104,
+        "17": 15957,
+        "18": 6643,
+        "19": 5785,
+        "20": 17393,
+        "21": 23793,
+        "22": 37246,
+        "23": 79372,
+        "24": 19435,
+        "25": 11299,
+        "26": 24506,
+        "27": 86096,
+        "28": 51411,
+        "29": 11306,
+        "30": 9679,
+        "31": 8736,
+        "32": 10615,
+        "33": 28006,
+        "34": 41592,
+        "35": 19296,
+        "36": 13331,
+        "37": 14181,
+        "38": 19021,
+        "39": 11946,
+        "40": 73239,
+        "41": 13726,
+        "42": 21404,
+        "43": 28254,
+        "44": 20826,
+        "45": 15810,
+        "46": 28472,
+        "47": 15398
+      },
+      "as_of": {
+        "令和8年11月1日": 817651,
+        "令和8年10月1日": 420750
+      },
+      "missing_prefectures": []
+    }
+  }
+}

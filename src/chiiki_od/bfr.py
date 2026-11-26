@@ -79,10 +79,17 @@ def _clean(s) -> str | None:
 
 # ---- データ定義（コードブック） --------------------------------------------
 
-def load_definition(zip_path: Path, member: str, sheet: str, prefix: str) -> pd.DataFrame:
-    """データ定義の1シートを、列ごとのコードブックにする。"""
-    with zipfile.ZipFile(zip_path) as z:
-        raw = z.read(member)
+def load_definition(zip_path: Path, member: str | None, sheet: str, prefix: str) -> pd.DataFrame:
+    """データ定義の1シートを、列ごとのコードブックにする。
+
+    病床機能報告は留意事項ZIPの中の xlsx（member で指定）、外来機能報告はデータ定義の xlsx そのもの
+    （member は None）を読む。
+    """
+    if member is None:
+        raw = Path(zip_path).read_bytes()
+    else:
+        with zipfile.ZipFile(zip_path) as z:
+            raw = z.read(member)
     d = pd.read_excel(io.BytesIO(raw), sheet_name=sheet, header=0, dtype=str, engine="calamine")
     d = d.iloc[:, :10]
     d.columns = ["h1", "h2", "h3", "h4", "item", "required", "dtype", "secret", "zero_if_blank", "note"]
@@ -106,7 +113,7 @@ def load_definition(zip_path: Path, member: str, sheet: str, prefix: str) -> pd.
     for c in ("item", "required", "dtype", "note"):
         d[c] = d[c].map(_clean)
     d["secret"] = d["secret"].map(_clean).eq("※")
-    d["zero_if_blank"] = d["zero_if_blank"].map(_clean).eq("○")
+    d["zero_if_blank"] = d["zero_if_blank"].map(_clean).isin(["○", "〇"])  # 外来機能報告の定義は「〇」も使う
     d.insert(0, "position", range(1, len(d) + 1))
 
     names = []
@@ -217,7 +224,7 @@ def parse_dataset(ds: dict) -> tuple[pd.DataFrame, dict, dict]:
     notes = raw_path(ds["id"], files[opt["definition_file"]])
     if not notes.exists():
         raise FileNotFoundError(f"{notes} がありません。留意事項ZIPを取得してください（chiiki-od fetch {ds['id']}）")
-    codebook = load_definition(notes, opt["definition_member"], opt["definition_sheet"], opt["column_prefix"])
+    codebook = load_definition(notes, opt.get("definition_member"), opt["definition_sheet"], opt["column_prefix"])
 
     frames, flag_frames, stats_frames, report = [], [], [], {"files": {}}
     offset = 0
@@ -248,7 +255,7 @@ def parse_dataset(ds: dict) -> tuple[pd.DataFrame, dict, dict]:
 
     report["rows"] = len(df)
     report["tokens"] = flags["token"].value_counts().to_dict()
-    for key in (["od_ward_code", "report_month"], ["od_ward_code"], ["od_facility_code"]):
+    for key in (["od_ward_code", "report_month"], ["od_ward_code"], ["od_facility_code", "report_month"], ["od_facility_code"]):
         if all(k in df.columns for k in key):
             dup = df.duplicated(key, keep=False)
             report["duplicate_keys"] = {

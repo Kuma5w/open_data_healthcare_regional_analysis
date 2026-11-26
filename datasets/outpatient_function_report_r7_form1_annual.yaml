@@ -1,0 +1,37 @@
+id: outpatient_function_report_r7_form1_annual
+title: 外来機能報告 令和7年度 様式1（年間）
+publisher: 厚生労働省
+source_page: https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/open_data_00021.html
+license:
+  terms_url: https://www.mhlw.go.jp/chosakuken/index.html
+  attribution: 出典：厚生労働省「令和7年度外来機能報告の結果」（外来様式1（年間））を加工して作成
+  notes: 加工した情報を、国が作成したかのような形で公表・利用しない。
+update_frequency: 年1回
+verified: true
+verified_note: 2026-11-26に公表ファイル（001724279.xlsx）とデータ定義（001724277.xlsx）で確認。
+parser: bed_function_report
+parser_options:
+  definition_file: definition
+  definition_sheet: 外来様式１ (年間値)
+  column_prefix: ga
+related:
+- outpatient_function_report_r7_form2
+- outpatient_function_report_r7_form1_annual
+files:
+- key: definition
+  url: https://www.mhlw.go.jp/content/10800000/001724277.xlsx
+  format: xlsx
+  as_of: 令和7年度
+- key: main
+  url: https://www.mhlw.go.jp/content/10800000/001724279.xlsx
+  format: xlsx
+  as_of: 令和7年7月1日時点・令和6年度実績
+output: outpatient_function_report_r7_form1_annual
+notes:
+- 1行＝1医療機関。外来の診療科・紹介率と逆紹介率・外来の人員配置・高額等の医療機器・救急医療の実施状況（令和7年7月1日時点、実績は令和6年度）。
+- 表の形は病床機能報告と同じ（見出し6行、データ定義の列の並びと一致）なので、病床機能報告と同じパーサー（chiiki_od.bfr）で読む。データ定義は留意事項ZIPではなく xlsx（001724277.xlsx）そのもの。
+- 報告対象は、一般・療養病床を有する病院・有床診療所と、報告の意向を示した無床診療所（令和7年度留意事項）。報告の単位は医療機関（施設）。
+- 数値列の記号（*：月別1〜9件の秘匿、-：任意項目の未報告など、未報告又はデータ不備）は欠損にし、元の記号は <output>__flags.parquet に残す。
+- データ定義で「未回答時にゼロを入力する項目」とされた列では、空欄の回答が0として入っている（コードブックの zero_if_blank）。
+- 医療機関コード（医科）（medical_code_ika）は10桁（都道府県2桁＋点数表区分1＋医療機関番号7桁）。病床機能報告・厚生局の届出受理医療機関名簿とつなぐときに使う。
+- 都道府県が個別に情報を更新している場合があり、最新の報告内容は各都道府県のサイトで確認する。

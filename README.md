@@ -53,7 +53,7 @@ src/chiiki_od/   共通部品（市区町村コード、変換、実行、検証
 schemas/         指標カードとデータセット定義の形式（JSON Schema）
 manifests/       取得・変換の記録（どのURLのどのファイルから作ったか）
 site/            指標カタログのサイトと質問窓口（index.html と、catalog・results コマンドで作る JSON・CSV、geo/ に地図の境界）
-docs/            指標カードの書き方、出典表記、データセットごとの使い方（docs/datasets/）
+docs/            指標カードの書き方、変換の決まり、出典表記、データセットごとの使い方（docs/datasets/）
 scripts/         対応表を作り直すスクリプトなど
 tests/           テストと合成サンプルデータ
 data/            元データ・変換後データ・計算結果（Gitには入れない）
@@ -94,6 +94,8 @@ chiiki-od fetch bed_function_report_r7_form2_monthly --from-dir ~/Downloads/R7_h
 chiiki-od convert bed_function_report_r7_form2_monthly
 ```
 
+変換の決まり（全列を文字列で読む、記号は0にせず欠損にする、市区町村コードは5桁で比べる、など）と、手作業でダウンロードするデータの一覧は、[docs/data_conversion.md](docs/data_conversion.md) にまとめてあります。
+
 データセットごとの使い方と注意点は docs/datasets/ にあります。
 
 - [病床機能報告](docs/datasets/bed_function_report.md)（令和3〜7年度。過年度の注意点は末尾）
@@ -125,6 +127,8 @@ df <- read_parquet("data/processed/kaigo_jigyosho_110.parquet")
 ## 指標を追加する
 
 [CONTRIBUTING.md](CONTRIBUTING.md) を見てください。流れは、Issueで相談 → `indicators/_template.yaml` からカードを書く → 計算スクリプトを書く → `chiiki-od check` と `pytest` → プルリクエスト → レビュー、です。カードの書き方は [docs/indicator_card_guide.md](docs/indicator_card_guide.md) にあります。
+
+新しいデータセットを足すときは、`datasets/_template.yaml` から定義を書きます。手順と決まりは [docs/data_conversion.md](docs/data_conversion.md) にあります。
 
 ## 作業の進め方
 

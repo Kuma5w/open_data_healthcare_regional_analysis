@@ -1,0 +1,84 @@
+id: psychiatric_beds_per_100k_koso
+version: 0.1.0
+status: draft
+name: 構想区域ごとの人口10万人あたり精神病床数
+short_description: 精神病床が人口に対してどれくらいあるかを、構想区域ごとに比べる（医療施設調査の市区町村別の値をまとめる）
+unit_of_analysis: koso_kuiki
+unit_note: 市区町村（政令市は区）の精神病床数と人口を、reference/koso_kuiki.csv（令和7年度病床機能報告の構想区域マスタ、339区域）で構想区域ごとに合計する。
+
+numerator:
+  description: 病院の精神病床数（医療施設調査 第1表の病床数のうち精神病床）。目安として精神科病院（精神病床のみの病院）の数も出す
+  dataset: medical_facility_survey_r7
+  as_of: 2025年10月1日
+denominator:
+  description: 総人口（住民基本台帳の総計＝日本人住民＋外国人住民）
+  dataset: population_jumin_r8
+  as_of: 2026年1月1日
+formula: 精神病床数 ÷ 総人口 × 100,000
+
+intent: >
+  改正医療法により、地域医療構想に精神医療が位置付けられた（地域医療構想策定ガイドライン Ⅰ-３）。
+  630調査の値は都道府県単位でしか公表されていないため、都道府県の中で精神病床がどの区域に偏っているかは見えない。
+  医療施設調査の市区町村別の病床数を構想区域にまとめ、精神病床の量を構想区域ごとに比べるための指標。
+  精神医療の地域医療構想をどの単位で考えるか（都道府県か構想区域か）は国のワーキンググループで検討中で、構想区域で見た場合の偏りを確かめる材料にする。
+
+why_this_denominator: >
+  精神病床は全年齢の住民が使うため、総人口を分母にした（医療計画の指標も人口10万対）。都道府県別の指標（psychiatric_beds_per_100k_pref）と同じ分母にした。
+  精神病床は区域の外からの入院も多く、人口あたりの値は区域の住民のための病床の量そのものではない。区域ごとの偏りを見る目安として使う。
+
+interpretation: >
+  値が大きいほど、人口に対して精神病床が多い。大きな精神科病院が1つあるだけで値が大きくなる区域がある（精神科病院の数の列と合わせて見る）。
+  精神病床が多い区域は、周りの区域や都道府県の外から入院を受け入れていることが多い。0の区域は、近くの区域の病院に頼っている。
+
+policy_questions:
+  - 都道府県の中で、精神病床が特定の構想区域に偏っているか
+  - 精神病床がない（または少ない）構想区域はどこか。その区域の住民はどこに入院しているか
+
+caveats:
+  - 医療施設調査（2025年10月1日）の病院の精神病床数。630調査の許可精神病床数（2025年6月30日、全国301,660床）とは時点と調査が違い、全国の合計は医療施設調査の方が多い（311,579床）。都道府県別の指標（psychiatric_beds_per_100k_pref、630調査）とは一致しない。
+  - 病床の数であり、稼働している病床・在院患者の数・病床の機能（急性期・慢性期など）は反映しない。休床中の病床も含む。
+  - 病院の所在地で数えている。患者が区域や都道府県をまたいで入院する流出入は反映しない。精神科の入院は区域をまたぐことが多い。
+  - 人口は住民基本台帳（2026年1月1日）の総数。病床数（2025年10月1日）と3か月ずれる。
+  - 構想区域は、市区町村を reference/koso_kuiki.csv（令和7年度の構想区域マスタ）でまとめたもの。精神医療の地域医療構想の区域が、一般の構想区域と同じになるとは限らない。
+  - 精神病床がない構想区域は 0（全国16区域）。
+
+alternatives:
+  - id: psychiatric_beds_per_100k_pref
+    reason: 都道府県ごとに、630調査の許可精神病床で見る（国立・都道府県立・指定病院などの内訳つき）
+  - id: hospitals_per_100k_koso
+    reason: 病院の数（精神科病院を含む）を構想区域ごとに見る
+
+authors:
+  - name: H.I.
+
+script: indicators/psychiatric_beds_per_100k_koso.py
+
+output:
+  area_code: koso_kuiki_code
+  area_name: koso_kuiki_name
+  value: beds_psychiatric_per_100k
+  numerator: beds_psychiatric
+  denominator: pop_total
+  scale: 100000
+  digits: 1
+  unit: 床／人口10万人
+  columns:
+    - {name: pref_code, label: 都道府県コード}
+    - {name: koso_kuiki_code, label: 構想区域コード}
+    - {name: koso_kuiki_name, label: 構想区域名}
+    - {name: beds_psychiatric, label: 精神病床数, unit: 床}
+    - {name: psychiatric_hospitals, label: 精神科病院数（精神病床のみの病院）, unit: 施設}
+    - {name: pop_total, label: 総人口, unit: 人}
+    - {name: beds_psychiatric_per_100k, label: 人口10万人あたり精神病床数, unit: 床／10万人}
+
+references:
+  - title: 医療施設調査（厚生労働省、e-Stat）
+    url: https://www.e-stat.go.jp/stat-search/files?toukei=00450021
+  - title: 住民基本台帳に基づく人口、人口動態及び世帯数（総務省）
+    url: https://www.soumu.go.jp/main_sosiki/jichi_gyousei/daityo/jinkou_jinkoudoutai-setaisuu.html
+  - title: 地域医療構想策定ガイドライン（2026）Ⅰ-３ 精神医療に関する地域医療構想について
+  - title: 精神医療に関する地域医療構想の検討ワーキンググループ 資料（厚生労働省、令和8年11月）
+    url: https://www.mhlw.go.jp/content/10800000/001772794.pdf
+
+created: "2026-11-26"
+updated: "2026-11-26"

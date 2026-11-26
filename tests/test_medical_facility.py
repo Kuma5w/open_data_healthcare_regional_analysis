@@ -74,3 +74,13 @@ def test_clinics_and_dental():
     assert d.loc["43203", "dental_clinics_per_100k"] == pytest.approx(0.0)
     d, _ = _run("dental_clinics_per_100k_koso", "koso_kuiki_code")
     assert d.loc["4308", "dental_clinics_per_100k"] == pytest.approx(40.0)
+
+
+def test_psychiatric_beds_koso():
+    # 精神病床（合成）：札幌 中央区100、熊本 中央区50、八代市60。人口は上の説明のとおり
+    d, notes = _run("psychiatric_beds_per_100k_koso", "koso_kuiki_code")
+    assert d.loc["0104", "beds_psychiatric"] == 100 and d.loc["0104", "beds_psychiatric_per_100k"] == pytest.approx(285.7)
+    assert d.loc["4312", "beds_psychiatric_per_100k"] == pytest.approx(454.5)  # 50 ÷ 11,000
+    assert d.loc["4308", "beds_psychiatric_per_100k"] == pytest.approx(600.0)
+    assert d.loc["4310", "beds_psychiatric"] == 0
+    assert any("精神病床が0の構想区域 1 件" in n for n in notes)

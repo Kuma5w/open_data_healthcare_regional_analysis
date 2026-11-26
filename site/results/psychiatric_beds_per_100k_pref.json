@@ -2,10 +2,10 @@
  "format": 1,
  "indicator": "psychiatric_beds_per_100k_pref",
  "name": "都道府県ごとの人口10万人あたり精神病床数",
- "card_version": "0.1.0",
+ "card_version": "0.1.1",
  "script": "indicators/psychiatric_beds_per_100k_pref.py",
  "script_sha256": "31ff0a182661f2585aa2800268cd59c47e8ad100dd93653247e3d0a8e69a5f63",
- "generated_at": "2026-11-26T08:18:52+00:00",
+ "generated_at": "2026-11-26T08:51:39+00:00",
  "sample": false,
  "options": {},
  "output": {

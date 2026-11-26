@@ -193,8 +193,9 @@ def per_population(
     unit: str,
     digits: int,
     ward_level: bool = False,
+    zero_word: str = "施設",
 ) -> tuple[pd.DataFrame, list[str]]:
-    """人口10万人あたりの施設数（unit は "municipality" か "koso_kuiki"）。分母は総人口。"""
+    """人口10万人あたりの施設数・病床数（unit は "municipality" か "koso_kuiki"）。分母は総人口。"""
     from . import areas
 
     counts = facilities[["municipality_code", *count_cols]].rename(columns={"municipality_code": "code5"})
@@ -207,4 +208,4 @@ def per_population(
         )
         zero_label = "市区町村"
     zero = int((res[count_cols[0]] == 0).sum())
-    return res, notes + [f"施設が0の{zero_label} {zero} 件"]
+    return res, notes + [f"{zero_word}が0の{zero_label} {zero} 件"]

@@ -1,7 +1,7 @@
 ﻿municipality_code,municipality_name,pref_code,secondary_area_code,secondary_area_name,hospitals,psychiatric_hospitals,general_hospitals,general_hospitals_with_ltc_beds,regional_support_hospitals,emergency_hospitals,hospital_beds,beds_psychiatric,beds_infectious,beds_tuberculosis,beds_ltc,beds_general,beds_regional_support_hospitals,general_clinics,clinics_with_beds,clinics_with_ltc_beds,clinics_without_beds,dental_clinics,dental_clinics_with_beds,dental_clinics_without_beds,clinic_beds,clinic_ltc_beds,as_of
-01101,中央区,01,0104,札幌,3,1,2,0,0,1,0,0,0,0,0,0,0,20,2,0,18,10,0,10,0,0,合成サンプル
+01101,中央区,01,0104,札幌,3,1,2,0,0,1,300,100,0,0,0,200,0,20,2,0,18,10,0,10,0,0,合成サンプル
 01102,北区,01,0104,札幌,1,0,1,0,0,0,0,0,0,0,0,0,0,10,0,0,10,5,0,5,0,0,合成サンプル
-43101,中央区,43,4301,熊本・上益城,2,0,2,0,0,2,0,0,0,0,0,0,0,8,1,0,7,6,0,6,0,0,合成サンプル
+43101,中央区,43,4301,熊本・上益城,2,0,2,0,0,2,200,50,0,0,0,150,0,8,1,0,7,6,0,6,0,0,合成サンプル
 43103,西区,43,4301,熊本・上益城,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,3,2,0,2,0,0,合成サンプル
-43202,八代市,43,4304,八代,1,0,1,0,0,0,0,0,0,0,0,0,0,5,0,0,5,4,0,4,0,0,合成サンプル
+43202,八代市,43,4304,八代,1,0,1,0,0,0,150,60,0,0,0,90,0,5,0,0,5,4,0,4,0,0,合成サンプル
 43203,人吉市,43,4305,球磨,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,2,0,0,0,0,0,合成サンプル

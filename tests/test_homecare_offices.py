@@ -31,6 +31,7 @@ def test_city_level(mod):
     assert d.loc["43203"].tolist() == [0, 1000, 0.0]
     joined = " ".join(notes)
     assert "都道府県コード" in joined and "重複" in joined and "読めない" in joined
+    assert "人口が0" in joined  # 北方領土の村のような人口0の行は除く
 
 
 def test_ward_level(mod):

@@ -86,6 +86,11 @@ def compute(
         else:
             p = p[~is_ward]
 
+    zero_pop = p["pop_65plus"].fillna(0) == 0
+    if zero_pop.any():
+        notes.append(f"65歳以上人口が0の市区町村 {int(zero_pop.sum())} 件（北方領土の村など）は除外")
+        p = p[~zero_pop]
+
     # 3. 結合：人口の表を基準にする（事業所が0の市区町村を落とさない） ------------
     res = p.merge(counts, left_on="code5", right_index=True, how="left")
     res["offices"] = res["offices"].fillna(0).astype("Int64")

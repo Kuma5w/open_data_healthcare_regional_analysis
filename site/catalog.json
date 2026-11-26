@@ -1,0 +1,238 @@
+{
+  "generated_at": "2026-11-26T01:39:01+00:00",
+  "indicators": [
+    {
+      "id": "homecare_offices_per_65plus",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": "65歳以上人口1万人あたり訪問介護事業所数",
+      "short_description": "高齢者人口に対する訪問介護の拠点の多さを、市区町村ごとに同じ方法で比べる入口の指標",
+      "unit_of_analysis": "municipality",
+      "unit_note": "政令指定都市は市単位に集約する（介護保険の保険者が市であり、介護保険事業計画も市単位で立てるため）。 区単位で見たいときは --ward-level で出力できる。\n",
+      "numerator": {
+        "description": "訪問介護事業所数（事業所番号で重複を除いた件数。都道府県コードの行は除外）",
+        "dataset": "kaigo_jigyosho_110",
+        "as_of": "2026年6月末"
+      },
+      "denominator": {
+        "description": "65歳以上人口（総計＝日本人住民＋外国人住民）",
+        "dataset": "population_65plus",
+        "as_of": "2026年1月1日"
+      },
+      "formula": "訪問介護事業所数 ÷ 65歳以上人口 × 10,000",
+      "intent": "在宅で暮らす高齢者を支える訪問介護の拠点が、地域によってどれくらい偏っているかを、 全国で同じ方法で比べるための入口の指標。新たな地域医療構想で在宅医療・介護の受け皿や 在宅医療等連携機能を議論するとき、まず「拠点が少ない地域」を見つける目的で作った。 供給量そのものではなく、拠点の分布を見ている。\n",
+      "why_this_denominator": "需要に最も近いのは要介護認定者数だが、認定率そのものに地域差があり、それが指標に混ざる。 まずは人口を分母にして拠点の分布を比べ、認定者数を分母にした版は別の指標として並べる方針にした。 75歳以上人口の方が訪問介護の利用者に近いが、他の高齢者向け指標と分母を揃えるため65歳以上を基本にした。\n",
+      "interpretation": "値が大きいほど、65歳以上人口に対して訪問介護事業所が多い。事業所の規模（職員数・訪問回数）は 反映しないため、値が大きくても供給量が多いとは限らない。人口の少ない町村では1事業所の差で値が大きく変わる。\n",
+      "policy_questions": [
+        "在宅医療・介護の受け皿が少ない市区町村はどこか",
+        "在宅医療等連携機能を担う医療機関の周辺に、訪問介護の拠点があるか"
+      ],
+      "caveats": [
+        "事業所数であり、職員数や訪問回数などの供給量は反映しない。「定員」列は訪問介護では0の例があり、供給量の代わりには使えない。",
+        "事業所の所在市区町村で数えている。市区町村の境界を越えた訪問は反映しない。",
+        "コード列「都道府県コード又は市町村コード」が事業所の所在地を示すのか指定権者を示すのかは、公式の項目定義で確認が必要。都道府県コード（下3桁000）の行は除外し、件数を実行記録に残す。",
+        "分子（6月末）と分母（1月1日）の時点がずれている。",
+        "人口の少ない町村では値が不安定。地図にするときは人口規模を併記するか、平滑化（経験ベイズ推定など）を検討する。",
+        "休止中の事業所が含まれるかどうかは未確認。",
+        "市町村合併をまたぐ年の比較では、reference/ の対応表で現在のコードに揃える。"
+      ],
+      "alternatives": [
+        {
+          "id": "homecare_offices_per_75plus",
+          "reason": "訪問介護の利用は75歳以上に多く、需要により近い分母"
+        },
+        {
+          "id": "homecare_offices_per_certified",
+          "reason": "要介護認定者数を分母にすると需要に近いが、認定率の地域差が混ざる"
+        }
+      ],
+      "authors": [
+        {
+          "name": "（作成者名）",
+          "affiliation": "（所属）"
+        }
+      ],
+      "script": "indicators/homecare_offices_per_65plus.py",
+      "references": [
+        {
+          "title": "介護サービス情報の公表システムデータのオープンデータ（厚生労働省）",
+          "url": "https://www.mhlw.go.jp/stf/kaigo-kouhyou_opendata.html"
+        },
+        {
+          "title": "住民基本台帳に基づく人口、人口動態及び世帯数（総務省）",
+          "url": "https://www.soumu.go.jp/main_sosiki/jichi_gyousei/daityo/jinkou_jinkoudoutai-setaisuu.html"
+        }
+      ],
+      "created": "2026-11-26",
+      "updated": "2026-11-26"
+    }
+  ],
+  "datasets": [
+    {
+      "id": "bed_function_report_r7",
+      "title": "病床機能報告 公表データ（令和7年度）病棟票（様式1）",
+      "publisher": "厚生労働省",
+      "source_page": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/open_data_00020.html",
+      "attribution": "出典：厚生労働省「令和7年度病床機能報告公表データ」を加工して作成",
+      "update_frequency": "年1回",
+      "verified": false,
+      "columns": [],
+      "notes": [
+        "必須項目の未報告は「未報告又はデータ不備」、任意項目の未報告は「－」と表示される。数値列ではゼロにせず欠損として扱い、件数を記録する。",
+        "月別と年間合計は項目ごとに必須条件が異なり、一致しない場合がある。",
+        "7地域のファイルを縦に結合して1つのParquetにする。"
+      ]
+    },
+    {
+      "id": "kaigo_jigyosho_110",
+      "title": "介護サービス事業所一覧（訪問介護）",
+      "publisher": "厚生労働省（介護サービス情報公表システム）",
+      "source_page": "https://www.mhlw.go.jp/stf/kaigo-kouhyou_opendata.html",
+      "attribution": "出典：厚生労働省「介護サービス情報公表システム」オープンデータ（訪問介護、2026年6月末時点）を加工して作成",
+      "update_frequency": "年2回（6月末時点・12月末時点）",
+      "verified": true,
+      "columns": [
+        {
+          "name": "municipality_code",
+          "type": "str",
+          "description": "6桁（検査数字付き）。政令市は区のコード。所在地か指定権者かは要確認"
+        },
+        {
+          "name": "record_no",
+          "type": "str"
+        },
+        {
+          "name": "pref_name",
+          "type": "str"
+        },
+        {
+          "name": "municipality_name",
+          "type": "str"
+        },
+        {
+          "name": "office_name",
+          "type": "str"
+        },
+        {
+          "name": "office_name_kana",
+          "type": "str"
+        },
+        {
+          "name": "service_type",
+          "type": "str"
+        },
+        {
+          "name": "address",
+          "type": "str"
+        },
+        {
+          "name": "address_building",
+          "type": "str"
+        },
+        {
+          "name": "lat",
+          "type": "float"
+        },
+        {
+          "name": "lon",
+          "type": "float"
+        },
+        {
+          "name": "tel",
+          "type": "str"
+        },
+        {
+          "name": "fax",
+          "type": "str"
+        },
+        {
+          "name": "corporate_number",
+          "type": "str"
+        },
+        {
+          "name": "corporate_name",
+          "type": "str"
+        },
+        {
+          "name": "office_number",
+          "type": "str",
+          "description": "10桁。先頭の0を保つため文字列"
+        },
+        {
+          "name": "available_days",
+          "type": "str"
+        },
+        {
+          "name": "available_days_note",
+          "type": "str"
+        },
+        {
+          "name": "capacity",
+          "type": "int",
+          "description": "訪問介護では0の例があり、供給量の代わりには使えない"
+        },
+        {
+          "name": "url",
+          "type": "str"
+        },
+        {
+          "name": "kyosei_service",
+          "type": "str"
+        },
+        {
+          "name": "meets_kaigo_standard",
+          "type": "str"
+        },
+        {
+          "name": "meets_shogai_standard",
+          "type": "str"
+        },
+        {
+          "name": "remarks",
+          "type": "str"
+        }
+      ],
+      "notes": [
+        "サービス種類ごとに別ファイル（訪問介護はサービスコード110）。他のサービスは同じ形式で datasets/ に追加できる。",
+        "2024年6月末以前はZIP形式で提供されている。",
+        "政令指定都市は区単位のコードで収録されている。市単位で集計するときは chiiki_od.codes.ward_to_city を使う。"
+      ]
+    },
+    {
+      "id": "population_65plus",
+      "title": "市区町村別 65歳以上人口（住民基本台帳に基づく人口）",
+      "publisher": "総務省",
+      "source_page": "https://www.soumu.go.jp/main_sosiki/jichi_gyousei/daityo/jinkou_jinkoudoutai-setaisuu.html",
+      "attribution": "出典：総務省「住民基本台帳に基づく人口、人口動態及び世帯数」（令和8年1月1日現在）を加工して作成",
+      "update_frequency": "年1回（1月1日現在）",
+      "verified": false,
+      "columns": [
+        {
+          "name": "municipality_code",
+          "type": "str",
+          "description": "5桁"
+        },
+        {
+          "name": "municipality_name",
+          "type": "str"
+        },
+        {
+          "name": "pop_total",
+          "type": "int"
+        },
+        {
+          "name": "pop_65plus",
+          "type": "int"
+        },
+        {
+          "name": "as_of",
+          "type": "str"
+        }
+      ],
+      "notes": [
+        "変換後は「1行＝1市区町村」の縦長の表にする。政令市は市の合計行と区の行の両方を残し、どちらを使うかは指標側で決める（二重計上に注意）。",
+        "【総計】は日本人住民と外国人住民の合計。"
+      ]
+    }
+  ]
+}

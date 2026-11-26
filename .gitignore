@@ -1,0 +1,25 @@
+# データ本体はGitに入れない（data/README.md を参照）
+data/raw/
+data/processed/
+data/outputs/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+.pytest_cache/
+.ruff_cache/
+build/
+dist/
+
+# OS / エディタ
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# R
+.Rhistory
+.RData
+.Rproj.user/

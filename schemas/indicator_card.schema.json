@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "indicator_card.schema.json",
+  "title": "指標カード",
+  "description": "指標の定義と、作成者がその指標で何を見ようとしたか（意図）を記録する。解説チャットボットはこのカードを根拠に回答する。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id", "version", "status", "name", "unit_of_analysis",
+    "numerator", "denominator", "formula",
+    "intent", "why_this_denominator", "caveats", "authors", "script"
+  ],
+  "properties": {
+    "id": {"type": "string", "pattern": "^[a-z0-9_]+$", "description": "ファイル名と同じ。英小文字・数字・_"},
+    "version": {"type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$"},
+    "status": {"enum": ["draft", "reviewed", "deprecated"]},
+    "name": {"type": "string", "minLength": 4},
+    "short_description": {"type": "string"},
+    "unit_of_analysis": {
+      "enum": ["municipality", "designated_city_ward", "secondary_medical_area", "koso_kuiki", "prefecture", "facility", "ward_unit"]
+    },
+    "unit_note": {"type": "string"},
+    "numerator": {"$ref": "#/$defs/term"},
+    "denominator": {"$ref": "#/$defs/term"},
+    "formula": {"type": "string"},
+    "intent": {"type": "string", "minLength": 30, "description": "この指標で何を見たいのか。地域医療構想のどの議論に使うのか"},
+    "why_this_denominator": {"type": "string", "minLength": 20, "description": "なぜこの分母（または比較対象）を選んだのか。他の候補を選ばなかった理由"},
+    "interpretation": {"type": "string"},
+    "policy_questions": {"type": "array", "items": {"type": "string"}},
+    "caveats": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "alternatives": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "reason"],
+        "properties": {"id": {"type": "string"}, "reason": {"type": "string"}}
+      }
+    },
+    "authors": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name"],
+        "properties": {
+          "name": {"type": "string"},
+          "affiliation": {"type": "string"},
+          "orcid": {"type": "string"}
+        }
+      }
+    },
+    "script": {"type": "string", "pattern": "^indicators/[a-z0-9_]+\\.py$"},
+    "references": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["title"],
+        "properties": {"title": {"type": "string"}, "url": {"type": "string"}}
+      }
+    },
+    "created": {"type": "string"},
+    "updated": {"type": "string"}
+  },
+  "$defs": {
+    "term": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["description", "dataset"],
+      "properties": {
+        "description": {"type": "string"},
+        "dataset": {"type": "string", "description": "datasets/ にあるデータセットのid"},
+        "as_of": {"type": "string", "description": "データの時点"},
+        "filter": {"type": "string", "description": "対象の絞り込み条件（あれば）"}
+      }
+    }
+  }
+}

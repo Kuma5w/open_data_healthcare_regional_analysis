@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: このリポジトリの指標や方法を使った場合は、以下のとおり引用してください。
+title: 地域医療構想 オープンデータ共有基盤
+version: 0.1.0
+date-released: "2026-11-26"
+license: MIT
+authors:
+  - name: 地域医療構想オープンデータ共有基盤 contributors
+repository-code: https://github.com/Kuma5w/open_data_healthcare_regional_analysis
+# doi: リリース時に Zenodo で付与される DOI を記入

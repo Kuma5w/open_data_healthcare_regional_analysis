@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "dataset.schema.json",
+  "title": "データセット定義",
+  "description": "元データの取得元・時点・読み込み方と、変換後（Parquet）の列名を定める。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "title", "publisher", "source_page", "license", "verified", "output"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^[a-z0-9_]+$"},
+    "title": {"type": "string"},
+    "publisher": {"type": "string"},
+    "source_page": {"type": "string"},
+    "license": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["terms_url", "attribution"],
+      "properties": {
+        "terms_url": {"type": "string"},
+        "attribution": {"type": "string", "description": "出典表記の例"},
+        "notes": {"type": "string"}
+      }
+    },
+    "update_frequency": {"type": "string"},
+    "verified": {"type": "boolean", "description": "実ファイルで列構成を確認済みか"},
+    "verified_note": {"type": "string"},
+    "parser": {"type": "string", "description": "汎用の読み込みで足りない場合の専用パーサー名（chiiki_od.parsers）"},
+    "files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["key", "url", "format"],
+        "properties": {
+          "key": {"type": "string"},
+          "url": {"type": "string"},
+          "as_of": {"type": "string"},
+          "format": {"enum": ["csv", "xlsx", "zip"]},
+          "encoding": {"type": "string"},
+          "sheet": {"type": ["string", "integer"]},
+          "header": {"oneOf": [{"type": "integer"}, {"type": "array", "items": {"type": "integer"}}]},
+          "na_values": {"type": "array", "items": {"type": "string"}}
+        }
+      }
+    },
+    "columns": {
+      "type": "array",
+      "description": "元の列名 → 変換後の列名と型。空なら元の列名のまま保存する",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["source", "name", "type"],
+        "properties": {
+          "source": {"type": "string"},
+          "name": {"type": "string", "pattern": "^[a-z0-9_]+$"},
+          "type": {"enum": ["str", "int", "float"]},
+          "description": {"type": "string"}
+        }
+      }
+    },
+    "output": {"type": "string", "pattern": "^[a-z0-9_]+$", "description": "data/processed/<output>.parquet"},
+    "notes": {"type": "array", "items": {"type": "string"}}
+  }
+}

@@ -1,0 +1,58 @@
+# 指標カードのテンプレート
+# このファイルをコピーして indicators/<id>.yaml にし、同じ名前の <id>.py に計算を書く。
+# 書き方の詳しい説明: docs/indicator_card_guide.md
+# 解説チャットボットは、このカードに書かれたことだけを根拠に答える。
+# 書いていないことは「作成者の説明はありません」と答えるので、意図はできるだけ言葉にする。
+
+id: example_indicator              # ファイル名と同じ。英小文字・数字・_
+version: 0.1.0                     # 定義を変えたら上げる（計算が変わる変更は 0.x.0 → 0.(x+1).0）
+status: draft                      # draft（レビュー前）/ reviewed / deprecated
+name: ○○人口1万人あたり△△数       # 日本語の正式名
+short_description: 一文で、何を比べる指標か
+
+unit_of_analysis: municipality     # municipality / designated_city_ward / secondary_medical_area / koso_kuiki / prefecture / facility / ward_unit
+unit_note: 政令市・特別区の扱い、境界の扱いなど
+
+numerator:
+  description: 何を数えるか（重複の除き方、除外するものも）
+  dataset: datasets/ にあるデータセットのid
+  as_of: データの時点
+denominator:
+  description: 何で割るか
+  dataset: datasets/ にあるデータセットのid
+  as_of: データの時点
+formula: 分子 ÷ 分母 × 10,000
+
+intent: >
+  この指標で何を見たいのか。地域医療構想のどの議論に使うつもりで作ったのか。
+  （30字以上。チャットボットが最もよく参照する欄）
+
+why_this_denominator: >
+  なぜこの分母（または比較の基準）を選んだのか。検討して選ばなかった候補と、その理由。
+
+interpretation: >
+  値が大きい・小さいとき、何が言えて何が言えないか。
+
+policy_questions:
+  - この指標で答えようとしている問い
+
+caveats:                           # 1つ以上必須
+  - データの限界、時点のずれ、小地域での不安定さ、定義の変更など
+
+alternatives:                      # 関連する（または作るべき）別の指標
+  - id: other_indicator_id
+    reason: どういうときにそちらを使うか
+
+authors:
+  - name: 氏名
+    affiliation: 所属
+    orcid: 0000-0000-0000-0000
+
+script: indicators/example_indicator.py
+
+references:
+  - title: 元データや参考文献の名前
+    url: https://
+
+created: "YYYY-MM-DD"
+updated: "YYYY-MM-DD"

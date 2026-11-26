@@ -8,40 +8,92 @@ license:
   notes: 介護サービス情報公表システムから抽出したデータであることを表示する。利用した場合は厚労省のフォームでの連絡が依頼されている。
 update_frequency: 年2回（6月末時点・12月末時点）
 verified: true
-verified_note: 2026年6月末時点ファイルの見出し行（24列）と先頭行で確認（2026-11-26）。UTF-8（BOM付き）。
+verified_note: 2026-11-26に2026年6月末時点ファイル（35,166行×24列、UTF-8 BOM付き）で確認。事業所番号に重複なし、1,776の市区町村コード。
 files:
-  - key: main
-    url: https://www.mhlw.go.jp/content/12300000/jigyosho_110_all_20260709180319.csv
-    as_of: 2026年6月末
-    format: csv
-    encoding: utf-8-sig
+- key: main
+  url: https://www.mhlw.go.jp/content/12300000/jigyosho_110_all_20260709180319.csv
+  as_of: 2026年6月末
+  format: csv
+  encoding: utf-8-sig
 columns:
-  - {source: 都道府県コード又は市町村コード, name: municipality_code, type: str, description: 6桁（検査数字付き）。政令市は区のコード。所在地か指定権者かは要確認}
-  - {source: "No", name: record_no, type: str}
-  - {source: 都道府県名, name: pref_name, type: str}
-  - {source: 市区町村名, name: municipality_name, type: str}
-  - {source: 事業所名, name: office_name, type: str}
-  - {source: 事業所名カナ, name: office_name_kana, type: str}
-  - {source: サービスの種類, name: service_type, type: str}
-  - {source: 住所, name: address, type: str}
-  - {source: 方書（ビル名等）, name: address_building, type: str}
-  - {source: 緯度, name: lat, type: float}
-  - {source: 経度, name: lon, type: float}
-  - {source: 電話番号, name: tel, type: str}
-  - {source: FAX番号, name: fax, type: str}
-  - {source: 法人番号, name: corporate_number, type: str}
-  - {source: 法人の名称, name: corporate_name, type: str}
-  - {source: 事業所番号, name: office_number, type: str, description: 10桁。先頭の0を保つため文字列}
-  - {source: 利用可能曜日, name: available_days, type: str}
-  - {source: 利用可能曜日特記事項, name: available_days_note, type: str}
-  - {source: 定員, name: capacity, type: int, description: 訪問介護では0の例があり、供給量の代わりには使えない}
-  - {source: URL, name: url, type: str}
-  - {source: 高齢者の方と障害者の方が同時一体的に利用できるサービス, name: kyosei_service, type: str}
-  - {source: 介護保険の通常の指定基準を満たしている, name: meets_kaigo_standard, type: str}
-  - {source: 障害福祉の通常の指定基準を満たしている, name: meets_shogai_standard, type: str}
-  - {source: 備考, name: remarks, type: str}
+- source: 都道府県コード又は市町村コード
+  name: municipality_code
+  type: str
+  description: 6桁（検査数字付き）。政令市は区のコード。住所・市区町村名と照合した範囲では事業所の所在市区町村（公式の項目定義は未確認）
+- source: 'No'
+  name: record_no
+  type: str
+- source: 都道府県名
+  name: pref_name
+  type: str
+- source: 市区町村名
+  name: municipality_name
+  type: str
+- source: 事業所名
+  name: office_name
+  type: str
+- source: 事業所名カナ
+  name: office_name_kana
+  type: str
+- source: サービスの種類
+  name: service_type
+  type: str
+- source: 住所
+  name: address
+  type: str
+- source: 方書（ビル名等）
+  name: address_building
+  type: str
+- source: 緯度
+  name: lat
+  type: float
+- source: 経度
+  name: lon
+  type: float
+- source: 電話番号
+  name: tel
+  type: str
+- source: FAX番号
+  name: fax
+  type: str
+- source: 法人番号
+  name: corporate_number
+  type: str
+- source: 法人の名称
+  name: corporate_name
+  type: str
+- source: 事業所番号
+  name: office_number
+  type: str
+  description: 10桁。先頭の0を保つため文字列
+- source: 利用可能曜日
+  name: available_days
+  type: str
+- source: 利用可能曜日特記事項
+  name: available_days_note
+  type: str
+- source: 定員
+  name: capacity
+  type: int
+  description: 訪問介護では0の例があり、供給量の代わりには使えない
+- source: URL
+  name: url
+  type: str
+- source: 高齢者の方と障害者の方が同時一体的に利用できるサービス
+  name: kyosei_service
+  type: str
+- source: 介護保険の通常の指定基準を満たしている
+  name: meets_kaigo_standard
+  type: str
+- source: 障害福祉の通常の指定基準を満たしている
+  name: meets_shogai_standard
+  type: str
+- source: 備考
+  name: remarks
+  type: str
 output: kaigo_jigyosho_110
 notes:
-  - サービス種類ごとに別ファイル（訪問介護はサービスコード110）。他のサービスは同じ形式で datasets/ に追加できる。
-  - 2024年6月末以前はZIP形式で提供されている。
-  - 政令指定都市は区単位のコードで収録されている。市単位で集計するときは chiiki_od.codes.ward_to_city を使う。
+- サービス種類ごとに別ファイル（訪問介護はサービスコード110）。他のサービスは同じ形式で datasets/ に追加できる。
+- 2024年6月末以前はZIP形式で提供されている。
+- 政令指定都市は区単位のコードで収録されている。市単位で集計するときは chiiki_od.codes.ward_to_city を使う。
+- 緯度・経度が0の事業所が35件ある（未設定とみられる）。地図に載せるときは除く。

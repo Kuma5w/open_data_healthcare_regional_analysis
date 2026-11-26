@@ -1,0 +1,62 @@
+id: bed_function_report_r4_form2_monthly
+title: 病床機能報告 令和4年度 様式2病棟票（月別）
+publisher: 厚生労働省
+source_page: https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/0000055891.html
+license:
+  terms_url: https://www.mhlw.go.jp/chosakuken/index.html
+  attribution: 出典：厚生労働省「令和4年度病床機能報告公表データ」（様式2病棟票）を加工して作成
+  notes: 加工した情報を、国が作成したかのような形で公表・利用しない。
+update_frequency: 年1回
+verified: true
+verified_note: 2026-11-26に公表ファイル（地域別8ファイル）とデータ定義（001152034.zip）で確認。見出しは6行で令和7年度と同じ形。
+parser: bed_function_report
+parser_options:
+  definition_file: notes
+  definition_member: 別紙１_令和４年度病床機能報告データ定義.xlsx
+  definition_sheet: 報告様式２病棟票
+  column_prefix: m
+related:
+- bed_function_report_r4_ward
+files:
+- key: notes
+  url: https://www.mhlw.go.jp/content/10800000/001152034.zip
+  format: zip
+  as_of: 令和4年度
+- key: hokkaido_tohoku
+  url: https://www.mhlw.go.jp/content/10800000/001151973.xlsx
+  format: xlsx
+  as_of: 令和3年4月〜令和4年3月診療分
+- key: kanto_ibaraki_chiba
+  url: https://www.mhlw.go.jp/content/10800000/001151974.xlsx
+  format: xlsx
+  as_of: 令和3年4月〜令和4年3月診療分
+- key: kanto_tokyo_kanagawa
+  url: https://www.mhlw.go.jp/content/10800000/001151975.xlsx
+  format: xlsx
+  as_of: 令和3年4月〜令和4年3月診療分
+- key: chubu
+  url: https://www.mhlw.go.jp/content/10800000/001151976.xlsx
+  format: xlsx
+  as_of: 令和3年4月〜令和4年3月診療分
+- key: kinki
+  url: https://www.mhlw.go.jp/content/10800000/001151977.xlsx
+  format: xlsx
+  as_of: 令和3年4月〜令和4年3月診療分
+- key: chugoku
+  url: https://www.mhlw.go.jp/content/10800000/001151978.xlsx
+  format: xlsx
+  as_of: 令和3年4月〜令和4年3月診療分
+- key: shikoku
+  url: https://www.mhlw.go.jp/content/10800000/001151979.xlsx
+  format: xlsx
+  as_of: 令和3年4月〜令和4年3月診療分
+- key: kyushu_okinawa
+  url: https://www.mhlw.go.jp/content/10800000/001151980.xlsx
+  format: xlsx
+  as_of: 令和3年4月〜令和4年3月診療分
+output: bed_function_report_r4_form2_monthly
+notes:
+- 1行＝1病棟×1か月（令和3年4月〜令和4年3月診療分）。月別の件数が1〜9件のセルは「*」（秘匿）。過年度の年間の件数を出すときは、公表値の合計に秘匿の月数×補完値を足して推計する（chiiki_od.psc_trend）。
+- 数値列の記号（*：月別1〜9件の秘匿、-：任意項目の未報告・非該当・不備、未報告又はデータ不備：必須項目の未報告・不備）は欠損にし、元の記号は <output>__flags.parquet に row_id・列・記号として残す。
+- 列名は先頭の識別列のみ英字、それ以外は表の種類の接頭辞＋位置番号（年度によって位置が違う）。年度をまたいで同じ項目を使うときは、見出しで対応づける（reference/bfr_item_map.csv）。
+- ファイルのURLは公表ファイル名から書いたもの（公表ページでの確認が必要）。手元のファイルを --from-dir で取り込む。

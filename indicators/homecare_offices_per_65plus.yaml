@@ -53,8 +53,7 @@ alternatives:
     reason: 要介護認定者数を分母にすると需要に近いが、認定率の地域差が混ざる
 
 authors:
-  - name: （作成者名）
-    affiliation: （所属）
+  - name: H.I.
 
 script: indicators/homecare_offices_per_65plus.py
 

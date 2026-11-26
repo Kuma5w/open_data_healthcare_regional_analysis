@@ -36,8 +36,7 @@ alternatives:
 - id: recovery_share_quantitative_koso
   reason: 都道府県の定量的な基準で、急性期と報告された病棟の一部を回復期相当として数え直す
 authors:
-- name: （作成者名）
-  affiliation: （所属）
+- name: H.I.
 script: indicators/recovery_bed_share_koso.py
 output:
   area_code: koso_kuiki_code

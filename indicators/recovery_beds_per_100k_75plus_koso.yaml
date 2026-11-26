@@ -37,8 +37,7 @@ alternatives:
 - id: recovery_beds_per_100k_65plus_koso
   reason: 65歳以上人口を分母にし、他の高齢者向け指標と分母を揃える
 authors:
-- name: （作成者名）
-  affiliation: （所属）
+- name: H.I.
 script: indicators/recovery_beds_per_100k_75plus_koso.py
 output:
   area_code: koso_kuiki_code

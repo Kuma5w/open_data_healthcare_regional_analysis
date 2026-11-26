@@ -13,7 +13,7 @@ import csv
 import json
 import re
 
-from . import codes, manifest, paths, results, specs
+from . import boundaries, codes, manifest, paths, results, specs
 
 REPO_URL = "https://github.com/Kuma5w/open_data_healthcare_regional_analysis"
 PAGES_URL = "https://kuma5w.github.io/open_data_healthcare_regional_analysis/"
@@ -110,6 +110,8 @@ def build() -> dict:
         "datasets": datasets,
         "results": _results_index(cards),
         "prefectures": codes.PREFECTURES,
+        # 地図の境界（scripts/make_boundaries.py が site/geo/ に作る）。新しい時点が先
+        "geo": boundaries.load_index(),
     }
 
     docs = [*DOCS, *(str(p.relative_to(paths.ROOT)) for p in sorted((paths.ROOT / "docs" / "datasets").glob("*.md")))]

@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>地域医療構想 指標カタログ</title>
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Hanken+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE: 研究者どうしの資料室。落ち着いて正確、出典と注意点を必ず添える
+   IDEA: 建築の作品集のような指標カード台帳。各指標は図面1枚、注記が欄外に付く
+   PICTURE: 一覧と詳細そのもの。右に質問窓口（チャット）
+   COLOUR and TYPE: 白・黒・コンクリート灰、意図の欄だけ安全黄色。BIZ UDPゴシック＋Hanken Grotesk
+   LAYOUT: 左に台帳（一覧→詳細）、右にチャット。900px未満は縦に積む */
+:root{color-scheme:light dark;--bg:light-dark(#ffffff,#1a1a19);--ink:light-dark(#141414,#f1f1ec);--mut:light-dark(#5d5d58,#a9a9a2);--pl:light-dark(#ecece8,#262624);--pl2:light-dark(#d8d8d4,#34342f);--line:light-dark(#c9c9c3,#44443e);--y:#ffe600;--yi:#141414;--link:light-dark(#0b4fb3,#8cb8ff)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.75 "BIZ UDPGothic","Hiragino Sans","Yu Gothic",sans-serif;overflow-x:clip}
+a{color:var(--link)}main a,.src a{overflow-wrap:anywhere}button,input,select,textarea{font:inherit}
+:focus-visible{outline:2px solid var(--link);outline-offset:2px}
+.num,code{font-family:"Hanken Grotesk",ui-monospace,monospace}
+code{font-size:.9em;background:var(--pl);padding:1px 5px;border-radius:3px;overflow-wrap:anywhere}
+pre{background:var(--pl);padding:12px 14px;overflow-x:auto;font-size:13px;line-height:1.55;border-left:3px solid var(--pl2)}
+pre code{background:none;padding:0}
+.wrap{max-width:1240px;margin:0 auto;padding:clamp(20px,3vw,40px) max(4vw,16px) 56px}
+header{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px 32px;border-bottom:2px solid var(--ink);padding-bottom:14px}
+h1{margin:0;font-size:clamp(24px,3vw,34px);line-height:1.2;text-wrap:balance}
+.sub{margin:6px 0 0;color:var(--mut);font-size:15px}
+nav{display:flex;flex-wrap:wrap;gap:4px}
+nav a{text-decoration:none;color:var(--ink);padding:8px 14px;min-height:40px;display:inline-flex;align-items:center;border:1px solid transparent}
+nav a[aria-current=page]{border-color:var(--ink);font-weight:700}
+.grid{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:32px;margin-top:24px;align-items:start}
+@media(max-width:900px){.grid{grid-template-columns:minmax(0,1fr)}}
+h2{font-size:24px;line-height:1.3;margin:0 0 6px}
+h3{font-size:17px;margin:26px 0 8px;padding-top:12px;border-top:1px solid var(--line)}
+.tools{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 18px}
+.tools input{flex:1 1 220px;padding:10px 12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);min-height:44px;font-size:16px}
+.chip{border:1px solid var(--line);background:var(--bg);color:var(--ink);padding:0 14px;min-height:44px;cursor:pointer}
+.chip[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.list{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.list li{border-bottom:1px solid var(--line)}
+.list a.row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 16px;padding:14px 4px;text-decoration:none;color:var(--ink)}
+.list a.row:hover{background:var(--pl)}
+.row .t{font-weight:700;font-size:17px;line-height:1.45}
+.row .d{grid-column:1/-1;color:var(--mut);font-size:14px}
+.badges{display:flex;flex-wrap:wrap;gap:6px;align-items:flex-start;justify-content:flex-end}
+.b{font-size:13px;border:1px solid var(--line);padding:1px 8px;white-space:nowrap}
+.b.draft{border-style:dashed}
+.meta{display:flex;flex-wrap:wrap;gap:6px 18px;color:var(--mut);font-size:14px;margin:4px 0 0}
+.formula{background:var(--pl);padding:14px 16px;font-weight:700;margin:16px 0 0}
+.intent{background:var(--y);color:var(--yi);padding:16px 18px;margin:18px 0 0}
+.intent h3{border:0;margin:0 0 6px;padding:0;color:var(--yi)}
+.intent p{margin:0}
+table{border-collapse:collapse;width:100%;font-size:15px;margin:8px 0}
+th,td{text-align:left;vertical-align:top;padding:8px 10px;border-bottom:1px solid var(--line)}
+th{font-weight:700;background:var(--pl);white-space:nowrap}
+ul.c{margin:6px 0;padding-left:1.2em}ul.c li{margin:4px 0}
+.btn{background:var(--ink);color:var(--bg);border:0;padding:0 16px;min-height:44px;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.back{display:inline-block;margin-bottom:10px;font-size:14px}
+.cols{max-height:420px;overflow:auto;border:1px solid var(--line)}
+.cols table{margin:0;font-size:14px}
+.note{font-size:14px;color:var(--mut)}
+td.num{white-space:nowrap}
+/* chat */
+.chat{position:sticky;top:16px;border:2px solid var(--ink);display:flex;flex-direction:column;max-height:calc(100vh - 32px);background:var(--bg)}
+@media(max-width:900px){.chat{position:static;max-height:none}}
+.chat-h{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--line)}
+.chat-h b{font-size:16px}
+.focus{font-size:13px;color:var(--mut);padding:6px 14px 0}
+.log{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:14px;min-height:260px}
+.m{overflow-wrap:anywhere;font-size:15px}
+.m.u{align-self:flex-end;background:var(--pl);padding:8px 12px;max-width:88%;white-space:pre-wrap}
+.m.a{border-left:3px solid var(--ink);padding-left:12px}
+.m.a p{margin:0 0 .6em}.m.a ul{margin:0 0 .6em;padding-left:1.2em}
+.src{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.src a{font-size:12px;border:1px solid var(--line);padding:2px 8px;text-decoration:none}
+.sug{display:flex;flex-direction:column;gap:6px}
+.sug button{text-align:left;border:1px solid var(--line);background:var(--bg);color:var(--ink);padding:8px 12px;min-height:44px;cursor:pointer;font-size:14px}
+.chat form{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line)}
+.chat textarea{flex:1;border:1px solid var(--line);background:var(--bg);color:var(--ink);padding:8px 10px;min-height:48px;resize:vertical;font-size:16px}
+.send{background:var(--y);color:var(--yi);border:0;font-weight:700;padding:0 16px;min-height:48px;cursor:pointer}
+.send:disabled{opacity:.45;cursor:default}
+.st{font-size:12px;color:var(--mut);padding:0 14px 10px}
+dialog{border:2px solid var(--ink);background:var(--bg);color:var(--ink);max-width:560px;width:calc(100% - 32px);padding:20px}
+dialog::backdrop{background:rgb(0 0 0/.35)}
+dialog label{display:block;font-size:14px;margin:12px 0 4px}
+dialog input,dialog select{width:100%;padding:8px 10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);min-height:44px;font-size:16px}
+.presets{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.presets button{font-size:13px;min-height:36px}
+.dots::after{content:"…";animation:d 1s steps(3) infinite}
+@keyframes d{0%{content:"."}50%{content:".."}100%{content:"..."}}
+@media(prefers-reduced-motion:reduce){.dots::after{animation:none}}
+@media(max-width:600px){h2{font-size:21px}th,td{padding:6px}.stack thead{display:none}.stack tr{display:grid;padding-block:8px;border-bottom:1px solid var(--line)}.stack td{display:flow-root;border:0;padding:2px 0;padding-inline-start:6.5em}.stack td::before{content:attr(data-l);float:inline-start;width:6em;margin-inline-start:-6.5em;color:var(--mut);font-size:13px}}
+</style>
+<script>new MutationObserver(()=>{for(const c of document.querySelectorAll('.stack td:not([data-l])')){let i=0,p=c;while(p=p.previousElementSibling)i+=p.colSpan;c.dataset.l=c.closest('table').rows[0].cells[i]?.textContent||''}}).observe(document,{childList:true,subtree:true})</script>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div>
+    <h1>地域医療構想 オープンデータ指標カタログ</h1>
+    <p class="sub">指標ごとに、作成者の意図・計算方法・注意点を確認できます。右の窓口では、指標カードとデータの説明を根拠に質問に答えます。</p>
+  </div>
+  <nav aria-label="ページ">
+    <a href="#indicators" data-nav="indicators">指標</a>
+    <a href="#datasets" data-nav="datasets">データ</a>
+    <a href="#references" data-nav="references">対応表</a>
+    <a href="#about" data-nav="about">このサイトについて</a>
+  </nav>
+</header>
+
+<div class="grid">
+  <main id="view" aria-live="polite"><p class="note">読み込み中です…</p></main>
+
+  <aside class="chat" aria-label="質問窓口">
+    <div class="chat-h"><b>質問する</b><button class="btn ghost" type="button" id="open-settings">接続の設定</button></div>
+    <div class="focus" id="focus"></div>
+    <div class="log" id="log"><div class="sug" id="sug"></div></div>
+    <form id="f">
+      <textarea id="q" rows="2" aria-label="質問" placeholder="例：回復期の割合で休棟中の病床を除いたのはなぜ？"></textarea>
+      <button class="send" id="send" type="submit">送信</button>
+    </form>
+    <div class="st" id="st">準備しています…</div>
+  </aside>
+</div>
+</div>
+
+<dialog id="dlg">
+  <form method="dialog" id="dlg-form">
+    <h2 style="font-size:20px">接続の設定</h2>
+    <p class="note">回答を作るAIを選びます。APIキーはこのブラウザの中にだけ保存され、ほかには送られません（接続先のAIには送られます）。</p>
+    <label for="prov">接続先</label>
+    <select id="prov">
+      <option value="claude">Claude（claude.ai 上で開いているとき）</option>
+      <option value="openai">OpenAI互換API（ローカルのQwenなど）</option>
+    </select>
+    <div id="oa">
+      <label for="base">ベースURL</label>
+      <input id="base" placeholder="http://localhost:11434/v1">
+      <div class="presets">
+        <button type="button" class="chip" data-base="http://localhost:11434/v1">Ollama</button>
+        <button type="button" class="chip" data-base="http://localhost:1234/v1">LM Studio</button>
+        <button type="button" class="chip" data-base="http://localhost:8080/v1">llama.cpp</button>
+      </div>
+      <label for="model">モデル名</label>
+      <input id="model" placeholder="例：qwen3.8:27b">
+      <label for="key">APIキー（ローカルなら空欄）</label>
+      <input id="key" type="password" autocomplete="off">
+      <p class="note">ローカルのOllamaを使う場合は、Ollama側でこのサイトのアドレスからの接続を許可する必要があります（docs/site.md）。</p>
+    </div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px">
+      <button class="btn ghost" value="cancel" type="submit">閉じる</button>
+      <button class="btn" value="save" type="submit" id="save">保存</button>
+    </div>
+  </form>
+</dialog>
+
+<script>
+{
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const UNIT = { municipality: "市区町村", koso_kuiki: "構想区域", secondary_medical_area: "二次医療圏", prefecture: "都道府県", designated_city_ward: "政令市の区", facility: "医療機関", ward_unit: "病棟" };
+const STATUS = { draft: "草案", reviewed: "レビュー済み", deprecated: "廃止" };
+let CAT = null, IDX = [], REPO = "";
+const toHash = (id) => id.replace(/_/g, "-");
+const fromHash = (h, list) => list.find((x) => toHash(x.id) === h);
+const gh = (path) => `${REPO}/blob/main/${path}`;
+const safeUrl = (u) => (/^https?:\/\//.test(u || "") ? u : null);
+
+// ---- 簡易Markdown（docs の節の表示用） -------------------------------------
+function inline(s) {
+  return esc(s)
+    .replace(/`([^`]+)`/g, "<code>$1</code>")
+    .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+    .replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g, '<a href="$2">$1</a>');
+}
+function md(text) {
+  const lines = String(text).split("\n"); let out = "", i = 0;
+  while (i < lines.length) {
+    const l = lines[i];
+    if (l.startsWith("```")) { let code = []; i++; while (i < lines.length && !lines[i].startsWith("```")) code.push(lines[i++]); i++; out += `<pre><code>${esc(code.join("\n"))}</code></pre>`; continue; }
+    if (l.trim().startsWith("|")) {
+      const rows = []; while (i < lines.length && lines[i].trim().startsWith("|")) rows.push(lines[i++]);
+      const cells = (r) => r.trim().replace(/^\||\|$/g, "").split("|").map((c) => c.trim());
+      const body = rows.filter((r, k) => k !== 1 || !/^\s*\|?\s*:?-/.test(r));
+      out += `<table class="stack"><thead><tr>${cells(body[0]).map((c) => `<th>${inline(c)}</th>`).join("")}</tr></thead><tbody>${body.slice(1).map((r) => `<tr>${cells(r).map((c) => `<td>${inline(c)}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
+      continue;
+    }
+    if (/^\s*[-*] /.test(l)) { let items = []; while (i < lines.length && /^\s*[-*] /.test(lines[i])) items.push(lines[i++].replace(/^\s*[-*] /, "")); out += `<ul class="c">${items.map((x) => `<li>${inline(x)}</li>`).join("")}</ul>`; continue; }
+    if (/^\d+\. /.test(l)) { let items = []; while (i < lines.length && /^\d+\. /.test(lines[i])) items.push(lines[i++].replace(/^\d+\. /, "")); out += `<ol>${items.map((x) => `<li>${inline(x)}</li>`).join("")}</ol>`; continue; }
+    if (/^#{2,4} /.test(l)) { out += `<h4>${inline(l.replace(/^#+ /, ""))}</h4>`; i++; continue; }
+    if (l.startsWith("> ")) { out += `<p class="note">${inline(l.slice(2))}</p>`; i++; continue; }
+    if (l.trim()) out += `<p>${inline(l)}</p>`;
+    i++;
+  }
+  return out;
+}
+
+// ---- 画面 -----------------------------------------------------------------
+let unitFilter = "", query = "";
+function setNav(name) {
+  document.querySelectorAll("[data-nav]").forEach((a) => (a.dataset.nav === name ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current")));
+}
+function cardText(c) { return [c.name, c.short_description, c.intent, c.why_this_denominator, c.interpretation, ...(c.caveats || []), c.numerator?.description, c.denominator?.description].join(" "); }
+
+function viewIndicators() {
+  setNav("indicators");
+  const units = [...new Set(CAT.indicators.map((c) => c.unit_of_analysis))];
+  const list = CAT.indicators.filter((c) => (!unitFilter || c.unit_of_analysis === unitFilter) && (!query || cardText(c).includes(query)));
+  $("view").innerHTML = `<h2>指標</h2><p class="note">${CAT.indicators.length}件。草案の指標は、作成者の確認前の内容を含みます。</p>
+  <div class="tools"><input id="iq" type="search" placeholder="指標を探す（例：回復期、訪問介護）" value="${esc(query)}" aria-label="指標を探す">
+  <button class="chip" type="button" data-unit="" aria-pressed="${!unitFilter}">すべて</button>${units.map((u) => `<button class="chip" type="button" data-unit="${esc(u)}" aria-pressed="${unitFilter === u}">${esc(UNIT[u] || u)}</button>`).join("")}</div>
+  <ul class="list">${list.map((c) => `<li><a class="row" href="#ind-${toHash(c.id)}"><span class="t">${esc(c.name)}</span>
+  <span class="badges"><span class="b">${esc(UNIT[c.unit_of_analysis] || c.unit_of_analysis)}</span><span class="b ${c.status === "draft" ? "draft" : ""}">${esc(STATUS[c.status] || c.status)}</span></span>
+  <span class="d">${esc(c.short_description || "")}</span></a></li>`).join("") || `<li class="note" style="padding:14px 4px">該当する指標はありません。</li>`}</ul>`;
+  $("iq").addEventListener("input", (e) => { query = e.target.value.trim(); const pos = e.target.selectionStart; viewIndicators(); const el = $("iq"); el.focus(); el.setSelectionRange(pos, pos); });
+  document.querySelectorAll("[data-unit]").forEach((b) => b.addEventListener("click", () => { unitFilter = b.dataset.unit; viewIndicators(); }));
+}
+
+function term(t) {
+  const ds = CAT.datasets.find((d) => d.id === t.dataset);
+  return `<td>${esc(t.description)}</td><td>${ds ? `<a href="#ds-${toHash(ds.id)}">${esc(ds.title)}</a>` : esc(t.dataset)}</td><td class="num">${esc(t.as_of || "")}</td>`;
+}
+function viewIndicator(c) {
+  setNav("indicators");
+  const alt = (c.alternatives || []).map((a) => { const t = CAT.indicators.find((x) => x.id === a.id); return `<li>${t ? `<a href="#ind-${toHash(t.id)}">${esc(t.name)}</a>` : `<code>${esc(a.id)}</code>（未作成）`}：${esc(a.reason)}</li>`; }).join("");
+  const refs = (c.references || []).map((r) => `<li>${safeUrl(r.url) ? `<a href="${esc(r.url)}">${esc(r.title)}</a>` : esc(r.title)}</li>`).join("");
+  $("view").innerHTML = `<a class="back" href="#indicators">← 指標の一覧</a>
+  <h2>${esc(c.name)}</h2>
+  <div class="meta"><span>単位：${esc(UNIT[c.unit_of_analysis] || c.unit_of_analysis)}</span><span>状態：${esc(STATUS[c.status] || c.status)}</span><span class="num">v${esc(c.version)}</span><span>作成者：${esc((c.authors || []).map((a) => a.name).join("、"))}</span></div>
+  <div class="formula">${esc(c.formula)}</div>
+  <div class="intent"><h3>この指標の意図</h3><p>${esc(c.intent)}</p></div>
+  <h3>分子と分母</h3>
+  <table class="stack"><thead><tr><th></th><th>内容</th><th>データ</th><th>時点</th></tr></thead><tbody>
+  <tr><th>分子</th>${term(c.numerator)}</tr><tr><th>分母</th>${term(c.denominator)}</tr></tbody></table>
+  ${c.unit_note ? `<p class="note">${esc(c.unit_note)}</p>` : ""}
+  <h3>なぜこの分母か</h3><p>${esc(c.why_this_denominator)}</p>
+  ${c.interpretation ? `<h3>読み方</h3><p>${esc(c.interpretation)}</p>` : ""}
+  ${(c.policy_questions || []).length ? `<h3>この指標で考えたい問い</h3><ul class="c">${c.policy_questions.map((q) => `<li>${esc(q)}</li>`).join("")}</ul>` : ""}
+  <h3>注意点</h3><ul class="c">${(c.caveats || []).map((x) => `<li>${esc(x)}</li>`).join("")}</ul>
+  ${alt ? `<h3>関連する指標</h3><ul class="c">${alt}</ul>` : ""}
+  <h3>計算と出典</h3><ul class="c"><li><a href="${gh(c.script)}">計算スクリプト（${esc(c.script)}）</a></li><li><a href="${gh(`indicators/${c.id}.yaml`)}">指標カード（YAML）</a></li>${refs}</ul>
+  <p style="margin-top:20px"><button class="btn" type="button" id="ask-card">この指標について質問する</button></p>`;
+  $("ask-card").addEventListener("click", () => setFocus(c.id, true));
+}
+
+function viewDatasets() {
+  setNav("datasets");
+  $("view").innerHTML = `<h2>データ</h2><p class="note">取り込み・変換に対応しているデータセットです。元データはリポジトリに含まれません。</p>
+  <ul class="list">${CAT.datasets.map((d) => `<li><a class="row" href="#ds-${toHash(d.id)}"><span class="t">${esc(d.title)}</span>
+  <span class="badges"><span class="b">${d.verified ? "確認済み" : "未確認"}</span></span><span class="d">${esc(d.publisher)}・${esc(d.update_frequency || "")}・<code>${esc(d.id)}</code></span></a></li>`).join("")}</ul>`;
+}
+function viewDataset(d) {
+  setNav("datasets");
+  const cols = IDX.filter((x) => x.type === "col" && x.dataset === d.id);
+  const users = CAT.indicators.filter((c) => [c.numerator?.dataset, c.denominator?.dataset].includes(d.id));
+  $("view").innerHTML = `<a class="back" href="#datasets">← データの一覧</a>
+  <h2>${esc(d.title)}</h2>
+  <div class="meta"><span>${esc(d.publisher)}</span><span>${d.verified ? "実ファイルで確認済み" : "実ファイルで未確認"}</span><span><code>${esc(d.id)}</code></span></div>
+  <h3>出典</h3><p>${safeUrl(d.source_page) ? `<a href="${esc(d.source_page)}">${esc(d.source_page)}</a>` : esc(d.source_page)}</p><p class="note">出典表記の例：${esc(d.attribution)}</p>
+  <h3>使うときの注意</h3><ul class="c">${(d.notes || []).map((n) => `<li>${esc(n)}</li>`).join("")}</ul>
+  ${users.length ? `<h3>このデータを使う指標</h3><ul class="c">${users.map((c) => `<li><a href="#ind-${toHash(c.id)}">${esc(c.name)}</a></li>`).join("")}</ul>` : ""}
+  ${cols.length ? `<h3>列（${cols.length}）</h3><div class="tools"><input id="cq" type="search" placeholder="列の見出しで探す（例：手術総数、許可病床）" aria-label="列を探す"></div><div class="cols"><table><thead><tr><th>列名</th><th>見出し</th><th>必須区分</th></tr></thead><tbody id="ct"></tbody></table></div>
+  <p class="note"><a href="${gh(d.codebook)}">コードブック（CSV）</a>には、欠損や秘匿の件数も載っています。</p>`
+    : (d.columns || []).length ? `<h3>列</h3><div class="cols"><table><thead><tr><th>列名</th><th>型</th><th>説明</th></tr></thead><tbody>${d.columns.map((c) => `<tr><td><code>${esc(c.name)}</code></td><td>${esc(c.type)}</td><td>${esc(c.description || "")}</td></tr>`).join("")}</tbody></table></div>` : ""}`;
+  if (cols.length) {
+    const draw = (q) => { $("ct").innerHTML = cols.filter((c) => !q || c.title.includes(q) || c.column.includes(q)).slice(0, 300).map((c) => `<tr><td><code>${esc(c.column)}</code></td><td>${esc(c.title)}</td><td>${esc(c.required)}</td></tr>`).join(""); };
+    draw(""); $("cq").addEventListener("input", (e) => draw(e.target.value.trim()));
+  }
+}
+function viewDocs(nav, sources, title, lead) {
+  setNav(nav);
+  const secs = IDX.filter((x) => x.type === "doc" && sources.includes(x.source));
+  $("view").innerHTML = `<h2>${esc(title)}</h2>${lead}${secs.map((s) => `<h3>${esc(s.title.split(" > ").slice(1).join(" > ") || s.title)}</h3>${md(s.text)}`).join("")}`;
+}
+function viewAbout() {
+  setNav("about");
+  $("view").innerHTML = `<h2>このサイトについて</h2>
+  <p>地域医療構想の分析に携わる研究者どうしで、オープンデータを使った基本的な分析の考え方と方法を共有するためのサイトです。指標ごとに作成者の意図を「指標カード」に書き残し、計算はスクリプトで誰でも再現できるようにしています。</p>
+  <h3>3つの約束</h3><ul class="c"><li>数値はスクリプトが作る。質問窓口のAIは数値を作らない。</li><li>指標には必ずカードを付ける（意図・分子と分母・なぜその分母か・注意点）。</li><li>出典と加工を明記する。</li></ul>
+  <h3>質問窓口のしくみ</h3><p>質問に近い指標カード・データの説明・列の見出しをこのサイトの中から探し、それだけを根拠にAIが答えます。根拠にした資料を回答の下に示します。カードに書かれていないことは「作成者の説明はありません」と答えます。</p>
+  <p>接続先は「接続の設定」で選べます。claude.ai 上ではClaudeを、それ以外ではOpenAI互換のAPI（ローカルのOllamaなど）を使います。</p>
+  <h3>指標を追加する</h3><p><a href="${REPO}">GitHubのリポジトリ</a>から、Issueで相談してプルリクエストを送ってください（<a href="${gh("CONTRIBUTING.md")}">貢献の手引き</a>）。</p>
+  <p class="note">カタログの生成日時：<span class="num">${esc(CAT.generated_at)}</span></p>`;
+}
+function route() {
+  if (!CAT) return;
+  const h = decodeURIComponent(location.hash.slice(1)) || "indicators";
+  if (h.startsWith("ind-")) { const c = fromHash(h.slice(4), CAT.indicators); if (c) { viewIndicator(c); setFocus(c.id, false); return window.scrollTo(0, 0); } }
+  if (h.startsWith("ds-")) { const d = fromHash(h.slice(3), CAT.datasets); if (d) { viewDataset(d); return window.scrollTo(0, 0); } }
+  if (h === "datasets") return viewDatasets();
+  if (h === "references") return viewDocs("references", ["reference/README.md"], "共通対応表", `<p class="note">市区町村コード・構想区域・二次医療圏の対応は、全員が同じ表を使います。<a href="${REPO}/tree/main/reference">表の一覧（GitHub）</a></p>`);
+  if (h === "about") return viewAbout();
+  viewIndicators();
+}
+window.addEventListener("hashchange", route);
+
+// ---- 検索（文字の2文字組の重なりで近い資料を選ぶ） ---------------------------
+const grams = (s) => { const t = String(s || "").replace(/\s+/g, ""); const g = new Set(); for (let i = 0; i < t.length - 1; i++) g.add(t.slice(i, i + 2)); return g; };
+let DOCS = null;
+function buildDocs() {
+  const items = [];
+  for (const c of CAT.indicators) items.push({ id: `card:${c.id}`, kind: "card", title: c.name, href: `#ind-${toHash(c.id)}`, text: JSON.stringify(c), weight: 1.6 });
+  for (const d of CAT.datasets) items.push({ id: `dataset:${d.id}`, kind: "dataset", title: d.title, href: `#ds-${toHash(d.id)}`, text: [d.title, d.publisher, d.attribution, ...(d.notes || [])].join("\n"), weight: 1.2 });
+  for (const x of IDX) {
+    if (x.type === "doc") items.push({ id: x.id, kind: "doc", title: x.title, href: gh(x.source), text: x.text, weight: 1.0 });
+    else items.push({ id: x.id, kind: "col", title: `${x.dataset} の ${x.column}：${x.title}`, href: `#ds-${toHash(x.dataset)}`, text: `${x.column} ${x.title}（${x.required || "必須区分なし"}${x.zero_if_blank ? "、未回答は0" : ""}${x.secret ? "、秘匿の対象" : ""}）`, key: x.item || x.title, weight: 0.7 });
+  }
+  // 列は項目名（見出しの最後の段）だけで照合する。長い見出しの上位の段で、関係のない列が拾われるのを防ぐ
+  for (const it of items) it.g = grams(it.kind === "col" ? it.key : it.title + " " + it.text.slice(0, 4000));
+  return items;
+}
+function retrieve(q, focusId) {
+  DOCS ||= buildDocs();
+  const qg = grams(q);
+  // 一致した2文字組の数（n）が少ない資料は、たまたま重なっただけとみなして使わない
+  const MIN = { card: 1, dataset: 2, doc: 3, col: 3 };
+  const scored = DOCS.map((it) => { let n = 0; for (const g of qg) if (it.g.has(g)) n++; return { it, n, s: (n / Math.sqrt(it.g.size + 20)) * it.weight }; })
+    .filter((x) => x.n >= MIN[x.it.kind]).sort((a, b) => b.s - a.s);
+  const pick = (kind, n) => scored.filter((x) => x.it.kind === kind).slice(0, n).map((x) => x.it);
+  const sel = [...pick("card", 3), ...pick("dataset", 2), ...pick("doc", 3), ...pick("col", 6)];
+  if (focusId && !sel.some((x) => x.id === `card:${focusId}`)) sel.unshift(DOCS.find((x) => x.id === `card:${focusId}`));
+  if (!sel.some((x) => x.kind === "card")) sel.push(...DOCS.filter((x) => x.kind === "card").slice(0, 3));
+  return sel.filter(Boolean);
+}
+
+// ---- 質問窓口 ---------------------------------------------------------------
+const SUG_DEFAULT = ["回復期病床の割合の分母から休棟中の病床を除いたのはなぜ？", "病床機能報告の「*」や「-」は分析でどう扱えばいい？", "人口を構想区域にまとめるとき、二重に数えないためには？", "指標を新しく追加するには何をすればいい？"];
+const SUG_CARD = ["この指標の意図を短く説明して", "なぜこの分母を選んだの？", "この指標から言えないことは？", "代わりに使える指標は？"];
+let focusId = null, busy = false, sample = null, settings = {};
+const hist = [];
+try { settings = JSON.parse(localStorage.getItem("chiiki-od-chat") || "{}"); } catch (_) { settings = {}; }
+
+function setFocus(id, ask) {
+  focusId = id;
+  const c = CAT.indicators.find((x) => x.id === id);
+  $("focus").textContent = c ? `話題：${c.name}` : "";
+  renderSug();
+  if (ask) $("q").focus();
+}
+function renderSug() {
+  const el = $("sug"); if (!el) return;
+  const list = focusId ? SUG_CARD : SUG_DEFAULT;
+  el.innerHTML = `<p class="note" style="margin:0">${focusId ? "この指標について：" : "たとえば："}</p>` + list.map((s, i) => `<button type="button" data-i="${i}">${esc(s)}</button>`).join("");
+  el.querySelectorAll("button").forEach((b) => b.addEventListener("click", () => ask(list[+b.dataset.i])));
+}
+function provider() { return settings.provider || (sample ? "claude" : "openai"); }
+function status() {
+  const p = provider();
+  const ready = p === "claude" ? !!sample : !!settings.base && !!settings.model;
+  $("send").disabled = busy || !ready;
+  $("st").textContent = ready
+    ? (p === "claude" ? "Claude（claude.ai）で回答します。" : `接続先：${settings.base}（${settings.model}）`) + " 回答は根拠の資料で確かめてください。"
+    : p === "claude" ? "この表示環境ではClaudeを使えません。「接続の設定」でOpenAI互換APIを指定してください。" : "「接続の設定」で接続先を指定すると質問できます。";
+}
+
+function systemPrompt(ctx) {
+  return `あなたは「地域医療構想 オープンデータ指標カタログ」の案内役です。利用者は地域医療構想の分析に携わる研究者や行政職員です。
+回答の決まり：
+- 下の【資料】に書かれていることだけを根拠に、日本語で答える。資料にないことは推測で補わず、「作成者の説明はありません」または「このカタログでは確認できません」と書き、どの資料を見ればよいか（データの公表元、コードブック、GitHubのIssueで作成者に聞く等）を示す。
+- 指標の意図・分母を選んだ理由・注意点を聞かれたら、指標カードの該当する欄の内容を、作成者の考えとして紹介する。あなた自身の評価は加えない。
+- 数値（件数・割合・病床数など）は、資料に書かれているものしか書かない。計算して新しい数値を作らない。指標の値が知りたいときは、計算スクリプトの実行方法を案内する。
+- 結論を先に、400字程度、長くても800字以内。
+- 最後の行に、根拠にした資料のIDを「出典: card:xxx, doc:yyy」の形式で必ず書く。
+
+【資料】
+${ctx}`;
+}
+function contextOf(items) {
+  let budget = 14000, out = [];
+  for (const it of items) {
+    let body = it.kind === "card" ? JSON.stringify(Object.fromEntries(Object.entries(JSON.parse(it.text)).filter(([k]) => !["authors", "created", "updated"].includes(k))), null, 1) : it.text;
+    body = body.slice(0, it.kind === "card" ? 5000 : 2200);
+    if (budget - body.length < 0) break;
+    budget -= body.length; out.push(`[${it.id}] ${it.title}\n${body}`);
+  }
+  return out.join("\n\n");
+}
+function renderAnswer(el, text, items, done) {
+  const m = done ? text.match(/\n?\s*出典[:：]\s*([^\n]*)\s*$/) : null;
+  const body = m ? text.slice(0, m.index) : text;
+  const ids = m ? [...new Set(m[1].split(/[,、\s]+/).filter(Boolean))] : [];
+  const lines = esc(body).split("\n"); let h = "", inList = false;
+  for (const raw of lines) {
+    const l = raw.trim(); const li = l.match(/^(?:[-*・]\s+|\d+[.)]\s+)(.*)$/);
+    if (li) { if (!inList) { h += "<ul>"; inList = true; } h += `<li>${li[1].replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")}</li>`; continue; }
+    if (inList) { h += "</ul>"; inList = false; }
+    if (l) h += `<p>${l.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")}</p>`;
+  }
+  if (inList) h += "</ul>";
+  if (!h) h = `<p class="dots">考えています</p>`;
+  const src = ids.map((id) => items.find((x) => x.id === id) || DOCS.find((x) => x.id === id)).filter(Boolean);
+  if (done && src.length) h += `<div class="src">${src.map((s) => `<a href="${esc(s.href)}">${esc(s.title.slice(0, 40))}</a>`).join("")}</div>`;
+  el.innerHTML = h;
+}
+
+async function callOpenAI(messages) {
+  const url = settings.base.replace(/\/+$/, "") + "/chat/completions";
+  const headers = { "Content-Type": "application/json" };
+  if (settings.key) headers.Authorization = `Bearer ${settings.key}`;
+  let r;
+  try { r = await fetch(url, { method: "POST", headers, body: JSON.stringify({ model: settings.model, messages, temperature: 0.2 }) }); }
+  catch (e) { throw new Error("接続できませんでした。URL、接続先の起動状態、CORSの許可（Ollamaなら OLLAMA_ORIGINS）を確認してください。"); }
+  if (!r.ok) throw new Error(`接続先がエラーを返しました（${r.status}）。モデル名やAPIキーを確認してください。`);
+  const j = await r.json();
+  return j.choices?.[0]?.message?.content || "";
+}
+
+async function ask(q) {
+  q = (q || "").trim(); if (!q || busy) return;
+  busy = true; status(); $("q").value = ""; $("sug")?.remove();
+  const u = document.createElement("div"); u.className = "m u"; u.textContent = q; $("log").appendChild(u);
+  const a = document.createElement("div"); a.className = "m a"; $("log").appendChild(a);
+  const items = retrieve(q, focusId);
+  renderAnswer(a, "", items, false); a.scrollIntoView({ block: "end" });
+  const sys = systemPrompt(contextOf(items));
+  hist.push({ role: "user", content: q });
+  const recent = hist.slice(-6); if (recent[0].role !== "user") recent.shift();
+  try {
+    let text;
+    if (provider() === "claude") {
+      const input = recent.map((m, i) => (i === 0 ? { role: "user", content: sys + "\n\n---\n利用者の質問：\n" + m.content } : m));
+      const r = await sample(input, { cache: false, onText: ({ text }) => renderAnswer(a, text, items, false) });
+      text = r.text;
+    } else {
+      text = await callOpenAI([{ role: "system", content: sys }, ...recent]);
+    }
+    renderAnswer(a, text, items, true);
+    hist.push({ role: "assistant", content: text });
+  } catch (e) {
+    hist.pop();
+    a.innerHTML = `<p>${esc(e?.code === "rate_limited" ? "利用が集中しています。少し時間をおいてください。" : e?.code === "not_granted" ? "Claudeの利用が許可されていません。" : e?.message || "回答を作成できませんでした。")}</p>`;
+  } finally { busy = false; status(); a.scrollIntoView({ block: "end" }); }
+}
+$("f").addEventListener("submit", (e) => { e.preventDefault(); ask($("q").value); });
+$("q").addEventListener("keydown", (e) => { if (e.key === "Enter" && (e.ctrlKey || e.metaKey) && !e.isComposing) { e.preventDefault(); ask($("q").value); } });
+
+// ---- 接続の設定 -------------------------------------------------------------
+const dlg = $("dlg");
+function syncOA() { $("oa").style.display = $("prov").value === "openai" ? "" : "none"; }
+$("open-settings").addEventListener("click", () => {
+  $("prov").value = provider(); $("base").value = settings.base || ""; $("model").value = settings.model || ""; $("key").value = settings.key || "";
+  syncOA(); dlg.showModal();
+});
+$("prov").addEventListener("change", syncOA);
+document.querySelectorAll("[data-base]").forEach((b) => b.addEventListener("click", () => { $("base").value = b.dataset.base; }));
+dlg.addEventListener("close", () => {
+  if (dlg.returnValue !== "save") return;
+  settings = { provider: $("prov").value, base: $("base").value.trim(), model: $("model").value.trim(), key: $("key").value };
+  try { localStorage.setItem("chiiki-od-chat", JSON.stringify(settings)); } catch (_) {}
+  status();
+});
+
+// ---- 起動 -------------------------------------------------------------------
+(async () => {
+  try {
+    const [c, s] = await Promise.all([fetch("catalog.json").then((r) => r.json()), fetch("search_index.json").then((r) => r.json())]);
+    CAT = c; IDX = s.items || []; REPO = CAT.repo_url || "";
+  } catch (e) {
+    $("view").innerHTML = `<p>カタログを読み込めませんでした。<code>chiiki-od catalog</code> で site/catalog.json を作ってください。</p>`;
+    return;
+  }
+  route(); renderSug(); status();
+  for (let i = 0; i < 6 && !(window.claude && window.claude.use); i++) await new Promise((r) => setTimeout(r, 300));
+  if (window.claude && window.claude.use) { try { sample = await window.claude.use("sample"); } catch (_) { sample = null; } }
+  status();
+})();
+}
+</script>
+</body>
+</html>

@@ -97,6 +97,10 @@ def test_結果の地域はすべて地図にある():
         card = specs.load_card(doc["indicator"])
         ix = [c["name"] for c in doc["columns"]].index(doc["output"]["area_code"])
         cov = boundaries.map_coverage(card["unit_of_analysis"], [r[ix] for r in doc["rows"]], layers)
+        if card["unit_of_analysis"] not in boundaries.UNIT_LAYERS:
+            # 境界のない単位（医療機関など）は地図を描かず、理由を出す
+            assert not cov["shown"] and cov["reason"], f"{p.name}: {cov}"
+            continue
         assert cov["shown"] and cov["missing"] == [], f"{p.name}: {cov}"
 
 

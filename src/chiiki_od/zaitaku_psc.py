@@ -97,12 +97,21 @@ def build_hospital_table(facility: pd.DataFrame, wards: pd.DataFrame, form2: pd.
         notes.append(f"様式2 年間合計票に行がない病院 {n}（様式2の項目は0とみなす）")
     h[FORM2_COLS] = h[FORM2_COLS].fillna(0)
 
+    # 外来機能報告とは医療機関コード（医科）でつなぎ、つながらない病院はオープンデータ医療機関コードでつなぐ
     o = outpatient.rename(columns=OUTPATIENT)
-    o = o.dropna(subset=["medical_code_ika"]).drop_duplicates("medical_code_ika")
-    h = h.merge(o[["medical_code_ika", *OUTPATIENT.values()]], on="medical_code_ika", how="left")
-    no_out = h[list(OUTPATIENT.values())].isna().all(axis=1)
+    vals = list(OUTPATIENT.values())
+    by_med = o.dropna(subset=["medical_code_ika"]).drop_duplicates("medical_code_ika").set_index("medical_code_ika")[vals]
+    h = h.merge(by_med, left_on="medical_code_ika", right_index=True, how="left")
+    if "od_facility_code" in o.columns:
+        by_od = o.dropna(subset=["od_facility_code"]).drop_duplicates("od_facility_code").set_index("od_facility_code")[vals]
+        miss = h[vals].isna().all(axis=1)
+        filled = h.loc[miss, ["od_facility_code"]].join(by_od, on="od_facility_code")[vals]
+        h.loc[miss, vals] = filled.to_numpy()
+        if (n := int((miss & h[vals].notna().any(axis=1)).sum())):
+            notes.append(f"外来機能報告と医療機関コード（医科）でつながらず、オープンデータ医療機関コードでつないだ病院 {n}")
+    no_out = h[vals].isna().all(axis=1)
     if no_out.any():
-        notes.append(f"外来機能報告 様式2 に医療機関コード（医科）で対応しない病院 {int(no_out.sum())}（P1〜P3は判定不能「－」）")
+        notes.append(f"外来機能報告 様式2 とつながらない病院 {int(no_out.sum())}（P1〜P3は判定不能「－」）")
     h["has_outpatient"] = ~no_out
 
     f = filings.dropna(subset=["medical_code"])
@@ -199,3 +208,101 @@ def letters(n: int) -> str:
         n, r = divmod(n - 1, 26)
         s = chr(65 + r) + s
     return s
+
+
+# ---- 指標スクリプトが使う入口 ------------------------------------------------------
+
+DATASETS = {
+    "facility": "bed_function_report_r7_facility",
+    "wards": "bed_function_report_r7_ward",
+    "form2": "bed_function_report_r7_form2_annual",
+    "outpatient": "outpatient_function_report_r7_form2",
+    "filings": "kouseikyoku_todokede_ika_r8",
+}
+SAMPLE_FILES = {k: f"zaitaku_psc_{k}_sample.csv" for k in DATASETS}
+_TEXT = set(FACILITY_KEYS) | {"medical_code", "filing_symbol", "hospital_clinic_type", "w016"}
+
+
+def load_inputs(sample: bool = False) -> dict[str, pd.DataFrame]:
+    """判定に使う5つの表。sample=True なら tests/fixtures の合成サンプル。"""
+    from . import paths
+
+    cols = {
+        "facility": [*FACILITY_KEYS, "f022", "f061"],
+        "wards": ["od_facility_code", *WARD_COLS],
+        "form2": ["od_facility_code", *FORM2_COLS],
+        "outpatient": ["medical_code_ika", "od_facility_code", "report_month", *OUTPATIENT],
+        "filings": ["pref_code", "facility_name", "medical_code", "filing_symbol"],
+    }
+    out = {}
+    for key, ds in DATASETS.items():
+        if sample:
+            df = pd.read_csv(paths.FIXTURES / SAMPLE_FILES[key], dtype=str, encoding="utf-8-sig")
+            for c in df.columns:
+                if c not in _TEXT:
+                    df[c] = pd.to_numeric(df[c]).astype("Int64")
+        else:
+            df = pd.read_parquet(paths.PROCESSED / f"{ds}.parquet", columns=cols[key])
+        df = df[[c for c in cols[key] if c in df.columns]]
+        if key == "outpatient":
+            df = df[df["report_month"] == 0]  # 報告月0＝年間値
+        out[key] = df.reset_index(drop=True)
+    return out
+
+
+def evaluate(facility, wards, form2, outpatient, filings, scale: float = 1.0) -> tuple[pd.DataFrame, list[str]]:
+    """病院の表と判定をまとめて返す（病院別・構想区域別の指標の共通の入口）。"""
+    h, notes = build_hospital_table(facility, wards, form2, outpatient, filings)
+    return pd.concat([h, judge(h, scale=scale)], axis=1), notes
+
+
+def _anon_order(code: str) -> str:
+    import hashlib
+
+    return hashlib.sha1(code.encode()).hexdigest()
+
+
+def hospital_table(r: pd.DataFrame) -> pd.DataFrame:
+    """病院別の結果（病院名と医療機関コードは載せず、構想区域ごとに A病院・B病院… と伏せる）。
+
+    伏せた名前の順は、該当項目数の多い順、同じ数の中は医療機関コードから作った乱数の順（公表ファイルの並びと関係しない）。
+    """
+    r = r.copy()
+    r["_order"] = r["od_facility_code"].map(_anon_order)
+    r = r.sort_values(["koso_kuiki_code", "items_met", "_order"], ascending=[True, False, True])
+    r["seq"] = r.groupby("koso_kuiki_code").cumcount().map(letters)
+    r["hospital_id"] = r["koso_kuiki_code"] + "-" + r["seq"]
+    r["hospital_label"] = r["koso_kuiki_name"] + "・" + r["seq"] + "病院"
+    cols = ["hospital_id", "hospital_label", "pref_code", "koso_kuiki_code", "koso_kuiki_name", "type",
+            "items_met", "P_count", "S_count", "C_count"]
+    cols += [i.code for i in ITEMS] + [f"{i.code}_value" for i in ITEMS] + ["shien_kind"]
+    out = r[cols].reset_index(drop=True)
+    for i in ITEMS:
+        out[f"{i.code}_value"] = out[f"{i.code}_value"].astype("Float64").round(0).astype("Int64")
+    return out
+
+
+def koso_table(r: pd.DataFrame, ref: pd.DataFrame) -> pd.DataFrame:
+    """構想区域ごとの、類型に該当する病院の数。対象病院のない区域も0で残す。"""
+    g = r.assign(
+        any_=r["is_P"] | r["is_S"] | r["is_C"], pc=r["is_P"] & r["is_C"]
+    ).groupby("koso_kuiki_code").agg(
+        hospitals=("od_facility_code", "size"),
+        hospitals_p=("is_P", "sum"),
+        hospitals_s=("is_S", "sum"),
+        hospitals_c=("is_C", "sum"),
+        hospitals_any=("any_", "sum"),
+        hospitals_pc=("pc", "sum"),
+    )
+    areas = ref.drop_duplicates("koso_kuiki_code")[["pref_code", "koso_kuiki_code", "koso_kuiki_name"]]
+    out = areas.merge(g, left_on="koso_kuiki_code", right_index=True, how="left")
+    for c in g.columns:
+        out[c] = out[c].fillna(0).astype("Int64")
+    return out.sort_values("koso_kuiki_code").reset_index(drop=True)
+
+
+def summary_notes(r: pd.DataFrame) -> list[str]:
+    n = {t: int(r[f"is_{t}"].sum()) for t in TYPES}
+    any_ = int((r["is_P"] | r["is_S"] | r["is_C"]).sum())
+    pc = int((r["is_P"] & r["is_C"]).sum())
+    return [f"判定した病院 {len(r):,}：P {n['P']:,}、S {n['S']:,}、C {n['C']:,}、いずれか {any_:,}、PかつC {pc:,}"]

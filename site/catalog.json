@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-26T02:25:50+00:00",
+  "generated_at": "2026-11-26T02:37:33+00:00",
   "indicators": [
     {
       "id": "homecare_offices_per_65plus",
@@ -112,6 +112,32 @@
         "bed_function_report_r7_form2_monthly"
       ],
       "codebook": "codebooks/bed_function_report_r7_facility.csv"
+    },
+    {
+      "id": "bed_function_report_r7_form2_annual",
+      "title": "病床機能報告 令和7年度 様式2病棟票（年間合計）",
+      "publisher": "厚生労働省",
+      "source_page": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/open_data_00020.html",
+      "attribution": "出典：厚生労働省「令和7年度病床機能報告公表データ」（様式2病棟票）を加工して作成",
+      "update_frequency": "年1回",
+      "verified": true,
+      "columns": [],
+      "notes": [
+        "1行＝1病棟（年間合計）。report_month はすべて0（データ定義で0は年間値を示す）。列は様式2（月別）と同じで、列名も同じ m001〜m221 を使う。",
+        "月別と年間合計は、項目によって必須の条件が異なるため、月別の合計と年間合計が一致しない場合がある（留意事項）。年間の分析にはこの表を使う。",
+        "紙媒体で報告した医療機関は、入院診療実績について月別ではなく年間合計のみが必須。",
+        "数値列の記号（*：月別1〜9件の秘匿、-：任意項目の未報告・非該当・不備、未報告又はデータ不備：必須項目の未報告・不備）は欠損にし、元の記号は <output>__flags.parquet に row_id・列・記号として残す。",
+        "データ定義で「未回答時にゼロを入力する項目」とされた列では、空欄の回答が0として入っている（コードブックの zero_if_blank）。0は「0件」と「無回答」を区別できない。",
+        "列名は先頭の識別列のみ英字（od_facility_code など）、それ以外は表の種類の接頭辞＋位置番号。各列の意味は codebooks/<id>.csv を参照。",
+        "オープンデータ医療機関コードは前年度と同じ医療機関に同じコードが割り当てられる（名称変更・移転で変わる場合あり）。オープンデータ病棟コードは前年度と変わる場合がある。",
+        "施設の状況は令和7年7月1日時点、通年の実績は令和6年4月1日〜令和7年3月31日。",
+        "都道府県が個別に情報を更新している場合があり、最新の報告内容は各都道府県のサイトで確認する。"
+      ],
+      "related": [
+        "bed_function_report_r7_ward",
+        "bed_function_report_r7_form2_monthly"
+      ],
+      "codebook": "codebooks/bed_function_report_r7_form2_annual.csv"
     },
     {
       "id": "bed_function_report_r7_form2_monthly",

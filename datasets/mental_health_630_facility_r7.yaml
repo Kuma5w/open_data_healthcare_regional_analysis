@@ -1,0 +1,95 @@
+id: mental_health_630_facility_r7
+title: 精神保健福祉資料（630調査）令和7年度 医療機関票 施設概要（都道府県・政令指定都市別の集計表）
+publisher: 国立精神・神経医療研究センター 精神保健研究所（厚生労働行政推進調査事業費補助金「効率的かつ効果的な精神保健医療福祉システム構築とそのモニタリングのための研究」研究班）
+source_page: https://www.ncnp.go.jp/nimh/seisaku/data/630.html
+license:
+  terms_url: https://www.ncnp.go.jp/nimh/seisaku/data/630.html
+  attribution: 出典：国立精神・神経医療研究センター 精神保健研究所「精神保健福祉資料（630調査）令和7年度 医療機関票 施設概要」を加工して作成
+  notes: 公表ページに利用条件と出典の書き方の指定はない（2026-11-26に確認）。用語の定義は teigisyo(R7_630).pdf。
+update_frequency: 年1回（6月30日時点）
+verified: true
+verified_note: 2026-11-26に公表ファイル（r7_630_shisetu.zip、Excel 1冊・14シート）で確認。施設概要1〜11の各表で、都道府県47行の合計が全国の行と一致し、内訳の表（医療法の区分・精神保健福祉法の区分・病院と診療所）の合計も一致。
+parser: seishin630_facility
+files:
+- key: shisetsu
+  url: https://www.ncnp.go.jp/nimh/seisaku/data/assets/excel/r7/r7_630_shisetu.zip
+  local_name: r7_630_shisetu.zip
+  as_of: 令和7年6月30日
+  format: zip
+columns:
+- {source: 表の番号（施設概要n）, name: table_no, type: int, description: 1 全病院（精神病床あり）、2 特定機能病院、3 地域医療支援病院、4 一般病院、5 精神病床のみを有する病院、6 国立・都道府県立精神科病院等、7 指定病院、8 非指定病院、9 精神病床なしの全施設、10 精神病床なしの病院、11 精神病床なしのクリニック・診療所}
+- {source: 表の名前, name: table_name, type: str}
+- {source: 表の区分, name: level, type: str, description: prefecture（都道府県。政令市の分を含む）、designated_city（政令指定都市）、national（全国）}
+- {source: 都道府県番号・政令指定都市番号, name: area_code, type: str, description: 都道府県は2桁、政令指定都市は5桁（6桁の団体コードから検査数字を除く）、全国は00}
+- {source: 都道府県名・政令指定都市名, name: area_name, type: str}
+- {source: '3列目 病院数', name: facilities, type: int}
+- {source: '4列目 病院数のうち応急入院指定病院数', name: emergency_admission_hospitals, type: int}
+- {source: '5列目 稼働中の精神科病棟数', name: wards_active, type: int}
+- {source: '6列目 休床中の精神科病棟数', name: wards_closed, type: int}
+- {source: '7列目 届出病床数', name: beds_notified, type: int}
+- {source: '8列目 許可精神病床数', name: beds_licensed, type: int}
+- {source: '9列目 措置入院受入可能病床数', name: beds_involuntary_capable, type: int}
+- {source: '10列目 措置入院受入可能病床数　うち、指定病床数', name: beds_designated, type: int}
+- {source: '11列目 在院患者数', name: inpatients, type: int}
+- {source: '12列目 公衆電話の設置されている病棟数(※1)', name: wards_with_payphone, type: int}
+- {source: '13列目 保護室および施錠可能個室数(※1)', name: seclusion_rooms, type: int}
+- {source: '14列目 保護室および施錠可能個室数(※1)　うち、トイレがついている個室数', name: seclusion_rooms_with_toilet, type: int}
+- {source: '15列目 保護室および施錠可能個室数(※1)　うち、カメラがついている個室数', name: seclusion_rooms_with_camera, type: int}
+- {source: '16列目 精神科医師数(※2)　常勤', name: psychiatrists_ft, type: int}
+- {source: '17列目 精神科医師数(※2)　非常勤(※3)', name: psychiatrists_pt, type: int}
+- {source: '18列目 精神科医師数(※2)　うち、精神保健指定医数　常勤', name: designated_physicians_ft, type: int}
+- {source: '19列目 精神科医師数(※2)　うち、精神保健指定医数　非常勤(※3)', name: designated_physicians_pt, type: int}
+- {source: '20列目 精神科医師数(※2)　うち、特定医師数　常勤', name: specified_physicians_ft, type: int}
+- {source: '21列目 精神科医師数(※2)　うち、特定医師数　非常勤(※3)', name: specified_physicians_pt, type: int}
+- {source: '22列目 精神科における看護職員数(看護師)※看護助手は除く　常勤', name: nurses_ft, type: int}
+- {source: '23列目 精神科における看護職員数(看護師)※看護助手は除く　非常勤(※3)', name: nurses_pt, type: int}
+- {source: '24列目 精神科における看護職員数(看護師)※看護助手は除く　うち、「精神看護専門看護師」「老人看護専門看護師」のいずれかをもつ人　常勤', name: nurses_cns_ft, type: int}
+- {source: '25列目 精神科における看護職員数(看護師)※看護助手は除く　うち、「精神看護専門看護師」「老人看護専門看護師」のいずれかをもつ人　非常勤(※3)', name: nurses_cns_pt, type: int}
+- {source: '26列目 精神科における看護職員数(看護師)※看護助手は除く　うち、「認知症看護認定看護師」「精神科認定看護師」のいずれかをもつ人　常勤', name: nurses_certified_ft, type: int}
+- {source: '27列目 精神科における看護職員数(看護師)※看護助手は除く　うち、「認知症看護認定看護師」「精神科認定看護師」のいずれかをもつ人　非常勤(※3)', name: nurses_certified_pt, type: int}
+- {source: '28列目 精神科における看護職員数(看護師)※看護助手は除く　うち、「精神及び神経症状に係る薬剤投与」に関連する「特定行為研修修了者数」(※4)　常勤', name: nurses_specified_act_psy_ft, type: int}
+- {source: '29列目 精神科における看護職員数(看護師)※看護助手は除く　うち、「精神及び神経症状に係る薬剤投与」に関連する「特定行為研修修了者数」(※4)　非常勤(※3)', name: nurses_specified_act_psy_pt, type: int}
+- {source: '30列目 精神科における看護職員数(看護師)※看護助手は除く　うち、「精神及び神経症状に係る薬剤投与」以外の「特定行為研修修了者数」(※5)　常勤', name: nurses_specified_act_other_ft, type: int}
+- {source: '31列目 精神科における看護職員数(看護師)※看護助手は除く　うち、「精神及び神経症状に係る薬剤投与」以外の「特定行為研修修了者数」(※5)　非常勤(※3)', name: nurses_specified_act_other_pt, type: int}
+- {source: '32列目 精神科における看護職員数(准看護師)※看護助手は除く　常勤', name: assistant_nurses_ft, type: int}
+- {source: '33列目 精神科における看護職員数(准看護師)※看護助手は除く　非常勤(※3)', name: assistant_nurses_pt, type: int}
+- {source: '34列目 精神科における看護補助者数(看護助手、看護アシスタント、ナースエイド、ケアワーカー等)　常勤', name: nursing_aides_ft, type: int}
+- {source: '35列目 精神科における看護補助者数(看護助手、看護アシスタント、ナースエイド、ケアワーカー等)　非常勤(※3)', name: nursing_aides_pt, type: int}
+- {source: '36列目 精神科における理学療法士　常勤数', name: physical_therapists_ft, type: int}
+- {source: '37列目 精神科における理学療法士　非常勤数(※3)', name: physical_therapists_pt, type: int}
+- {source: '38列目 精神科における理学療法士　常勤配置医療機関数(※6)', name: physical_therapists_ft_facilities, type: int}
+- {source: '39列目 精神科における理学療法士　非常勤配置医療機関数(※7)', name: physical_therapists_pt_facilities, type: int}
+- {source: '40列目 精神科における作業療法士　常勤数', name: occupational_therapists_ft, type: int}
+- {source: '41列目 精神科における作業療法士　非常勤数(※3)', name: occupational_therapists_pt, type: int}
+- {source: '42列目 精神科における作業療法士　常勤配置医療機関数(※6)', name: occupational_therapists_ft_facilities, type: int}
+- {source: '43列目 精神科における作業療法士　非常勤配置医療機関数(※7)', name: occupational_therapists_pt_facilities, type: int}
+- {source: '44列目 精神科における精神保健福祉士　常勤数', name: psychiatric_social_workers_ft, type: int}
+- {source: '45列目 精神科における精神保健福祉士　非常勤数(※3)', name: psychiatric_social_workers_pt, type: int}
+- {source: '46列目 精神科における精神保健福祉士　常勤配置医療機関数(※6)', name: psychiatric_social_workers_ft_facilities, type: int}
+- {source: '47列目 精神科における精神保健福祉士　非常勤配置医療機関数(※7)', name: psychiatric_social_workers_pt_facilities, type: int}
+- {source: '48列目 精神科における臨床心理技術者　常勤数', name: psychologists_ft, type: int}
+- {source: '49列目 精神科における臨床心理技術者　非常勤数(※3)', name: psychologists_pt, type: int}
+- {source: '50列目 精神科における臨床心理技術者　常勤配置医療機関数(※6)', name: psychologists_ft_facilities, type: int}
+- {source: '51列目 精神科における臨床心理技術者　非常勤配置医療機関数(※7)', name: psychologists_pt_facilities, type: int}
+- {source: '52列目 精神科における臨床心理技術者　うち、公認心理師有資格者　常勤数', name: certified_psychologists_ft, type: int}
+- {source: '53列目 精神科における臨床心理技術者　うち、公認心理師有資格者　非常勤数(※3)', name: certified_psychologists_pt, type: int}
+- {source: '54列目 精神科における臨床心理技術者　うち、公認心理師有資格者　常勤配置医療機関数(※6)', name: certified_psychologists_ft_facilities, type: int}
+- {source: '55列目 精神科における臨床心理技術者　うち、公認心理師有資格者　非常勤配置医療機関数(※7)', name: certified_psychologists_pt_facilities, type: int}
+- {source: '56列目 退院後生活環境相談員配置数(※8)', name: discharge_counselors, type: int}
+- {source: '57列目 退院後生活環境相談員配置数(※8)　うち、精神保健福祉士の人数', name: discharge_counselors_psw, type: int}
+- {source: '58列目 退院後生活環境相談員配置数(※8)　うち、看護職員の人数', name: discharge_counselors_nurses, type: int}
+- {source: '59列目 退院後生活環境相談員配置数(※8)　うち、作業療法士の人数', name: discharge_counselors_ot, type: int}
+- {source: '60列目 退院後生活環境相談員配置数(※8)　うち、社会福祉士の人数', name: discharge_counselors_sw, type: int}
+- {source: '61列目 退院後生活環境相談員配置数(※8)　うち、公認心理師の人数', name: discharge_counselors_psychologists, type: int}
+- {source: '62列目 退院後生活環境相談員配置数(※8)　うち、3年以上の相談指導の経験があり厚生労働大臣の定める研修を修了した者の人数', name: discharge_counselors_trained, type: int}
+- {source: '63列目 医療保護入院患者数', name: inpatients_medical_protection, type: int}
+- {source: '64列目 措置入院患者数(※9)', name: inpatients_involuntary, type: int}
+- {source: '65列目 退院後生活環境相談員1人当たりの医療保護入院患者数と措置入院患者数の合計(※9)', name: patients_per_discharge_counselor, type: float}
+- {source: 表の1行目, name: as_of, type: str}
+output: mental_health_630_facility_r7
+notes:
+- 医療機関ごとの値はない。都道府県（政令指定都市の分を含む）と政令指定都市ごとの集計表で、変換後は1行＝表×地域。
+- 施設概要1〜8は精神病床を有する病院（1が全体）、9〜11は精神病床を有しない医療機関（病床・入院の列は空欄）。
+- 精神病床を有しない医療機関は回答率が都道府県で約20〜100％と違う（data/processed/<output>__response_rate.parquet）。都道府県どうしの比較には使わない。
+- 記号「-」（相談員がいないため1人当たりの値を計算できないなど）は欠損にした。
+- 人数の「非常勤」は精神科への勤務が週1日以上の職員数。精神科医師は、業務の半分以上がICD-10のFコードの疾患の診療なら、心療内科など他科の所属でも数える。

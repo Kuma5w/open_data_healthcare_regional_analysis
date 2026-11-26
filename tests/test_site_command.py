@@ -226,3 +226,37 @@ def test_構想区域版と市区町村版の指標を選び分ける():
     assert muni["indicator"] == "dental_muni"
     # 単位を言わなければ、構想区域版と市区町村版の候補を出す
     assert both["indicator"] is None and sorted(both["ties"]) == ["clinic_koso", "clinic_muni"]
+
+
+PSY = [
+    {"id": "beds", "name": "都道府県ごとの人口10万人あたり精神病床数"},
+    {"id": "inpatients", "name": "都道府県ごとの人口10万人あたり精神病床の在院患者数"},
+    {"id": "occupancy", "name": "都道府県ごとの精神病床の利用率"},
+    {"id": "involuntary", "name": "都道府県ごとの措置入院受入可能病床の利用状況"},
+    {"id": "doctors", "name": "都道府県ごとの人口10万人あたり精神科医師数（常勤、精神病床を有する病院）"},
+    {"id": "hosp_koso", "name": "構想区域ごとの人口10万人あたり病院数"},
+]
+
+
+def test_精神科の指標を選び分ける():
+    units = {m["id"]: ("koso_kuiki" if m["id"] == "hosp_koso" else "prefecture") for m in PSY}
+    ctx = {
+        "prefectures": codes.PREFECTURES,
+        "indicators": PSY,
+        "units": units,
+        "areas": {k: (KOSO if u == "koso_kuiki" else []) for k, u in units.items()},
+    }
+    cases = [
+        ("精神病床の利用率を東京都で", "occupancy"),
+        ("措置入院の受入病床の利用状況を出して", "involuntary"),
+        ("精神科医師数を出して", "doctors"),
+        ("在院患者数を熊本県で", "inpatients"),
+        ("精神病床の結果を出して", None),  # 精神病床数・在院患者数・利用率のどれか分からない → 候補を出す
+    ]
+    r = subprocess.run(
+        ["node", str(RUNNER)],
+        input=json.dumps({"ctx": ctx, "cases": [{"q": q, "current": None} for q, _ in cases]}, ensure_ascii=False),
+        capture_output=True, text=True, encoding="utf-8", check=True,
+    )
+    for (q, want), g in zip(cases, json.loads(r.stdout), strict=True):
+        assert g["indicator"] == want, (q, g)

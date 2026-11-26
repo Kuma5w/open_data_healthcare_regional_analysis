@@ -1,0 +1,83 @@
+id: involuntary_bed_use_pref
+version: 0.1.0
+status: draft
+name: 都道府県ごとの措置入院受入可能病床の利用状況
+short_description: 措置入院を受け入れられる病床のうち、措置入院の患者がどれくらい入院しているかを都道府県ごとに比べる
+unit_of_analysis: prefecture
+unit_note: 都道府県（政令指定都市の分を含む）。630調査の施設概要は都道府県と政令指定都市ごとの集計表で、構想区域や市区町村の値はない。
+
+numerator:
+  description: 措置入院患者数（緊急措置入院を含む、2025年6月30日時点）。内訳として国立・都道府県立精神科病院等、指定病院、非指定病院ごとの患者数も出す
+  dataset: mental_health_630_facility_r7
+  as_of: 2025年6月30日
+denominator:
+  description: 措置入院受入可能病床数（国立・都道府県立精神科病院等の病床と、指定病院の指定病床）。内訳として、国立・都道府県立精神科病院等の受入可能病床と、指定病院の指定病床も出す
+  dataset: mental_health_630_facility_r7
+  as_of: 2025年6月30日
+formula: 措置入院患者数 ÷ 措置入院受入可能病床数 × 100
+
+intent: >
+  改正医療法により、地域医療構想に精神医療が位置付けられた（地域医療構想策定ガイドライン Ⅰ-３）。国のワーキンググループで精神医療の地域医療構想のガイドラインが検討されている（2026年度中に結論の予定）。WG資料は、措置患者受入可能病床（指定病床）の利用状況として、都道府県別の措置入院患者の割合を示している。精神科救急・措置入院の受け皿が、どれくらい使われているかの地域差を見るための指標。
+
+why_this_denominator: >
+  措置入院は、国立・都道府県立精神科病院等と、指定病院の指定病床で受け入れる（精神保健福祉法）。そのため、両方を合わせた措置入院受入可能病床数を分母にした。指定病院の指定病床だけの利用率も内訳に出した。
+
+interpretation: >
+  値が高いほど、措置入院を受け入れられる病床のうち措置入院の患者が多い（受け皿に余裕が少ない可能性）。低い場合は、受け皿に余裕がある、または措置入院の運用が少ない。患者数が少ない都道府県が多く（数人〜数十人）、1日の人数なので変動が大きい。
+
+policy_questions:
+  - 措置入院を受け入れる病床に余裕が少ない都道府県はどこか
+  - 措置入院の患者を、国公立の病院と指定病院のどちらが多く受け入れているか
+
+caveats:
+  - 630調査（精神保健福祉資料）の医療機関票の集計表で、令和7年6月30日の1日の状況。在院患者数・入院形態別の患者数もその日の人数。
+  - 公表されているのは都道府県と政令指定都市ごとの集計だけで、医療機関ごとの値や構想区域ごとの値はない。精神医療の地域医療構想をどの単位で考えるか（都道府県か構想区域か）は国のワーキンググループで検討中。
+  - 医療機関の所在地の都道府県で数えている。患者が都道府県をまたいで入院する流出入は反映しない。
+  - 都道府県の値には政令指定都市の分が含まれる。医療機関が提出した値の集計で、公表元は「提出票に矛盾する数値があると合計が一致しない場合がある」としている（令和7年度の施設概要では、都道府県の合計と全国の行、表どうしの内訳はすべて一致した）。
+  - 措置入院患者は1日（6月30日）の人数で、都道府県によっては数人。年間の措置入院の件数とは違う。
+  - 国立・都道府県立精神科病院等は、許可病床のすべてが措置入院受入可能病床として数えられている。
+  - 非指定病院（措置入院受入可能病床なし）にも措置入院患者が全国で18人いる。全体の値の分子には含めた。
+
+alternatives:
+  - id: psychiatric_inpatients_per_100k_pref
+    reason: 措置・医療保護入院を含む在院患者の数を人口あたりで見る
+  - id: psychiatric_bed_occupancy_pref
+    reason: 精神病床全体の利用率を見る
+
+authors:
+  - name: H.I.
+
+script: indicators/involuntary_bed_use_pref.py
+
+output:
+  area_code: pref_code
+  area_name: pref_name
+  value: involuntary_use_pct
+  numerator: inpatients_involuntary
+  denominator: beds_involuntary_capable
+  scale: 100
+  digits: 1
+  unit: ％
+  columns:
+    - {name: pref_code, label: 都道府県コード}
+    - {name: pref_name, label: 都道府県名}
+    - {name: beds_involuntary_capable, label: 措置入院受入可能病床数, unit: 床}
+    - {name: inpatients_involuntary, label: 措置入院患者数（緊急措置入院を含む）, unit: 人}
+    - {name: beds_involuntary_capable_public, label: 受入可能病床 国立・都道府県立精神科病院等, unit: 床}
+    - {name: inpatients_involuntary_public, label: 措置入院患者 国立・都道府県立精神科病院等, unit: 人}
+    - {name: beds_designated, label: 指定病院の指定病床数, unit: 床}
+    - {name: inpatients_involuntary_designated, label: 措置入院患者 指定病院, unit: 人}
+    - {name: inpatients_involuntary_nondesignated, label: 措置入院患者 非指定病院, unit: 人}
+    - {name: involuntary_use_pct, label: 措置入院受入可能病床の利用状況, unit: ％}
+    - {name: involuntary_use_public_pct, label: 利用状況 国立・都道府県立精神科病院等, unit: ％}
+    - {name: involuntary_use_designated_pct, label: 利用状況 指定病院（指定病床）, unit: ％}
+
+references:
+  - title: 精神保健福祉資料（630調査）令和7年度 医療機関票 施設概要（国立精神・神経医療研究センター 精神保健研究所）
+    url: https://www.ncnp.go.jp/nimh/seisaku/data/630.html
+  - title: 地域医療構想策定ガイドライン（2026）Ⅰ-３ 精神医療に関する地域医療構想について
+  - title: 精神医療に関する地域医療構想の検討ワーキンググループ 資料（厚生労働省、令和8年11月）
+    url: https://www.mhlw.go.jp/content/10800000/001772794.pdf
+
+created: "2026-11-26"
+updated: "2026-11-26"

@@ -1,0 +1,80 @@
+id: psychiatrists_per_100k_pref
+version: 0.1.0
+status: draft
+name: 都道府県ごとの人口10万人あたり精神科医師数（常勤、精神病床を有する病院）
+short_description: 精神病床を有する病院の常勤の精神科医師が、人口に対してどれくらいいるかを都道府県ごとに比べる
+unit_of_analysis: prefecture
+unit_note: 都道府県（政令指定都市の分を含む）。630調査の施設概要は都道府県と政令指定都市ごとの集計表で、構想区域や市区町村の値はない。
+
+numerator:
+  description: 精神病床を有する病院の精神科医師数（常勤）。非常勤（精神科への勤務が週1日以上）と、精神保健指定医数（常勤・非常勤）も列に出す
+  dataset: mental_health_630_facility_r7
+  as_of: 2025年6月30日
+denominator:
+  description: 総人口（住民基本台帳の総計）
+  dataset: population_jumin_r8
+  as_of: 2026年1月1日
+formula: 精神科医師数（常勤）÷ 総人口 × 100,000
+
+intent: >
+  改正医療法により、地域医療構想に精神医療が位置付けられた（地域医療構想策定ガイドライン Ⅰ-３）。国のワーキンググループで精神医療の地域医療構想のガイドラインが検討されている（2026年度中に結論の予定）。精神病床を持つ病院の医師の確保状況を都道府県ごとに見るための指標。措置入院や医療保護入院の判定に必要な精神保健指定医の数も合わせて示す。
+
+why_this_denominator: >
+  精神科の医療は全年齢が対象なので総人口を分母にした。常勤を主な値にしたのは、非常勤の人数は勤務日数の幅が大きく（週1日以上を数える）、人数を足すと実際の診療の量を表さないため。
+
+interpretation: >
+  値が大きいほど、人口に対して精神病床を有する病院の常勤精神科医が多い。精神科クリニックの医師は含まないので、外来の体制は表さない。病床が多い都道府県ほど医師も多くなりやすいので、精神病床数の指標と合わせて見る。
+
+policy_questions:
+  - 精神病床を有する病院の精神科医が、人口に対して少ない都道府県はどこか
+  - 精神保健指定医が少なく、措置入院・医療保護入院の判定の体制に課題がありうる都道府県はどこか
+
+caveats:
+  - 630調査（精神保健福祉資料）の医療機関票の集計表で、令和7年6月30日の1日の状況。在院患者数・入院形態別の患者数もその日の人数。
+  - 公表されているのは都道府県と政令指定都市ごとの集計だけで、医療機関ごとの値や構想区域ごとの値はない。精神医療の地域医療構想をどの単位で考えるか（都道府県か構想区域か）は国のワーキンググループで検討中。
+  - 医療機関の所在地の都道府県で数えている。患者が都道府県をまたいで入院する流出入は反映しない。
+  - 都道府県の値には政令指定都市の分が含まれる。医療機関が提出した値の集計で、公表元は「提出票に矛盾する数値があると合計が一致しない場合がある」としている（令和7年度の施設概要では、都道府県の合計と全国の行、表どうしの内訳はすべて一致した）。
+  - 精神病床を有しない医療機関（クリニックなど）の医師は含まない。その表は都道府県ごとの回答率が約20〜100％と違うため使っていない。
+  - 業務の半分以上がICD-10のFコードの疾患の診療である医師は、心療内科など他科の所属でも精神科医として数えている（630調査の定義）。
+  - 医師・歯科医師・薬剤師統計の精神科医師数とは、調査の対象と定義が違う。
+  - 人口は住民基本台帳（2026年1月1日）の総数。調査の時点（2025年6月30日）と半年ずれる。ほかの人口あたりの指標とそろえた。
+
+alternatives:
+  - id: psychiatric_beds_per_100k_pref
+    reason: 精神病床の量と合わせて見る
+
+authors:
+  - name: H.I.
+
+script: indicators/psychiatrists_per_100k_pref.py
+
+output:
+  area_code: pref_code
+  area_name: pref_name
+  value: psychiatrists_ft_per_100k
+  numerator: psychiatrists_ft
+  denominator: population
+  scale: 100000
+  digits: 2
+  unit: 人／人口10万人
+  columns:
+    - {name: pref_code, label: 都道府県コード}
+    - {name: pref_name, label: 都道府県名}
+    - {name: hospitals, label: 精神病床を有する病院数, unit: 病院}
+    - {name: psychiatrists_ft, label: 精神科医師数（常勤）, unit: 人}
+    - {name: psychiatrists_pt, label: 精神科医師数（非常勤）, unit: 人}
+    - {name: designated_physicians_ft, label: 精神保健指定医数（常勤）, unit: 人}
+    - {name: designated_physicians_pt, label: 精神保健指定医数（非常勤）, unit: 人}
+    - {name: population, label: 総人口, unit: 人}
+    - {name: psychiatrists_ft_per_100k, label: 人口10万人あたり精神科医師数（常勤）, unit: 人／10万人}
+    - {name: designated_physicians_ft_per_100k, label: 人口10万人あたり精神保健指定医数（常勤）, unit: 人／10万人}
+
+references:
+  - title: 精神保健福祉資料（630調査）令和7年度 医療機関票 施設概要（国立精神・神経医療研究センター 精神保健研究所）
+    url: https://www.ncnp.go.jp/nimh/seisaku/data/630.html
+  - title: 地域医療構想策定ガイドライン（2026）Ⅰ-３ 精神医療に関する地域医療構想について
+  - title: 精神医療に関する地域医療構想の検討ワーキンググループ 資料（厚生労働省、令和8年11月）
+    url: https://www.mhlw.go.jp/content/10800000/001772794.pdf
+
+created: "2026-11-26"
+updated: "2026-11-26"

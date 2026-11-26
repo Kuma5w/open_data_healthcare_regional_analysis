@@ -1,0 +1,233 @@
+{
+  "dataset": "mental_health_630_facility_r7",
+  "files": {
+    "shisetsu": {
+      "url": "https://www.ncnp.go.jp/nimh/seisaku/data/assets/excel/r7/r7_630_shisetu.zip",
+      "as_of": "令和7年6月30日",
+      "raw_path": "data/raw/mental_health_630_facility_r7/shisetsu.zip",
+      "bytes": 295671,
+      "sha256": "c010a3819321b7b1268fb96b1addc2fb35f9753d7ccb78bda1303cb1ef1126ec",
+      "fetched_at": "2026-11-26T08:15:23+00:00",
+      "obtained": "local_copy"
+    }
+  },
+  "output": {
+    "path": "data/processed/mental_health_630_facility_r7.parquet",
+    "rows": 748,
+    "columns": [
+      "table_no",
+      "table_name",
+      "level",
+      "area_code",
+      "area_name",
+      "facilities",
+      "emergency_admission_hospitals",
+      "wards_active",
+      "wards_closed",
+      "beds_notified",
+      "beds_licensed",
+      "beds_involuntary_capable",
+      "beds_designated",
+      "inpatients",
+      "wards_with_payphone",
+      "seclusion_rooms",
+      "seclusion_rooms_with_toilet",
+      "seclusion_rooms_with_camera",
+      "psychiatrists_ft",
+      "psychiatrists_pt",
+      "designated_physicians_ft",
+      "designated_physicians_pt",
+      "specified_physicians_ft",
+      "specified_physicians_pt",
+      "nurses_ft",
+      "nurses_pt",
+      "nurses_cns_ft",
+      "nurses_cns_pt",
+      "nurses_certified_ft",
+      "nurses_certified_pt",
+      "nurses_specified_act_psy_ft",
+      "nurses_specified_act_psy_pt",
+      "nurses_specified_act_other_ft",
+      "nurses_specified_act_other_pt",
+      "assistant_nurses_ft",
+      "assistant_nurses_pt",
+      "nursing_aides_ft",
+      "nursing_aides_pt",
+      "physical_therapists_ft",
+      "physical_therapists_pt",
+      "physical_therapists_ft_facilities",
+      "physical_therapists_pt_facilities",
+      "occupational_therapists_ft",
+      "occupational_therapists_pt",
+      "occupational_therapists_ft_facilities",
+      "occupational_therapists_pt_facilities",
+      "psychiatric_social_workers_ft",
+      "psychiatric_social_workers_pt",
+      "psychiatric_social_workers_ft_facilities",
+      "psychiatric_social_workers_pt_facilities",
+      "psychologists_ft",
+      "psychologists_pt",
+      "psychologists_ft_facilities",
+      "psychologists_pt_facilities",
+      "certified_psychologists_ft",
+      "certified_psychologists_pt",
+      "certified_psychologists_ft_facilities",
+      "certified_psychologists_pt_facilities",
+      "discharge_counselors",
+      "discharge_counselors_psw",
+      "discharge_counselors_nurses",
+      "discharge_counselors_ot",
+      "discharge_counselors_sw",
+      "discharge_counselors_psychologists",
+      "discharge_counselors_trained",
+      "inpatients_medical_protection",
+      "inpatients_involuntary",
+      "patients_per_discharge_counselor",
+      "as_of"
+    ],
+    "converted_at": "2026-11-26T08:18:51+00:00",
+    "converter_version": "0.1.0",
+    "extras": {
+      "response_rate": "data/processed/mental_health_630_facility_r7__response_rate.parquet",
+      "codebook": "codebooks/mental_health_630_facility_r7.csv"
+    },
+    "report": {
+      "sheets": {
+        "医療機能・施設概要1（精神病床有_全病院）": [
+          {
+            "table_no": 1,
+            "level": "prefecture",
+            "rows": 48
+          },
+          {
+            "table_no": 1,
+            "level": "designated_city",
+            "rows": 20
+          }
+        ],
+        "医療機能・施設概要2（精神病床有_特定機能病院）": [
+          {
+            "table_no": 2,
+            "level": "prefecture",
+            "rows": 48
+          },
+          {
+            "table_no": 2,
+            "level": "designated_city",
+            "rows": 20
+          }
+        ],
+        "医療機能・施設概要3（精神病床有_地域医療支援病院）": [
+          {
+            "table_no": 3,
+            "level": "prefecture",
+            "rows": 48
+          },
+          {
+            "table_no": 3,
+            "level": "designated_city",
+            "rows": 20
+          }
+        ],
+        "医療機能・施設概要4（精神病床有_一般病院）": [
+          {
+            "table_no": 4,
+            "level": "prefecture",
+            "rows": 48
+          },
+          {
+            "table_no": 4,
+            "level": "designated_city",
+            "rows": 20
+          }
+        ],
+        "医療機能・施設概要5（精神病床有_精神病床のみを有する病院）": [
+          {
+            "table_no": 5,
+            "level": "prefecture",
+            "rows": 48
+          },
+          {
+            "table_no": 5,
+            "level": "designated_city",
+            "rows": 20
+          }
+        ],
+        "医療機能・施設概要6（精神病床有_国立・都道府県立病院等）": [
+          {
+            "table_no": 6,
+            "level": "prefecture",
+            "rows": 48
+          },
+          {
+            "table_no": 6,
+            "level": "designated_city",
+            "rows": 20
+          }
+        ],
+        "医療機能・施設概要7（精神病床有_指定病院）": [
+          {
+            "table_no": 7,
+            "level": "prefecture",
+            "rows": 48
+          },
+          {
+            "table_no": 7,
+            "level": "designated_city",
+            "rows": 20
+          }
+        ],
+        "医療機能・施設概要8（精神病床有_非指定病院）": [
+          {
+            "table_no": 8,
+            "level": "prefecture",
+            "rows": 48
+          },
+          {
+            "table_no": 8,
+            "level": "designated_city",
+            "rows": 20
+          }
+        ],
+        "医療機能・施設概要9（精神病床無_全施設）": [
+          {
+            "table_no": 9,
+            "level": "prefecture",
+            "rows": 48
+          },
+          {
+            "table_no": 9,
+            "level": "designated_city",
+            "rows": 20
+          }
+        ],
+        "医療機能・施設概要10（精神病床無_病院）": [
+          {
+            "table_no": 10,
+            "level": "prefecture",
+            "rows": 48
+          },
+          {
+            "table_no": 10,
+            "level": "designated_city",
+            "rows": 20
+          }
+        ],
+        "医療機能・施設概要11（精神病床無_CL・診療所）": [
+          {
+            "table_no": 11,
+            "level": "prefecture",
+            "rows": 48
+          },
+          {
+            "table_no": 11,
+            "level": "designated_city",
+            "rows": 20
+          }
+        ]
+      },
+      "as_of": "令和7年6月30日時点の医療機関の実態",
+      "total_mismatches": []
+    }
+  }
+}

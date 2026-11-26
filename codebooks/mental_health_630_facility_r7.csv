@@ -1,0 +1,64 @@
+column,position,label
+facilities,3,病院数
+emergency_admission_hospitals,4,病院数のうち応急入院指定病院数
+wards_active,5,稼働中の精神科病棟数
+wards_closed,6,休床中の精神科病棟数
+beds_notified,7,届出病床数
+beds_licensed,8,許可精神病床数
+beds_involuntary_capable,9,措置入院受入可能病床数
+beds_designated,10,措置入院受入可能病床数 > うち、指定病床数
+inpatients,11,在院患者数
+wards_with_payphone,12,公衆電話の設置されている病棟数(※1)
+seclusion_rooms,13,保護室および施錠可能個室数(※1)
+seclusion_rooms_with_toilet,14,保護室および施錠可能個室数(※1) > うち、トイレがついている個室数
+seclusion_rooms_with_camera,15,保護室および施錠可能個室数(※1) > うち、カメラがついている個室数
+psychiatrists_ft,16,精神科医師数(※2) > 常勤
+psychiatrists_pt,17,精神科医師数(※2) > 非常勤(※3)
+designated_physicians_ft,18,精神科医師数(※2) > うち、精神保健指定医数 > 常勤
+designated_physicians_pt,19,精神科医師数(※2) > うち、精神保健指定医数 > 非常勤(※3)
+specified_physicians_ft,20,精神科医師数(※2) > うち、特定医師数 > 常勤
+specified_physicians_pt,21,精神科医師数(※2) > うち、特定医師数 > 非常勤(※3)
+nurses_ft,22,精神科における看護職員数(看護師)※看護助手は除く > 常勤
+nurses_pt,23,精神科における看護職員数(看護師)※看護助手は除く > 非常勤(※3)
+nurses_cns_ft,24,精神科における看護職員数(看護師)※看護助手は除く > うち、「精神看護専門看護師」「老人看護専門看護師」のいずれかをもつ人 > 常勤
+nurses_cns_pt,25,精神科における看護職員数(看護師)※看護助手は除く > うち、「精神看護専門看護師」「老人看護専門看護師」のいずれかをもつ人 > 非常勤(※3)
+nurses_certified_ft,26,精神科における看護職員数(看護師)※看護助手は除く > うち、「認知症看護認定看護師」「精神科認定看護師」のいずれかをもつ人 > 常勤
+nurses_certified_pt,27,精神科における看護職員数(看護師)※看護助手は除く > うち、「認知症看護認定看護師」「精神科認定看護師」のいずれかをもつ人 > 非常勤(※3)
+nurses_specified_act_psy_ft,28,精神科における看護職員数(看護師)※看護助手は除く > うち、「精神及び神経症状に係る薬剤投与」に関連する「特定行為研修修了者数」(※4) > 常勤
+nurses_specified_act_psy_pt,29,精神科における看護職員数(看護師)※看護助手は除く > うち、「精神及び神経症状に係る薬剤投与」に関連する「特定行為研修修了者数」(※4) > 非常勤(※3)
+nurses_specified_act_other_ft,30,精神科における看護職員数(看護師)※看護助手は除く > うち、「精神及び神経症状に係る薬剤投与」以外の「特定行為研修修了者数」(※5) > 常勤
+nurses_specified_act_other_pt,31,精神科における看護職員数(看護師)※看護助手は除く > うち、「精神及び神経症状に係る薬剤投与」以外の「特定行為研修修了者数」(※5) > 非常勤(※3)
+assistant_nurses_ft,32,精神科における看護職員数(准看護師)※看護助手は除く > 常勤
+assistant_nurses_pt,33,精神科における看護職員数(准看護師)※看護助手は除く > 非常勤(※3)
+nursing_aides_ft,34,精神科における看護補助者数(看護助手、看護アシスタント、ナースエイド、ケアワーカー等) > 常勤
+nursing_aides_pt,35,精神科における看護補助者数(看護助手、看護アシスタント、ナースエイド、ケアワーカー等) > 非常勤(※3)
+physical_therapists_ft,36,精神科における理学療法士 > 常勤数
+physical_therapists_pt,37,精神科における理学療法士 > 非常勤数(※3)
+physical_therapists_ft_facilities,38,精神科における理学療法士 > 常勤配置医療機関数(※6)
+physical_therapists_pt_facilities,39,精神科における理学療法士 > 非常勤配置医療機関数(※7)
+occupational_therapists_ft,40,精神科における作業療法士 > 常勤数
+occupational_therapists_pt,41,精神科における作業療法士 > 非常勤数(※3)
+occupational_therapists_ft_facilities,42,精神科における作業療法士 > 常勤配置医療機関数(※6)
+occupational_therapists_pt_facilities,43,精神科における作業療法士 > 非常勤配置医療機関数(※7)
+psychiatric_social_workers_ft,44,精神科における精神保健福祉士 > 常勤数
+psychiatric_social_workers_pt,45,精神科における精神保健福祉士 > 非常勤数(※3)
+psychiatric_social_workers_ft_facilities,46,精神科における精神保健福祉士 > 常勤配置医療機関数(※6)
+psychiatric_social_workers_pt_facilities,47,精神科における精神保健福祉士 > 非常勤配置医療機関数(※7)
+psychologists_ft,48,精神科における臨床心理技術者 > 常勤数
+psychologists_pt,49,精神科における臨床心理技術者 > 非常勤数(※3)
+psychologists_ft_facilities,50,精神科における臨床心理技術者 > 常勤配置医療機関数(※6)
+psychologists_pt_facilities,51,精神科における臨床心理技術者 > 非常勤配置医療機関数(※7)
+certified_psychologists_ft,52,精神科における臨床心理技術者 > うち、公認心理師有資格者 > 常勤数
+certified_psychologists_pt,53,精神科における臨床心理技術者 > うち、公認心理師有資格者 > 非常勤数(※3)
+certified_psychologists_ft_facilities,54,精神科における臨床心理技術者 > うち、公認心理師有資格者 > 常勤配置医療機関数(※6)
+certified_psychologists_pt_facilities,55,精神科における臨床心理技術者 > うち、公認心理師有資格者 > 非常勤配置医療機関数(※7)
+discharge_counselors,56,退院後生活環境相談員配置数(※8)
+discharge_counselors_psw,57,退院後生活環境相談員配置数(※8) > うち、精神保健福祉士の人数
+discharge_counselors_nurses,58,退院後生活環境相談員配置数(※8) > うち、看護職員の人数
+discharge_counselors_ot,59,退院後生活環境相談員配置数(※8) > うち、作業療法士の人数
+discharge_counselors_sw,60,退院後生活環境相談員配置数(※8) > うち、社会福祉士の人数
+discharge_counselors_psychologists,61,退院後生活環境相談員配置数(※8) > うち、公認心理師の人数
+discharge_counselors_trained,62,退院後生活環境相談員配置数(※8) > うち、3年以上の相談指導の経験があり厚生労働大臣の定める研修を修了した者の人数
+inpatients_medical_protection,63,医療保護入院患者数
+inpatients_involuntary,64,措置入院患者数(※9)
+patients_per_discharge_counselor,65,退院後生活環境相談員1人当たりの医療保護入院患者数と措置入院患者数の合計(※9)

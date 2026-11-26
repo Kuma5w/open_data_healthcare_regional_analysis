@@ -1,0 +1,85 @@
+id: psychiatric_bed_occupancy_pref
+version: 0.1.0
+status: draft
+name: 都道府県ごとの精神病床の利用率
+short_description: 精神病床が実際にどれくらい使われているかを、都道府県ごと・病院の区分ごとに比べる
+unit_of_analysis: prefecture
+unit_note: 都道府県（政令指定都市の分を含む）。630調査の施設概要は都道府県と政令指定都市ごとの集計表で、構想区域や市区町村の値はない。
+
+numerator:
+  description: 精神病床を有する病院の在院患者数（2025年6月30日時点）
+  dataset: mental_health_630_facility_r7
+  as_of: 2025年6月30日
+denominator:
+  description: 許可精神病床数（休床中の病棟を含む）。内訳として、精神保健福祉法の区分（国立・都道府県立精神科病院等・指定病院・非指定病院）ごとの病床数・在院患者数・利用率も出す
+  dataset: mental_health_630_facility_r7
+  as_of: 2025年6月30日
+formula: 在院患者数 ÷ 許可精神病床数 × 100
+
+intent: >
+  改正医療法により、地域医療構想に精神医療が位置付けられた（地域医療構想策定ガイドライン Ⅰ-３）。国のワーキンググループで精神医療の地域医療構想のガイドラインが検討されている（2026年度中に結論の予定）。WG資料は、都道府県別の病床利用率（在院患者数÷許可病床数）を、公的医療機関と民間医療機関に分けて示している。病床の量だけでなく、使われ方の地域差を見るための指標。
+
+why_this_denominator: >
+  WG資料と同じく、許可病床を分母にした。届出病床（稼働の届出のある病床）を分母にすると、休床の多い地域の利用率が高く出る。WG資料の公的・民間の区分はこの表にないため、内訳は精神保健福祉法の区分（国立・都道府県立精神科病院等、指定病院、非指定病院）で出した。
+
+interpretation: >
+  値が高いほど、許可病床に対して入院患者が多い。低い場合は、休床や空床が多い（病床の適正化の余地がある可能性）。高すぎる場合（100％超）は、報告の誤りや時点の違いも疑う。
+
+policy_questions:
+  - 精神病床の利用率が低い（空床・休床が多い）都道府県はどこか
+  - 国公立・指定病院・非指定病院で利用率に差があるか
+
+caveats:
+  - 630調査（精神保健福祉資料）の医療機関票の集計表で、令和7年6月30日の1日の状況。在院患者数・入院形態別の患者数もその日の人数。
+  - 公表されているのは都道府県と政令指定都市ごとの集計だけで、医療機関ごとの値や構想区域ごとの値はない。精神医療の地域医療構想をどの単位で考えるか（都道府県か構想区域か）は国のワーキンググループで検討中。
+  - 医療機関の所在地の都道府県で数えている。患者が都道府県をまたいで入院する流出入は反映しない。
+  - 都道府県の値には政令指定都市の分が含まれる。医療機関が提出した値の集計で、公表元は「提出票に矛盾する数値があると合計が一致しない場合がある」としている（令和7年度の施設概要では、都道府県の合計と全国の行、表どうしの内訳はすべて一致した）。
+  - 1日（6月30日）の在院患者数による。年間の平均的な利用率（延べ在院患者数÷延べ病床数）とは違う。
+  - 鳥取県は100％を超える（在院患者1,299人、許可病床1,231床。指定病院は117.5％）。公表値のまま載せている。
+  - 内訳の区分は精神保健福祉法による。WG資料の「公的医療機関・民間医療機関」とは区分が違う（市町村立や公的医療機関の多くは指定病院・非指定病院に入る）。
+
+alternatives:
+  - id: psychiatric_beds_per_100k_pref
+    reason: 病床の量を人口あたりで見る
+  - id: involuntary_bed_use_pref
+    reason: 措置入院を受け入れる病床の利用状況を見る
+
+authors:
+  - name: H.I.
+
+script: indicators/psychiatric_bed_occupancy_pref.py
+
+output:
+  area_code: pref_code
+  area_name: pref_name
+  value: occupancy_pct
+  numerator: inpatients
+  denominator: beds_licensed
+  scale: 100
+  digits: 1
+  unit: ％
+  columns:
+    - {name: pref_code, label: 都道府県コード}
+    - {name: pref_name, label: 都道府県名}
+    - {name: beds_licensed, label: 許可精神病床数, unit: 床}
+    - {name: inpatients, label: 在院患者数, unit: 人}
+    - {name: beds_public, label: 許可病床 国立・都道府県立精神科病院等, unit: 床}
+    - {name: inpatients_public, label: 在院患者 国立・都道府県立精神科病院等, unit: 人}
+    - {name: beds_designated, label: 許可病床 指定病院, unit: 床}
+    - {name: inpatients_designated, label: 在院患者 指定病院, unit: 人}
+    - {name: beds_nondesignated, label: 許可病床 非指定病院, unit: 床}
+    - {name: inpatients_nondesignated, label: 在院患者 非指定病院, unit: 人}
+    - {name: occupancy_pct, label: 精神病床の利用率, unit: ％}
+    - {name: occupancy_public_pct, label: 利用率 国立・都道府県立精神科病院等, unit: ％}
+    - {name: occupancy_designated_pct, label: 利用率 指定病院, unit: ％}
+    - {name: occupancy_nondesignated_pct, label: 利用率 非指定病院, unit: ％}
+
+references:
+  - title: 精神保健福祉資料（630調査）令和7年度 医療機関票 施設概要（国立精神・神経医療研究センター 精神保健研究所）
+    url: https://www.ncnp.go.jp/nimh/seisaku/data/630.html
+  - title: 地域医療構想策定ガイドライン（2026）Ⅰ-３ 精神医療に関する地域医療構想について
+  - title: 精神医療に関する地域医療構想の検討ワーキンググループ 資料（厚生労働省、令和8年11月）
+    url: https://www.mhlw.go.jp/content/10800000/001772794.pdf
+
+created: "2026-11-26"
+updated: "2026-11-26"

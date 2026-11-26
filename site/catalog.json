@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-26T07:58:16+00:00",
+  "generated_at": "2026-11-26T08:20:02+00:00",
   "repo_url": "https://github.com/Kuma5w/open_data_healthcare_regional_analysis",
   "pages_url": "https://kuma5w.github.io/open_data_healthcare_regional_analysis/",
   "indicators": [
@@ -1004,6 +1004,648 @@
         },
         {
           "title": "地域医療構想策定ガイドライン（厚生労働省医政局）"
+        }
+      ],
+      "created": "2026-11-26",
+      "updated": "2026-11-26"
+    },
+    {
+      "id": "involuntary_bed_use_pref",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": "都道府県ごとの措置入院受入可能病床の利用状況",
+      "short_description": "措置入院を受け入れられる病床のうち、措置入院の患者がどれくらい入院しているかを都道府県ごとに比べる",
+      "unit_of_analysis": "prefecture",
+      "unit_note": "都道府県（政令指定都市の分を含む）。630調査の施設概要は都道府県と政令指定都市ごとの集計表で、構想区域や市区町村の値はない。",
+      "numerator": {
+        "description": "措置入院患者数（緊急措置入院を含む、2025年6月30日時点）。内訳として国立・都道府県立精神科病院等、指定病院、非指定病院ごとの患者数も出す",
+        "dataset": "mental_health_630_facility_r7",
+        "as_of": "2025年6月30日"
+      },
+      "denominator": {
+        "description": "措置入院受入可能病床数（国立・都道府県立精神科病院等の病床と、指定病院の指定病床）。内訳として、国立・都道府県立精神科病院等の受入可能病床と、指定病院の指定病床も出す",
+        "dataset": "mental_health_630_facility_r7",
+        "as_of": "2025年6月30日"
+      },
+      "formula": "措置入院患者数 ÷ 措置入院受入可能病床数 × 100",
+      "intent": "改正医療法により、地域医療構想に精神医療が位置付けられた（地域医療構想策定ガイドライン Ⅰ-３）。国のワーキンググループで精神医療の地域医療構想のガイドラインが検討されている（2026年度中に結論の予定）。WG資料は、措置患者受入可能病床（指定病床）の利用状況として、都道府県別の措置入院患者の割合を示している。精神科救急・措置入院の受け皿が、どれくらい使われているかの地域差を見るための指標。\n",
+      "why_this_denominator": "措置入院は、国立・都道府県立精神科病院等と、指定病院の指定病床で受け入れる（精神保健福祉法）。そのため、両方を合わせた措置入院受入可能病床数を分母にした。指定病院の指定病床だけの利用率も内訳に出した。\n",
+      "interpretation": "値が高いほど、措置入院を受け入れられる病床のうち措置入院の患者が多い（受け皿に余裕が少ない可能性）。低い場合は、受け皿に余裕がある、または措置入院の運用が少ない。患者数が少ない都道府県が多く（数人〜数十人）、1日の人数なので変動が大きい。\n",
+      "policy_questions": [
+        "措置入院を受け入れる病床に余裕が少ない都道府県はどこか",
+        "措置入院の患者を、国公立の病院と指定病院のどちらが多く受け入れているか"
+      ],
+      "caveats": [
+        "630調査（精神保健福祉資料）の医療機関票の集計表で、令和7年6月30日の1日の状況。在院患者数・入院形態別の患者数もその日の人数。",
+        "公表されているのは都道府県と政令指定都市ごとの集計だけで、医療機関ごとの値や構想区域ごとの値はない。精神医療の地域医療構想をどの単位で考えるか（都道府県か構想区域か）は国のワーキンググループで検討中。",
+        "医療機関の所在地の都道府県で数えている。患者が都道府県をまたいで入院する流出入は反映しない。",
+        "都道府県の値には政令指定都市の分が含まれる。医療機関が提出した値の集計で、公表元は「提出票に矛盾する数値があると合計が一致しない場合がある」としている（令和7年度の施設概要では、都道府県の合計と全国の行、表どうしの内訳はすべて一致した）。",
+        "措置入院患者は1日（6月30日）の人数で、都道府県によっては数人。年間の措置入院の件数とは違う。",
+        "国立・都道府県立精神科病院等は、許可病床のすべてが措置入院受入可能病床として数えられている。",
+        "非指定病院（措置入院受入可能病床なし）にも措置入院患者が全国で18人いる。全体の値の分子には含めた。"
+      ],
+      "alternatives": [
+        {
+          "id": "psychiatric_inpatients_per_100k_pref",
+          "reason": "措置・医療保護入院を含む在院患者の数を人口あたりで見る"
+        },
+        {
+          "id": "psychiatric_bed_occupancy_pref",
+          "reason": "精神病床全体の利用率を見る"
+        }
+      ],
+      "authors": [
+        {
+          "name": "H.I."
+        }
+      ],
+      "script": "indicators/involuntary_bed_use_pref.py",
+      "output": {
+        "area_code": "pref_code",
+        "area_name": "pref_name",
+        "value": "involuntary_use_pct",
+        "numerator": "inpatients_involuntary",
+        "denominator": "beds_involuntary_capable",
+        "scale": 100,
+        "digits": 1,
+        "unit": "％",
+        "columns": [
+          {
+            "name": "pref_code",
+            "label": "都道府県コード"
+          },
+          {
+            "name": "pref_name",
+            "label": "都道府県名"
+          },
+          {
+            "name": "beds_involuntary_capable",
+            "label": "措置入院受入可能病床数",
+            "unit": "床"
+          },
+          {
+            "name": "inpatients_involuntary",
+            "label": "措置入院患者数（緊急措置入院を含む）",
+            "unit": "人"
+          },
+          {
+            "name": "beds_involuntary_capable_public",
+            "label": "受入可能病床 国立・都道府県立精神科病院等",
+            "unit": "床"
+          },
+          {
+            "name": "inpatients_involuntary_public",
+            "label": "措置入院患者 国立・都道府県立精神科病院等",
+            "unit": "人"
+          },
+          {
+            "name": "beds_designated",
+            "label": "指定病院の指定病床数",
+            "unit": "床"
+          },
+          {
+            "name": "inpatients_involuntary_designated",
+            "label": "措置入院患者 指定病院",
+            "unit": "人"
+          },
+          {
+            "name": "inpatients_involuntary_nondesignated",
+            "label": "措置入院患者 非指定病院",
+            "unit": "人"
+          },
+          {
+            "name": "involuntary_use_pct",
+            "label": "措置入院受入可能病床の利用状況",
+            "unit": "％"
+          },
+          {
+            "name": "involuntary_use_public_pct",
+            "label": "利用状況 国立・都道府県立精神科病院等",
+            "unit": "％"
+          },
+          {
+            "name": "involuntary_use_designated_pct",
+            "label": "利用状況 指定病院（指定病床）",
+            "unit": "％"
+          }
+        ]
+      },
+      "references": [
+        {
+          "title": "精神保健福祉資料（630調査）令和7年度 医療機関票 施設概要（国立精神・神経医療研究センター 精神保健研究所）",
+          "url": "https://www.ncnp.go.jp/nimh/seisaku/data/630.html"
+        },
+        {
+          "title": "地域医療構想策定ガイドライン（2026）Ⅰ-３ 精神医療に関する地域医療構想について"
+        },
+        {
+          "title": "精神医療に関する地域医療構想の検討ワーキンググループ 資料（厚生労働省、令和8年11月）",
+          "url": "https://www.mhlw.go.jp/content/10800000/001772794.pdf"
+        }
+      ],
+      "created": "2026-11-26",
+      "updated": "2026-11-26"
+    },
+    {
+      "id": "psychiatric_bed_occupancy_pref",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": "都道府県ごとの精神病床の利用率",
+      "short_description": "精神病床が実際にどれくらい使われているかを、都道府県ごと・病院の区分ごとに比べる",
+      "unit_of_analysis": "prefecture",
+      "unit_note": "都道府県（政令指定都市の分を含む）。630調査の施設概要は都道府県と政令指定都市ごとの集計表で、構想区域や市区町村の値はない。",
+      "numerator": {
+        "description": "精神病床を有する病院の在院患者数（2025年6月30日時点）",
+        "dataset": "mental_health_630_facility_r7",
+        "as_of": "2025年6月30日"
+      },
+      "denominator": {
+        "description": "許可精神病床数（休床中の病棟を含む）。内訳として、精神保健福祉法の区分（国立・都道府県立精神科病院等・指定病院・非指定病院）ごとの病床数・在院患者数・利用率も出す",
+        "dataset": "mental_health_630_facility_r7",
+        "as_of": "2025年6月30日"
+      },
+      "formula": "在院患者数 ÷ 許可精神病床数 × 100",
+      "intent": "改正医療法により、地域医療構想に精神医療が位置付けられた（地域医療構想策定ガイドライン Ⅰ-３）。国のワーキンググループで精神医療の地域医療構想のガイドラインが検討されている（2026年度中に結論の予定）。WG資料は、都道府県別の病床利用率（在院患者数÷許可病床数）を、公的医療機関と民間医療機関に分けて示している。病床の量だけでなく、使われ方の地域差を見るための指標。\n",
+      "why_this_denominator": "WG資料と同じく、許可病床を分母にした。届出病床（稼働の届出のある病床）を分母にすると、休床の多い地域の利用率が高く出る。WG資料の公的・民間の区分はこの表にないため、内訳は精神保健福祉法の区分（国立・都道府県立精神科病院等、指定病院、非指定病院）で出した。\n",
+      "interpretation": "値が高いほど、許可病床に対して入院患者が多い。低い場合は、休床や空床が多い（病床の適正化の余地がある可能性）。高すぎる場合（100％超）は、報告の誤りや時点の違いも疑う。\n",
+      "policy_questions": [
+        "精神病床の利用率が低い（空床・休床が多い）都道府県はどこか",
+        "国公立・指定病院・非指定病院で利用率に差があるか"
+      ],
+      "caveats": [
+        "630調査（精神保健福祉資料）の医療機関票の集計表で、令和7年6月30日の1日の状況。在院患者数・入院形態別の患者数もその日の人数。",
+        "公表されているのは都道府県と政令指定都市ごとの集計だけで、医療機関ごとの値や構想区域ごとの値はない。精神医療の地域医療構想をどの単位で考えるか（都道府県か構想区域か）は国のワーキンググループで検討中。",
+        "医療機関の所在地の都道府県で数えている。患者が都道府県をまたいで入院する流出入は反映しない。",
+        "都道府県の値には政令指定都市の分が含まれる。医療機関が提出した値の集計で、公表元は「提出票に矛盾する数値があると合計が一致しない場合がある」としている（令和7年度の施設概要では、都道府県の合計と全国の行、表どうしの内訳はすべて一致した）。",
+        "1日（6月30日）の在院患者数による。年間の平均的な利用率（延べ在院患者数÷延べ病床数）とは違う。",
+        "鳥取県は100％を超える（在院患者1,299人、許可病床1,231床。指定病院は117.5％）。公表値のまま載せている。",
+        "内訳の区分は精神保健福祉法による。WG資料の「公的医療機関・民間医療機関」とは区分が違う（市町村立や公的医療機関の多くは指定病院・非指定病院に入る）。"
+      ],
+      "alternatives": [
+        {
+          "id": "psychiatric_beds_per_100k_pref",
+          "reason": "病床の量を人口あたりで見る"
+        },
+        {
+          "id": "involuntary_bed_use_pref",
+          "reason": "措置入院を受け入れる病床の利用状況を見る"
+        }
+      ],
+      "authors": [
+        {
+          "name": "H.I."
+        }
+      ],
+      "script": "indicators/psychiatric_bed_occupancy_pref.py",
+      "output": {
+        "area_code": "pref_code",
+        "area_name": "pref_name",
+        "value": "occupancy_pct",
+        "numerator": "inpatients",
+        "denominator": "beds_licensed",
+        "scale": 100,
+        "digits": 1,
+        "unit": "％",
+        "columns": [
+          {
+            "name": "pref_code",
+            "label": "都道府県コード"
+          },
+          {
+            "name": "pref_name",
+            "label": "都道府県名"
+          },
+          {
+            "name": "beds_licensed",
+            "label": "許可精神病床数",
+            "unit": "床"
+          },
+          {
+            "name": "inpatients",
+            "label": "在院患者数",
+            "unit": "人"
+          },
+          {
+            "name": "beds_public",
+            "label": "許可病床 国立・都道府県立精神科病院等",
+            "unit": "床"
+          },
+          {
+            "name": "inpatients_public",
+            "label": "在院患者 国立・都道府県立精神科病院等",
+            "unit": "人"
+          },
+          {
+            "name": "beds_designated",
+            "label": "許可病床 指定病院",
+            "unit": "床"
+          },
+          {
+            "name": "inpatients_designated",
+            "label": "在院患者 指定病院",
+            "unit": "人"
+          },
+          {
+            "name": "beds_nondesignated",
+            "label": "許可病床 非指定病院",
+            "unit": "床"
+          },
+          {
+            "name": "inpatients_nondesignated",
+            "label": "在院患者 非指定病院",
+            "unit": "人"
+          },
+          {
+            "name": "occupancy_pct",
+            "label": "精神病床の利用率",
+            "unit": "％"
+          },
+          {
+            "name": "occupancy_public_pct",
+            "label": "利用率 国立・都道府県立精神科病院等",
+            "unit": "％"
+          },
+          {
+            "name": "occupancy_designated_pct",
+            "label": "利用率 指定病院",
+            "unit": "％"
+          },
+          {
+            "name": "occupancy_nondesignated_pct",
+            "label": "利用率 非指定病院",
+            "unit": "％"
+          }
+        ]
+      },
+      "references": [
+        {
+          "title": "精神保健福祉資料（630調査）令和7年度 医療機関票 施設概要（国立精神・神経医療研究センター 精神保健研究所）",
+          "url": "https://www.ncnp.go.jp/nimh/seisaku/data/630.html"
+        },
+        {
+          "title": "地域医療構想策定ガイドライン（2026）Ⅰ-３ 精神医療に関する地域医療構想について"
+        },
+        {
+          "title": "精神医療に関する地域医療構想の検討ワーキンググループ 資料（厚生労働省、令和8年11月）",
+          "url": "https://www.mhlw.go.jp/content/10800000/001772794.pdf"
+        }
+      ],
+      "created": "2026-11-26",
+      "updated": "2026-11-26"
+    },
+    {
+      "id": "psychiatric_beds_per_100k_pref",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": "都道府県ごとの人口10万人あたり精神病床数",
+      "short_description": "精神病床（許可病床）が人口に対してどれくらいあるかを、都道府県ごとに比べる",
+      "unit_of_analysis": "prefecture",
+      "unit_note": "都道府県（政令指定都市の分を含む）。630調査の施設概要は都道府県と政令指定都市ごとの集計表で、構想区域や市区町村の値はない。",
+      "numerator": {
+        "description": "精神病床を有する病院の許可精神病床数（休床中の病棟を含む）。内訳として、精神保健福祉法の区分（国立・都道府県立精神科病院等・指定病院・非指定病院）ごとの病床数も出す",
+        "dataset": "mental_health_630_facility_r7",
+        "as_of": "2025年6月30日"
+      },
+      "denominator": {
+        "description": "総人口（住民基本台帳の総計）",
+        "dataset": "population_jumin_r8",
+        "as_of": "2026年1月1日"
+      },
+      "formula": "許可精神病床数 ÷ 総人口 × 100,000",
+      "intent": "改正医療法により、地域医療構想に精神医療が位置付けられた（地域医療構想策定ガイドライン Ⅰ-３）。国のワーキンググループで精神医療の地域医療構想のガイドラインが検討されている（2026年度中に結論の予定）。精神病床の量を都道府県ごとに同じ方法で比べる入口の指標。基準病床数・必要病床数の議論では、人口当たりの入院患者数や病床数の地域差が出発点になる。\n",
+      "why_this_denominator": "精神病床は全年齢の住民が使うため、総人口を分母にした（医療計画の指標も人口10万対）。許可病床を使い、届出病床（稼働の届出がある病床）は使っていない。届出病床は休床などで年により動くが、許可病床は病床の枠を表すため。WG資料の病床利用率も許可病床を分母にしている。\n",
+      "interpretation": "値が大きいほど、人口に対して精神病床が多い。病床が多いことは、入院の受け皿が多いことと、長期入院が多い構造の、両方の意味がありうる。在院患者数・病床利用率の指標と合わせて見る。\n",
+      "policy_questions": [
+        "人口に対して精神病床が多い（少ない）都道府県はどこか",
+        "精神病床のうち、国公立・指定病院・非指定病院がそれぞれどれくらいを占めるか"
+      ],
+      "caveats": [
+        "630調査（精神保健福祉資料）の医療機関票の集計表で、令和7年6月30日の1日の状況。在院患者数・入院形態別の患者数もその日の人数。",
+        "公表されているのは都道府県と政令指定都市ごとの集計だけで、医療機関ごとの値や構想区域ごとの値はない。精神医療の地域医療構想をどの単位で考えるか（都道府県か構想区域か）は国のワーキンググループで検討中。",
+        "医療機関の所在地の都道府県で数えている。患者が都道府県をまたいで入院する流出入は反映しない。",
+        "都道府県の値には政令指定都市の分が含まれる。医療機関が提出した値の集計で、公表元は「提出票に矛盾する数値があると合計が一致しない場合がある」としている（令和7年度の施設概要では、都道府県の合計と全国の行、表どうしの内訳はすべて一致した）。",
+        "精神病床を有しない医療機関（クリニックなど）は含まない。",
+        "許可病床には休床中の病棟の病床を含む。",
+        "人口は住民基本台帳（2026年1月1日）の総数。調査の時点（2025年6月30日）と半年ずれる。ほかの人口あたりの指標とそろえた。"
+      ],
+      "alternatives": [
+        {
+          "id": "psychiatric_inpatients_per_100k_pref",
+          "reason": "病床ではなく、在院患者の数で見る"
+        },
+        {
+          "id": "psychiatric_bed_occupancy_pref",
+          "reason": "病床がどれくらい使われているかを見る"
+        }
+      ],
+      "authors": [
+        {
+          "name": "H.I."
+        }
+      ],
+      "script": "indicators/psychiatric_beds_per_100k_pref.py",
+      "output": {
+        "area_code": "pref_code",
+        "area_name": "pref_name",
+        "value": "beds_per_100k",
+        "numerator": "beds_licensed",
+        "denominator": "population",
+        "scale": 100000,
+        "digits": 1,
+        "unit": "床／人口10万人",
+        "columns": [
+          {
+            "name": "pref_code",
+            "label": "都道府県コード"
+          },
+          {
+            "name": "pref_name",
+            "label": "都道府県名"
+          },
+          {
+            "name": "hospitals",
+            "label": "精神病床を有する病院数",
+            "unit": "病院"
+          },
+          {
+            "name": "beds_licensed",
+            "label": "許可精神病床数",
+            "unit": "床"
+          },
+          {
+            "name": "beds_public",
+            "label": "うち国立・都道府県立精神科病院等",
+            "unit": "床"
+          },
+          {
+            "name": "beds_designated_hosp",
+            "label": "うち指定病院",
+            "unit": "床"
+          },
+          {
+            "name": "beds_nondesignated_hosp",
+            "label": "うち非指定病院",
+            "unit": "床"
+          },
+          {
+            "name": "population",
+            "label": "総人口",
+            "unit": "人"
+          },
+          {
+            "name": "beds_per_100k",
+            "label": "人口10万人あたり精神病床数",
+            "unit": "床／10万人"
+          }
+        ]
+      },
+      "references": [
+        {
+          "title": "精神保健福祉資料（630調査）令和7年度 医療機関票 施設概要（国立精神・神経医療研究センター 精神保健研究所）",
+          "url": "https://www.ncnp.go.jp/nimh/seisaku/data/630.html"
+        },
+        {
+          "title": "地域医療構想策定ガイドライン（2026）Ⅰ-３ 精神医療に関する地域医療構想について"
+        },
+        {
+          "title": "精神医療に関する地域医療構想の検討ワーキンググループ 資料（厚生労働省、令和8年11月）",
+          "url": "https://www.mhlw.go.jp/content/10800000/001772794.pdf"
+        }
+      ],
+      "created": "2026-11-26",
+      "updated": "2026-11-26"
+    },
+    {
+      "id": "psychiatric_inpatients_per_100k_pref",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": "都道府県ごとの人口10万人あたり精神病床の在院患者数",
+      "short_description": "精神病床に入院している患者が人口に対してどれくらいいるかを、都道府県ごとに比べる",
+      "unit_of_analysis": "prefecture",
+      "unit_note": "都道府県（政令指定都市の分を含む）。630調査の施設概要は都道府県と政令指定都市ごとの集計表で、構想区域や市区町村の値はない。",
+      "numerator": {
+        "description": "精神病床を有する病院の在院患者数（2025年6月30日時点）。内訳として、医療保護入院患者数と措置入院患者数（緊急措置入院を含む）も出す",
+        "dataset": "mental_health_630_facility_r7",
+        "as_of": "2025年6月30日"
+      },
+      "denominator": {
+        "description": "総人口（住民基本台帳の総計）",
+        "dataset": "population_jumin_r8",
+        "as_of": "2026年1月1日"
+      },
+      "formula": "在院患者数 ÷ 総人口 × 100,000",
+      "intent": "改正医療法により、地域医療構想に精神医療が位置付けられた（地域医療構想策定ガイドライン Ⅰ-３）。国のワーキンググループで精神医療の地域医療構想のガイドラインが検討されている（2026年度中に結論の予定）。WG資料では、基準病床数の政策効果係数を、人口当たりの慢性期入院患者数が少ない県の水準と比べて決めている。人口当たりの入院患者数の地域差を、都道府県ごとに同じ方法で見るための指標。\n",
+      "why_this_denominator": "入院患者の数を人口で割り、地域の人口規模の違いをならした。精神疾患は全年齢に及ぶため総人口を分母にした。年齢構成の違い（高齢者の多い県では認知症の入院が多いなど）は調整していない。\n",
+      "interpretation": "値が大きいほど、人口に対して精神病床の入院患者が多い。入院の必要性が高い地域だけでなく、地域生活への移行が進んでいない地域でも大きくなりうる。入院期間（1年以上の長期入院など）はこの表にないので区別できない。\n",
+      "policy_questions": [
+        "人口に対して精神病床の入院患者が多い都道府県はどこか",
+        "医療保護入院・措置入院の患者が人口に対して多い都道府県はどこか"
+      ],
+      "caveats": [
+        "630調査（精神保健福祉資料）の医療機関票の集計表で、令和7年6月30日の1日の状況。在院患者数・入院形態別の患者数もその日の人数。",
+        "公表されているのは都道府県と政令指定都市ごとの集計だけで、医療機関ごとの値や構想区域ごとの値はない。精神医療の地域医療構想をどの単位で考えるか（都道府県か構想区域か）は国のワーキンググループで検討中。",
+        "医療機関の所在地の都道府県で数えている。患者が都道府県をまたいで入院する流出入は反映しない。",
+        "都道府県の値には政令指定都市の分が含まれる。医療機関が提出した値の集計で、公表元は「提出票に矛盾する数値があると合計が一致しない場合がある」としている（令和7年度の施設概要では、都道府県の合計と全国の行、表どうしの内訳はすべて一致した）。",
+        "入院期間（3か月未満・1年以上など）や疾患の内訳はこの表にない。630調査の在院患者のクロス集計（公表ページで項目を選んで出力）にある。",
+        "年齢構成を調整していない。",
+        "人口は住民基本台帳（2026年1月1日）の総数。調査の時点（2025年6月30日）と半年ずれる。ほかの人口あたりの指標とそろえた。"
+      ],
+      "alternatives": [
+        {
+          "id": "psychiatric_beds_per_100k_pref",
+          "reason": "病床の量で見る"
+        },
+        {
+          "id": "psychiatric_bed_occupancy_pref",
+          "reason": "病床に対する在院患者の割合を見る"
+        }
+      ],
+      "authors": [
+        {
+          "name": "H.I."
+        }
+      ],
+      "script": "indicators/psychiatric_inpatients_per_100k_pref.py",
+      "output": {
+        "area_code": "pref_code",
+        "area_name": "pref_name",
+        "value": "inpatients_per_100k",
+        "numerator": "inpatients",
+        "denominator": "population",
+        "scale": 100000,
+        "digits": 1,
+        "unit": "人／人口10万人",
+        "columns": [
+          {
+            "name": "pref_code",
+            "label": "都道府県コード"
+          },
+          {
+            "name": "pref_name",
+            "label": "都道府県名"
+          },
+          {
+            "name": "inpatients",
+            "label": "在院患者数",
+            "unit": "人"
+          },
+          {
+            "name": "inpatients_medical_protection",
+            "label": "うち医療保護入院患者数",
+            "unit": "人"
+          },
+          {
+            "name": "inpatients_involuntary",
+            "label": "うち措置入院患者数（緊急措置入院を含む）",
+            "unit": "人"
+          },
+          {
+            "name": "population",
+            "label": "総人口",
+            "unit": "人"
+          },
+          {
+            "name": "inpatients_per_100k",
+            "label": "人口10万人あたり在院患者数",
+            "unit": "人／10万人"
+          }
+        ]
+      },
+      "references": [
+        {
+          "title": "精神保健福祉資料（630調査）令和7年度 医療機関票 施設概要（国立精神・神経医療研究センター 精神保健研究所）",
+          "url": "https://www.ncnp.go.jp/nimh/seisaku/data/630.html"
+        },
+        {
+          "title": "地域医療構想策定ガイドライン（2026）Ⅰ-３ 精神医療に関する地域医療構想について"
+        },
+        {
+          "title": "精神医療に関する地域医療構想の検討ワーキンググループ 資料（厚生労働省、令和8年11月）",
+          "url": "https://www.mhlw.go.jp/content/10800000/001772794.pdf"
+        }
+      ],
+      "created": "2026-11-26",
+      "updated": "2026-11-26"
+    },
+    {
+      "id": "psychiatrists_per_100k_pref",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": "都道府県ごとの人口10万人あたり精神科医師数（常勤、精神病床を有する病院）",
+      "short_description": "精神病床を有する病院の常勤の精神科医師が、人口に対してどれくらいいるかを都道府県ごとに比べる",
+      "unit_of_analysis": "prefecture",
+      "unit_note": "都道府県（政令指定都市の分を含む）。630調査の施設概要は都道府県と政令指定都市ごとの集計表で、構想区域や市区町村の値はない。",
+      "numerator": {
+        "description": "精神病床を有する病院の精神科医師数（常勤）。非常勤（精神科への勤務が週1日以上）と、精神保健指定医数（常勤・非常勤）も列に出す",
+        "dataset": "mental_health_630_facility_r7",
+        "as_of": "2025年6月30日"
+      },
+      "denominator": {
+        "description": "総人口（住民基本台帳の総計）",
+        "dataset": "population_jumin_r8",
+        "as_of": "2026年1月1日"
+      },
+      "formula": "精神科医師数（常勤）÷ 総人口 × 100,000",
+      "intent": "改正医療法により、地域医療構想に精神医療が位置付けられた（地域医療構想策定ガイドライン Ⅰ-３）。国のワーキンググループで精神医療の地域医療構想のガイドラインが検討されている（2026年度中に結論の予定）。精神病床を持つ病院の医師の確保状況を都道府県ごとに見るための指標。措置入院や医療保護入院の判定に必要な精神保健指定医の数も合わせて示す。\n",
+      "why_this_denominator": "精神科の医療は全年齢が対象なので総人口を分母にした。常勤を主な値にしたのは、非常勤の人数は勤務日数の幅が大きく（週1日以上を数える）、人数を足すと実際の診療の量を表さないため。\n",
+      "interpretation": "値が大きいほど、人口に対して精神病床を有する病院の常勤精神科医が多い。精神科クリニックの医師は含まないので、外来の体制は表さない。病床が多い都道府県ほど医師も多くなりやすいので、精神病床数の指標と合わせて見る。\n",
+      "policy_questions": [
+        "精神病床を有する病院の精神科医が、人口に対して少ない都道府県はどこか",
+        "精神保健指定医が少なく、措置入院・医療保護入院の判定の体制に課題がありうる都道府県はどこか"
+      ],
+      "caveats": [
+        "630調査（精神保健福祉資料）の医療機関票の集計表で、令和7年6月30日の1日の状況。在院患者数・入院形態別の患者数もその日の人数。",
+        "公表されているのは都道府県と政令指定都市ごとの集計だけで、医療機関ごとの値や構想区域ごとの値はない。精神医療の地域医療構想をどの単位で考えるか（都道府県か構想区域か）は国のワーキンググループで検討中。",
+        "医療機関の所在地の都道府県で数えている。患者が都道府県をまたいで入院する流出入は反映しない。",
+        "都道府県の値には政令指定都市の分が含まれる。医療機関が提出した値の集計で、公表元は「提出票に矛盾する数値があると合計が一致しない場合がある」としている（令和7年度の施設概要では、都道府県の合計と全国の行、表どうしの内訳はすべて一致した）。",
+        "精神病床を有しない医療機関（クリニックなど）の医師は含まない。その表は都道府県ごとの回答率が約20〜100％と違うため使っていない。",
+        "業務の半分以上がICD-10のFコードの疾患の診療である医師は、心療内科など他科の所属でも精神科医として数えている（630調査の定義）。",
+        "医師・歯科医師・薬剤師統計の精神科医師数とは、調査の対象と定義が違う。",
+        "人口は住民基本台帳（2026年1月1日）の総数。調査の時点（2025年6月30日）と半年ずれる。ほかの人口あたりの指標とそろえた。"
+      ],
+      "alternatives": [
+        {
+          "id": "psychiatric_beds_per_100k_pref",
+          "reason": "精神病床の量と合わせて見る"
+        }
+      ],
+      "authors": [
+        {
+          "name": "H.I."
+        }
+      ],
+      "script": "indicators/psychiatrists_per_100k_pref.py",
+      "output": {
+        "area_code": "pref_code",
+        "area_name": "pref_name",
+        "value": "psychiatrists_ft_per_100k",
+        "numerator": "psychiatrists_ft",
+        "denominator": "population",
+        "scale": 100000,
+        "digits": 2,
+        "unit": "人／人口10万人",
+        "columns": [
+          {
+            "name": "pref_code",
+            "label": "都道府県コード"
+          },
+          {
+            "name": "pref_name",
+            "label": "都道府県名"
+          },
+          {
+            "name": "hospitals",
+            "label": "精神病床を有する病院数",
+            "unit": "病院"
+          },
+          {
+            "name": "psychiatrists_ft",
+            "label": "精神科医師数（常勤）",
+            "unit": "人"
+          },
+          {
+            "name": "psychiatrists_pt",
+            "label": "精神科医師数（非常勤）",
+            "unit": "人"
+          },
+          {
+            "name": "designated_physicians_ft",
+            "label": "精神保健指定医数（常勤）",
+            "unit": "人"
+          },
+          {
+            "name": "designated_physicians_pt",
+            "label": "精神保健指定医数（非常勤）",
+            "unit": "人"
+          },
+          {
+            "name": "population",
+            "label": "総人口",
+            "unit": "人"
+          },
+          {
+            "name": "psychiatrists_ft_per_100k",
+            "label": "人口10万人あたり精神科医師数（常勤）",
+            "unit": "人／10万人"
+          },
+          {
+            "name": "designated_physicians_ft_per_100k",
+            "label": "人口10万人あたり精神保健指定医数（常勤）",
+            "unit": "人／10万人"
+          }
+        ]
+      },
+      "references": [
+        {
+          "title": "精神保健福祉資料（630調査）令和7年度 医療機関票 施設概要（国立精神・神経医療研究センター 精神保健研究所）",
+          "url": "https://www.ncnp.go.jp/nimh/seisaku/data/630.html"
+        },
+        {
+          "title": "地域医療構想策定ガイドライン（2026）Ⅰ-３ 精神医療に関する地域医療構想について"
+        },
+        {
+          "title": "精神医療に関する地域医療構想の検討ワーキンググループ 資料（厚生労働省、令和8年11月）",
+          "url": "https://www.mhlw.go.jp/content/10800000/001772794.pdf"
         }
       ],
       "created": "2026-11-26",
@@ -3712,6 +4354,305 @@
       "codebook": null
     },
     {
+      "id": "mental_health_630_facility_r7",
+      "title": "精神保健福祉資料（630調査）令和7年度 医療機関票 施設概要（都道府県・政令指定都市別の集計表）",
+      "publisher": "国立精神・神経医療研究センター 精神保健研究所（厚生労働行政推進調査事業費補助金「効率的かつ効果的な精神保健医療福祉システム構築とそのモニタリングのための研究」研究班）",
+      "source_page": "https://www.ncnp.go.jp/nimh/seisaku/data/630.html",
+      "attribution": "出典：国立精神・神経医療研究センター 精神保健研究所「精神保健福祉資料（630調査）令和7年度 医療機関票 施設概要」を加工して作成",
+      "update_frequency": "年1回（6月30日時点）",
+      "verified": true,
+      "columns": [
+        {
+          "name": "table_no",
+          "type": "int",
+          "description": "1 全病院（精神病床あり）、2 特定機能病院、3 地域医療支援病院、4 一般病院、5 精神病床のみを有する病院、6 国立・都道府県立精神科病院等、7 指定病院、8 非指定病院、9 精神病床なしの全施設、10 精神病床なしの病院、11 精神病床なしのクリニック・診療所"
+        },
+        {
+          "name": "table_name",
+          "type": "str"
+        },
+        {
+          "name": "level",
+          "type": "str",
+          "description": "prefecture（都道府県。政令市の分を含む）、designated_city（政令指定都市）、national（全国）"
+        },
+        {
+          "name": "area_code",
+          "type": "str",
+          "description": "都道府県は2桁、政令指定都市は5桁（6桁の団体コードから検査数字を除く）、全国は00"
+        },
+        {
+          "name": "area_name",
+          "type": "str"
+        },
+        {
+          "name": "facilities",
+          "type": "int"
+        },
+        {
+          "name": "emergency_admission_hospitals",
+          "type": "int"
+        },
+        {
+          "name": "wards_active",
+          "type": "int"
+        },
+        {
+          "name": "wards_closed",
+          "type": "int"
+        },
+        {
+          "name": "beds_notified",
+          "type": "int"
+        },
+        {
+          "name": "beds_licensed",
+          "type": "int"
+        },
+        {
+          "name": "beds_involuntary_capable",
+          "type": "int"
+        },
+        {
+          "name": "beds_designated",
+          "type": "int"
+        },
+        {
+          "name": "inpatients",
+          "type": "int"
+        },
+        {
+          "name": "wards_with_payphone",
+          "type": "int"
+        },
+        {
+          "name": "seclusion_rooms",
+          "type": "int"
+        },
+        {
+          "name": "seclusion_rooms_with_toilet",
+          "type": "int"
+        },
+        {
+          "name": "seclusion_rooms_with_camera",
+          "type": "int"
+        },
+        {
+          "name": "psychiatrists_ft",
+          "type": "int"
+        },
+        {
+          "name": "psychiatrists_pt",
+          "type": "int"
+        },
+        {
+          "name": "designated_physicians_ft",
+          "type": "int"
+        },
+        {
+          "name": "designated_physicians_pt",
+          "type": "int"
+        },
+        {
+          "name": "specified_physicians_ft",
+          "type": "int"
+        },
+        {
+          "name": "specified_physicians_pt",
+          "type": "int"
+        },
+        {
+          "name": "nurses_ft",
+          "type": "int"
+        },
+        {
+          "name": "nurses_pt",
+          "type": "int"
+        },
+        {
+          "name": "nurses_cns_ft",
+          "type": "int"
+        },
+        {
+          "name": "nurses_cns_pt",
+          "type": "int"
+        },
+        {
+          "name": "nurses_certified_ft",
+          "type": "int"
+        },
+        {
+          "name": "nurses_certified_pt",
+          "type": "int"
+        },
+        {
+          "name": "nurses_specified_act_psy_ft",
+          "type": "int"
+        },
+        {
+          "name": "nurses_specified_act_psy_pt",
+          "type": "int"
+        },
+        {
+          "name": "nurses_specified_act_other_ft",
+          "type": "int"
+        },
+        {
+          "name": "nurses_specified_act_other_pt",
+          "type": "int"
+        },
+        {
+          "name": "assistant_nurses_ft",
+          "type": "int"
+        },
+        {
+          "name": "assistant_nurses_pt",
+          "type": "int"
+        },
+        {
+          "name": "nursing_aides_ft",
+          "type": "int"
+        },
+        {
+          "name": "nursing_aides_pt",
+          "type": "int"
+        },
+        {
+          "name": "physical_therapists_ft",
+          "type": "int"
+        },
+        {
+          "name": "physical_therapists_pt",
+          "type": "int"
+        },
+        {
+          "name": "physical_therapists_ft_facilities",
+          "type": "int"
+        },
+        {
+          "name": "physical_therapists_pt_facilities",
+          "type": "int"
+        },
+        {
+          "name": "occupational_therapists_ft",
+          "type": "int"
+        },
+        {
+          "name": "occupational_therapists_pt",
+          "type": "int"
+        },
+        {
+          "name": "occupational_therapists_ft_facilities",
+          "type": "int"
+        },
+        {
+          "name": "occupational_therapists_pt_facilities",
+          "type": "int"
+        },
+        {
+          "name": "psychiatric_social_workers_ft",
+          "type": "int"
+        },
+        {
+          "name": "psychiatric_social_workers_pt",
+          "type": "int"
+        },
+        {
+          "name": "psychiatric_social_workers_ft_facilities",
+          "type": "int"
+        },
+        {
+          "name": "psychiatric_social_workers_pt_facilities",
+          "type": "int"
+        },
+        {
+          "name": "psychologists_ft",
+          "type": "int"
+        },
+        {
+          "name": "psychologists_pt",
+          "type": "int"
+        },
+        {
+          "name": "psychologists_ft_facilities",
+          "type": "int"
+        },
+        {
+          "name": "psychologists_pt_facilities",
+          "type": "int"
+        },
+        {
+          "name": "certified_psychologists_ft",
+          "type": "int"
+        },
+        {
+          "name": "certified_psychologists_pt",
+          "type": "int"
+        },
+        {
+          "name": "certified_psychologists_ft_facilities",
+          "type": "int"
+        },
+        {
+          "name": "certified_psychologists_pt_facilities",
+          "type": "int"
+        },
+        {
+          "name": "discharge_counselors",
+          "type": "int"
+        },
+        {
+          "name": "discharge_counselors_psw",
+          "type": "int"
+        },
+        {
+          "name": "discharge_counselors_nurses",
+          "type": "int"
+        },
+        {
+          "name": "discharge_counselors_ot",
+          "type": "int"
+        },
+        {
+          "name": "discharge_counselors_sw",
+          "type": "int"
+        },
+        {
+          "name": "discharge_counselors_psychologists",
+          "type": "int"
+        },
+        {
+          "name": "discharge_counselors_trained",
+          "type": "int"
+        },
+        {
+          "name": "inpatients_medical_protection",
+          "type": "int"
+        },
+        {
+          "name": "inpatients_involuntary",
+          "type": "int"
+        },
+        {
+          "name": "patients_per_discharge_counselor",
+          "type": "float"
+        },
+        {
+          "name": "as_of",
+          "type": "str"
+        }
+      ],
+      "notes": [
+        "医療機関ごとの値はない。都道府県（政令指定都市の分を含む）と政令指定都市ごとの集計表で、変換後は1行＝表×地域。",
+        "施設概要1〜8は精神病床を有する病院（1が全体）、9〜11は精神病床を有しない医療機関（病床・入院の列は空欄）。",
+        "精神病床を有しない医療機関は回答率が都道府県で約20〜100％と違う（data/processed/<output>__response_rate.parquet）。都道府県どうしの比較には使わない。",
+        "記号「-」（相談員がいないため1人当たりの値を計算できないなど）は欠損にした。",
+        "人数の「非常勤」は精神科への勤務が週1日以上の職員数。精神科医師は、業務の半分以上がICD-10のFコードの疾患の診療なら、心療内科など他科の所属でも数える。"
+      ],
+      "related": [],
+      "codebook": "codebooks/mental_health_630_facility_r7.csv"
+    },
+    {
       "id": "outpatient_function_report_r7_form1_annual",
       "title": "外来機能報告 令和7年度 様式1（年間）",
       "publisher": "厚生労働省",
@@ -3879,6 +4820,46 @@
       "generated_at": "2026-11-26T06:12:22+00:00",
       "card_version": "0.1.0",
       "rows": 339,
+      "stale": []
+    },
+    "involuntary_bed_use_pref": {
+      "path": "results/involuntary_bed_use_pref.json",
+      "csv": "results/involuntary_bed_use_pref.csv",
+      "generated_at": "2026-11-26T08:20:02+00:00",
+      "card_version": "0.1.0",
+      "rows": 47,
+      "stale": []
+    },
+    "psychiatric_bed_occupancy_pref": {
+      "path": "results/psychiatric_bed_occupancy_pref.json",
+      "csv": "results/psychiatric_bed_occupancy_pref.csv",
+      "generated_at": "2026-11-26T08:20:01+00:00",
+      "card_version": "0.1.0",
+      "rows": 47,
+      "stale": []
+    },
+    "psychiatric_beds_per_100k_pref": {
+      "path": "results/psychiatric_beds_per_100k_pref.json",
+      "csv": "results/psychiatric_beds_per_100k_pref.csv",
+      "generated_at": "2026-11-26T08:18:52+00:00",
+      "card_version": "0.1.0",
+      "rows": 47,
+      "stale": []
+    },
+    "psychiatric_inpatients_per_100k_pref": {
+      "path": "results/psychiatric_inpatients_per_100k_pref.json",
+      "csv": "results/psychiatric_inpatients_per_100k_pref.csv",
+      "generated_at": "2026-11-26T08:18:53+00:00",
+      "card_version": "0.1.0",
+      "rows": 47,
+      "stale": []
+    },
+    "psychiatrists_per_100k_pref": {
+      "path": "results/psychiatrists_per_100k_pref.json",
+      "csv": "results/psychiatrists_per_100k_pref.csv",
+      "generated_at": "2026-11-26T08:18:56+00:00",
+      "card_version": "0.1.0",
+      "rows": 47,
       "stale": []
     },
     "recovery_bed_share_koso": {

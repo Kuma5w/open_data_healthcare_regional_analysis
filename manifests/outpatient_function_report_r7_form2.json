@@ -1,0 +1,123 @@
+{
+  "dataset": "outpatient_function_report_r7_form2",
+  "files": {
+    "definition": {
+      "url": "https://www.mhlw.go.jp/content/10800000/001724277.xlsx",
+      "as_of": "令和7年度",
+      "raw_path": "data/raw/outpatient_function_report_r7_form2/definition.xlsx",
+      "bytes": 33614,
+      "sha256": "adc4941ff1eb087be8bdf779d8c18d90ab6bd61e9c96e2ca5b491671fe11eb44",
+      "fetched_at": "2026-11-26T06:47:15+00:00",
+      "obtained": "local_copy"
+    },
+    "main": {
+      "url": "https://www.mhlw.go.jp/content/10800000/001724280.xlsx",
+      "as_of": "令和6年4月〜令和7年3月診療分",
+      "raw_path": "data/raw/outpatient_function_report_r7_form2/main.xlsx",
+      "bytes": 29574069,
+      "sha256": "66de57e5335bd0cd9d35968d8050e97f7b41389c23be33dd7b4eb9caab4fce55",
+      "fetched_at": "2026-11-26T06:47:15+00:00",
+      "obtained": "local_copy"
+    }
+  },
+  "output": {
+    "path": "data/processed/outpatient_function_report_r7_form2.parquet",
+    "rows": 149877,
+    "columns": [
+      "row_id",
+      "hospital_clinic_type",
+      "od_facility_code",
+      "facility_name",
+      "pref_code",
+      "secondary_area_code",
+      "secondary_area_name",
+      "koso_kuiki_code",
+      "koso_kuiki_name",
+      "municipality_code",
+      "municipality_name",
+      "medical_code_ika",
+      "report_month",
+      "gb013",
+      "gb014",
+      "gb015",
+      "gb016",
+      "gb017",
+      "gb018",
+      "gb019",
+      "gb020",
+      "gb021",
+      "gb022",
+      "gb023",
+      "gb024",
+      "gb025",
+      "gb026",
+      "gb027",
+      "gb028",
+      "gb029",
+      "gb030",
+      "gb031",
+      "gb032",
+      "gb033",
+      "gb034",
+      "gb035",
+      "gb036",
+      "gb037",
+      "gb038",
+      "gb039",
+      "gb040",
+      "gb041",
+      "gb042",
+      "gb043",
+      "gb044",
+      "gb045",
+      "gb046",
+      "gb047",
+      "gb048",
+      "gb049",
+      "gb050",
+      "gb051",
+      "gb052",
+      "gb053",
+      "gb054",
+      "gb055",
+      "gb056",
+      "gb057",
+      "gb058",
+      "gb059",
+      "gb060",
+      "gb061",
+      "gb062",
+      "gb063",
+      "gb064",
+      "gb065",
+      "gb066",
+      "gb067"
+    ],
+    "converted_at": "2026-11-26T06:47:49+00:00",
+    "converter_version": "0.1.0",
+    "extras": {
+      "flags": "data/processed/outpatient_function_report_r7_form2__flags.parquet",
+      "codebook": "codebooks/outpatient_function_report_r7_form2.csv"
+    },
+    "report": {
+      "files": {
+        "main": {
+          "rows": 149877,
+          "item_name_mismatches": []
+        }
+      },
+      "rows": 149877,
+      "tokens": {
+        "*": 258579
+      },
+      "duplicate_keys": {
+        "key": [
+          "od_facility_code",
+          "report_month"
+        ],
+        "rows": 0,
+        "codes": 0
+      }
+    }
+  }
+}

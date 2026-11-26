@@ -1,6 +1,6 @@
 # site/
 
-指標カタログのサイトと解説チャットボットを置く場所です（作業手順の3番目で作ります）。
+指標カタログのサイトと質問窓口です。説明は [docs/site.md](../docs/site.md) にあります。
 
-- `catalog.json`：`chiiki-od catalog` で、指標カードとデータセット定義から自動で作る。チャットボットはこのファイルだけを根拠に答える。
-- サイトは GitHub Pages または Cloudflare Pages で公開する想定。
+- `index.html`：サイト本体（1ファイル）
+- `catalog.json`・`search_index.json`：`chiiki-od catalog` で作る。手で編集しない

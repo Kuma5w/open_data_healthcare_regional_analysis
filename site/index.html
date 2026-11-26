@@ -161,10 +161,11 @@ details.rd summary{cursor:pointer;min-height:44px;display:flex;align-items:cente
 .maptools{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;margin:6px 0 0;font-size:13px;color:var(--mut)}
 .maptools button{font-size:13px;min-height:36px}
 @media(max-width:600px){.res{padding:4px 12px 14px}.br{grid-template-columns:minmax(4em,6.5em) minmax(0,1fr) 4.6em;gap:0 6px}.bars .gap{padding-left:4px}}
-/* 印刷・PDF：A4、余白は上下18mm・左20mm・右16mm（ブラウザの「既定」の余白ではこの値が使われる） */
-@page{size:A4;margin:18mm 16mm 18mm 20mm}
+/* 印刷・PDF：A4。余白（上下18mm・左20mm・右16mm）は本文の内側に持たせ、改ページごとに繰り返す。
+   ページ側の余白（@page の margin）は、印刷画面で「余白：なし」などを選ぶと無視されるため使わない */
+@page{size:A4;margin:0}
 @media print{
-  body{font-size:11pt}.wrap{max-width:none;padding:0}
+  body{font-size:11pt;padding:18mm 16mm 18mm 20mm;box-decoration-break:clone;-webkit-box-decoration-break:clone}.wrap{max-width:none;padding:0}
   nav,.chat,.back,.res-tools,.actions,#ask-card,.tip,.np,details.rd:not(.pr){display:none!important}
   .grid{display:block;margin-top:12px}header{padding-bottom:8px}
   .res{border-width:1px;break-inside:auto}.br,.rt tr{break-inside:avoid}

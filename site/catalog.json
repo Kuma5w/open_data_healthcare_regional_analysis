@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-26T04:36:14+00:00",
+  "generated_at": "2026-11-26T04:59:39+00:00",
   "repo_url": "https://github.com/Kuma5w/open_data_healthcare_regional_analysis",
   "pages_url": "https://kuma5w.github.io/open_data_healthcare_regional_analysis/",
   "indicators": [
@@ -50,8 +50,7 @@
       ],
       "authors": [
         {
-          "name": "（作成者名）",
-          "affiliation": "（所属）"
+          "name": "H.I."
         }
       ],
       "script": "indicators/homecare_offices_per_65plus.py",
@@ -154,8 +153,7 @@
       ],
       "authors": [
         {
-          "name": "（作成者名）",
-          "affiliation": "（所属）"
+          "name": "H.I."
         }
       ],
       "script": "indicators/recovery_bed_share_koso.py",
@@ -281,8 +279,7 @@
       ],
       "authors": [
         {
-          "name": "（作成者名）",
-          "affiliation": "（所属）"
+          "name": "H.I."
         }
       ],
       "script": "indicators/recovery_beds_per_100k_75plus_koso.py",

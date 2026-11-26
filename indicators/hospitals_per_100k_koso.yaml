@@ -1,0 +1,86 @@
+id: hospitals_per_100k_koso
+version: 0.1.0
+status: draft
+name: 構想区域ごとの人口10万人あたり病院数
+short_description: 病院の数を、人口に対して構想区域ごとに同じ方法で比べる入口の指標
+unit_of_analysis: koso_kuiki
+unit_note: 市区町村（政令市は区）の施設数と人口を、reference/koso_kuiki.csv（令和7年度病床機能報告の構想区域マスタ、339区域）で構想区域ごとに合計する。
+
+numerator:
+  description: 病院数（精神科病院を含む。内訳として一般病院・精神科病院・救急告示病院（再掲）も出す）
+  dataset: medical_facility_survey_r7
+  as_of: 2025年10月1日
+denominator:
+  description: 総人口（住民基本台帳の総計＝日本人住民＋外国人住民）
+  dataset: population_jumin_r8
+  as_of: 2026年1月1日
+formula: 病院数 ÷ 総人口 × 100,000
+
+intent: >
+  地域医療構想の協議の単位である構想区域ごとに、人口に対して病院がどれくらいあるかを、全国で同じ方法で比べるための入口の指標。
+  地域医療構想策定ガイドラインは、大都市型の地域で急性期医療が多数の医療機関に分散していることや、地方都市型の地域で手術や救急搬送の受入が小規模に分散していることを課題に挙げ、
+  医療機関の連携・再編・集約化を議論するよう求めている。病院の多さ（分散の程度）を見る出発点として作った。病床数や医療機能ではなく、施設の数を見ている。
+
+why_this_denominator: >
+  病院は全年齢の住民が使うため、総人口を分母にした（医療施設調査の公表値も人口10万対）。
+  入院の多くは高齢者なので75歳以上人口も考えられるが、精神科病院や小児・周産期の医療も含むため、総人口を基本にした。
+
+interpretation: >
+  値が大きいほど、人口に対して病院が多い。病院の規模（病床数）や機能は反映しない。
+  病院が多いことは、選べる医療機関が多いことと、医療資源が小規模に分散していることの、両方の意味がありうる。病床数や医療機能の指標と合わせて見る。
+
+policy_questions:
+  - 人口に対して病院が多い（医療資源が分散している可能性がある）構想区域はどこか
+  - 病院が少なく、近接する構想区域との連携を前提にする必要がある区域はどこか
+
+caveats:
+  - 精神科病院（精神病床のみの病院）を含む。内訳の列で一般病院だけの数を確かめられる。救急告示病院は再掲。
+  - 施設の数であり、規模（病床数）・診療科・医師などの職員数・診療の実績は反映しない。
+  - 施設の所在地で数えている。患者が市区町村や構想区域をまたいで受診する流出入は反映しない。
+  - 人口は住民基本台帳（2026年1月1日）の総数を使っている。医療施設調査の公表値の「人口10万対」（推計人口による）とは一致しない。
+  - 施設数（2025年10月1日）と人口（2026年1月1日）の時点が3か月ずれている。
+  - 医療施設調査（動態調査）は開設・廃止などの届出をもとにしており、届出の時期によって実態とずれることがある。
+  - 構想区域は、市区町村を reference/koso_kuiki.csv（令和7年度の構想区域マスタ）でまとめたもの。表には二次医療圏（令和7年10月1日時点、330圏）の行もあるが、構想区域とは区切りが違う地域がある。
+
+alternatives:
+  - id: hospitals_per_100k
+    reason: 同じ指標を市区町村ごとに見る
+  - id: recovery_bed_share_koso
+    reason: 病床の機能の構成と合わせて見る
+  - id: general_clinics_per_100k_koso
+    reason: 一般診療所の分布と並べて見る
+
+authors:
+  - name: H.I.
+
+script: indicators/hospitals_per_100k_koso.py
+
+output:
+  area_code: koso_kuiki_code
+  area_name: koso_kuiki_name
+  value: hospitals_per_100k
+  numerator: hospitals
+  denominator: pop_total
+  scale: 100000
+  digits: 2
+  unit: 施設／人口10万人
+  columns:
+    - {name: pref_code, label: 都道府県コード}
+    - {name: koso_kuiki_code, label: 構想区域コード}
+    - {name: koso_kuiki_name, label: 構想区域名}
+    - {name: hospitals, label: 病院数, unit: 施設}
+    - {name: general_hospitals, label: うち一般病院, unit: 施設}
+    - {name: psychiatric_hospitals, label: うち精神科病院, unit: 施設}
+    - {name: emergency_hospitals, label: うち救急告示病院（再掲）, unit: 施設}
+    - {name: pop_total, label: 総人口, unit: 人}
+    - {name: hospitals_per_100k, label: 人口10万人あたり病院数, unit: 施設／10万人}
+
+references:
+  - title: 医療施設調査（厚生労働省、e-Stat）
+    url: https://www.e-stat.go.jp/stat-search/files?toukei=00450021
+  - title: 住民基本台帳に基づく人口、人口動態及び世帯数（総務省）
+    url: https://www.soumu.go.jp/main_sosiki/jichi_gyousei/daityo/jinkou_jinkoudoutai-setaisuu.html
+  - title: 地域医療構想策定ガイドライン（厚生労働省医政局）
+
+created: "2026-11-26"
+updated: "2026-11-26"

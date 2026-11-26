@@ -195,3 +195,34 @@ def test_似た名前の介護サービスの指標を選び分ける():
     got = json.loads(r.stdout)
     for (q, want), g in zip(cases, got, strict=True):
         assert g["indicator"] == want, (q, g)
+
+
+MEDICAL = [
+    {"id": "hosp_koso", "name": "構想区域ごとの人口10万人あたり病院数"},
+    {"id": "hosp_muni", "name": "人口10万人あたり病院数（市区町村別）"},
+    {"id": "clinic_koso", "name": "構想区域ごとの人口10万人あたり一般診療所数"},
+    {"id": "clinic_muni", "name": "人口10万人あたり一般診療所数（市区町村別）"},
+    {"id": "dental_koso", "name": "構想区域ごとの人口10万人あたり歯科診療所数"},
+    {"id": "dental_muni", "name": "人口10万人あたり歯科診療所数（市区町村別）"},
+]
+
+
+def test_構想区域版と市区町村版の指標を選び分ける():
+    units = {m["id"]: ("koso_kuiki" if m["id"].endswith("koso") else "municipality") for m in MEDICAL}
+    ctx = {
+        "prefectures": codes.PREFECTURES,
+        "indicators": MEDICAL,
+        "units": units,
+        "areas": {k: (KOSO if u == "koso_kuiki" else MUNI) for k, u in units.items()},
+    }
+    qs = ["構想区域ごとの病院数を熊本県で", "市区町村別の歯科診療所数を出して", "一般診療所数を出して"]
+    r = subprocess.run(
+        ["node", str(RUNNER)],
+        input=json.dumps({"ctx": ctx, "cases": [{"q": q, "current": None} for q in qs]}, ensure_ascii=False),
+        capture_output=True, text=True, encoding="utf-8", check=True,
+    )
+    koso, muni, both = json.loads(r.stdout)
+    assert koso["indicator"] == "hosp_koso" and koso["pref"] == "43"
+    assert muni["indicator"] == "dental_muni"
+    # 単位を言わなければ、構想区域版と市区町村版の候補を出す
+    assert both["indicator"] is None and sorted(both["ties"]) == ["clinic_koso", "clinic_muni"]

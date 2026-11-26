@@ -131,6 +131,35 @@ details.rd{margin-top:10px;border-top:1px solid var(--line);padding-top:6px}
 details.rd summary{cursor:pointer;min-height:44px;display:flex;align-items:center;font-weight:700}
 .hash{font-family:"Hanken Grotesk",ui-monospace,monospace;font-size:12px;overflow-wrap:anywhere}
 .print-only{display:none}
+/* チャットや地図で選んだ地域の強調 */
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.br.hl{background:var(--pl);font-weight:700;box-shadow:inset 3px 0 0 var(--ink)}
+.rt tr.hl td{background:var(--pl);font-weight:700}
+.hlbar{display:flex;flex-wrap:wrap;align-items:center;gap:4px 12px;font-size:14px;margin:0 0 8px}
+.hlbar button{font-size:13px;min-height:36px}
+.m.a.sys{border-left-style:dashed}
+.m.a .choice{margin-top:6px}
+.src button{font-size:12px;border:1px solid var(--line);padding:2px 8px;background:var(--bg);color:var(--link);cursor:pointer;min-height:32px}
+/* 塗り分け地図。色は1色（青）の濃淡4段階で、明暗それぞれの背景に対して dataviz の検証済み（ordinal）。値なしは灰色 */
+:root{--q1:light-dark(#84b9f3,#1757ac);--q2:light-dark(#338ced,#257de0);--q3:light-dark(#1b64be,#6aabf1);--q4:light-dark(#0e3d7e,#b6d5f8);--nod:light-dark(#dcdcd7,#3a3a35);--ctx:light-dark(#f1f1ee,#242422)}
+.mapw{margin:6px 0 4px}
+.map{position:relative;border:1px solid var(--line);background:var(--bg)}
+.map svg{display:block;width:100%;height:auto;max-height:560px}
+.map .a{stroke:var(--bg);stroke-width:.6;vector-effect:non-scaling-stroke;print-color-adjust:exact;-webkit-print-color-adjust:exact}
+.map .q1{fill:var(--q1)}.map .q2{fill:var(--q2)}.map .q3{fill:var(--q3)}.map .q4{fill:var(--q4)}.map .nod{fill:var(--nod)}
+.map .ctx{fill:var(--ctx);stroke:var(--line);stroke-width:.5;vector-effect:non-scaling-stroke}
+.map .pl{fill:none;stroke:var(--mut);stroke-width:.8;vector-effect:non-scaling-stroke;pointer-events:none}
+.map .sel{fill:none;stroke:var(--ink);stroke-width:1.4;vector-effect:non-scaling-stroke;pointer-events:none}
+.map .hlp{fill:none;stroke:var(--ink);stroke-width:3;vector-effect:non-scaling-stroke;pointer-events:none}
+.map path.a[tabindex]{cursor:pointer;outline:none}
+.map path.a[tabindex]:focus-visible{stroke:var(--link);stroke-width:3}
+.map .msg{padding:24px;color:var(--mut);font-size:14px}
+.legend{display:flex;flex-wrap:wrap;align-items:center;gap:4px 14px;margin:8px 0 2px;font-size:13px}
+.legend .k{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;font-family:"Hanken Grotesk","BIZ UDPGothic",sans-serif;font-variant-numeric:tabular-nums}
+.legend .sw{width:16px;height:12px;border-radius:2px;print-color-adjust:exact;-webkit-print-color-adjust:exact}
+.legend .t{color:var(--mut);width:100%}
+.maptools{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;margin:6px 0 0;font-size:13px;color:var(--mut)}
+.maptools button{font-size:13px;min-height:36px}
 @media(max-width:600px){.res{padding:4px 12px 14px}.br{grid-template-columns:minmax(4em,6.5em) minmax(0,1fr) 4.6em;gap:0 6px}.bars .gap{padding-left:4px}}
 @media print{
   body{font-size:11pt}.wrap{max-width:none;padding:0}
@@ -142,6 +171,7 @@ details.rd summary{cursor:pointer;min-height:44px;display:flex;align-items:cente
   a{color:inherit}
 }
 </style>
+<script src="command.js"></script>
 <script>new MutationObserver(()=>{for(const c of document.querySelectorAll('.stack td:not([data-l])')){let i=0,p=c;while(p=p.previousElementSibling)i+=p.colSpan;c.dataset.l=c.closest('table').rows[0].cells[i]?.textContent||''}}).observe(document,{childList:true,subtree:true})</script>
 </head>
 <body>
@@ -167,7 +197,7 @@ details.rd summary{cursor:pointer;min-height:44px;display:flex;align-items:cente
     <div class="focus" id="focus"></div>
     <div class="log" id="log"><div class="sug" id="sug"></div></div>
     <form id="f">
-      <textarea id="q" rows="2" aria-label="質問" placeholder="例：回復期の割合で休棟中の病床を除いたのはなぜ？"></textarea>
+      <textarea id="q" rows="2" aria-label="質問" placeholder="例：分母を選んだ理由は？／熊本県の結果を出して"></textarea>
       <button class="send" id="send" type="submit">送信</button>
     </form>
     <div class="st" id="st">準備しています…</div>
@@ -293,7 +323,7 @@ function viewIndicator(c, params) {
   <h3>計算と出典</h3><ul class="c"><li><a href="${gh(c.script)}">計算スクリプト（${esc(c.script)}）</a></li><li><a href="${gh(`indicators/${c.id}.yaml`)}">指標カード（YAML）</a></li>${refs}</ul>
   <p style="margin-top:20px"><button class="btn" type="button" id="ask-card">この指標について質問する</button></p>`;
   $("ask-card").addEventListener("click", () => setFocus(c.id, true));
-  loadResult(c, params || new URLSearchParams());
+  return loadResult(c, params || new URLSearchParams());
 }
 
 // ---- 結果を見る（ボタン出力） -----------------------------------------------
@@ -322,11 +352,19 @@ async function loadResult(c, params) {
     return;
   }
   if (token !== resToken || !$("res")) return;
-  const doc = RES[c.id], pref = params.get("pref") || "", sort = params.get("sort") || "desc";
-  RS = { c, doc, meta, pref: doc.by_pref[pref] ? pref : "", sort: SORTS[sort] ? sort : "desc" };
+  const doc = RES[c.id], sort = params.get("sort") || "desc";
+  // hl：強調する地域のコード（チャットや地図で選んだもの）。表示中の都道府県の地域だけを残す
+  const codes = new Set(areasOf(doc).map((a) => a.code));
+  let pref = doc.by_pref[params.get("pref") || ""] ? params.get("pref") : "";
+  let hl = (params.get("hl") || "").split(",").filter((h) => codes.has(h));
+  if (!pref && hl.length && doc.by_pref[hl[0].slice(0, 2)]) pref = hl[0].slice(0, 2);
+  hl = hl.filter((h) => h.slice(0, 2) === pref);
+  RS = { c, doc, meta, pref, sort: SORTS[sort] ? sort : "desc", hl };
   drawResult();
   renderSug();
 }
+const areaIx = (doc) => { const ix = Object.fromEntries(doc.columns.map((x, i) => [x.name, i])); return { CODE: ix[doc.output.area_code], NAME: ix[doc.output.area_name] }; };
+const areasOf = (doc) => { const { CODE, NAME } = areaIx(doc); return doc.rows.map((r) => ({ code: r[CODE], name: r[NAME] })); };
 
 // 表示に使う形に並べる（値の計算はしない）
 function resultView() {
@@ -343,7 +381,8 @@ function resultView() {
     ? doc.rows.filter((r) => r[CODE].slice(0, 2) === pref).map((r) => ({ code: r[CODE], name: r[NAME], v: r[V], r }))
     : Object.entries(doc.by_pref).map(([k, s]) => ({ code: k, name: s.name, v: pooled ? s.pooled : s.median, s }));
   items.sort(cmp);
-  return { o, d, ix, V, CODE, NAME, NUM, DEN, pooled, unitWord, items,
+  const hl = new Set(pref ? RS.hl || [] : []);
+  return { o, d, ix, V, CODE, NAME, NUM, DEN, pooled, unitWord, items, hl,
     region: pref ? doc.by_pref[pref].name : "全国",
     ref: pooled ? doc.national.pooled : doc.summary.median, refLabel: pooled ? "全国計" : "全国の中央値" };
 }
@@ -353,16 +392,22 @@ function barsHtml(v, clickable) {
   const shown = items.map((x, i) => ({ ...x, i })).filter((x) => x.v !== null);
   const max = Math.max(...shown.map((x) => x.v), ref ?? 0) || 1;
   const pct = (x) => ((Math.max(0, x) / max) * 100).toFixed(3);
-  let list = shown, cut = 0;
-  if (shown.length > 60) { cut = shown.length - 50; list = [...shown.slice(0, 25), null, ...shown.slice(-25)]; }
+  // 60件を超えるときは上下25件ずつ。強調中の地域は中略の部分にあっても描く
+  let list = shown;
+  if (shown.length > 60) {
+    list = []; let skip = 0;
+    shown.forEach((x, k) => {
+      if (k < 25 || k >= shown.length - 25 || v.hl.has(x.code)) { if (skip) list.push({ gap: skip }); skip = 0; list.push(x); } else skip++;
+    });
+  }
   const refEl = ref != null ? `<span class="ref" style="left:${pct(ref)}%"></span>` : "";
   const rp = +pct(ref ?? 0);
   const head = ref != null
     ? `<div class="br hd" aria-hidden="true"><span></span><span class="tk"><span class="rl" style="${rp > 55 ? `right:calc(${(100 - rp).toFixed(3)}% + 6px)` : `left:calc(${rp}% + 6px)`}">${esc(refLabel)} <b>${fmt(ref, d)}</b></span>${refEl}</span><span></span></div>` : "";
   const tag = clickable ? "button" : "div";
-  const row = (x) => (x === null
-    ? `<div class="gap">中略（${cut.toLocaleString("ja-JP")}件）。すべての値は下の表にあります</div>`
-    : `<${tag} ${clickable ? `type="button" aria-label="${esc(x.name)} ${fmt(x.v, d)}。この都道府県を表示"` : ""} class="br" data-i="${x.i}"><span class="n">${esc(x.name)}</span><span class="tk"><span class="bar" style="width:${pct(x.v)}%"></span>${refEl}</span><span class="v">${fmt(x.v, d)}</span></${tag}>`);
+  const row = (x) => (x.gap
+    ? `<div class="gap">中略（${x.gap.toLocaleString("ja-JP")}件）。すべての値は下の表にあります</div>`
+    : `<${tag} ${clickable ? `type="button" aria-label="${esc(x.name)} ${fmt(x.v, d)}。この都道府県を表示"` : ""} class="br${v.hl.has(x.code) ? " hl" : ""}" data-i="${x.i}"><span class="n">${esc(x.name)}${v.hl.has(x.code) ? `<span class="vh">（選んだ地域）</span>` : ""}</span><span class="tk"><span class="bar" style="width:${pct(x.v)}%"></span>${refEl}</span><span class="v">${fmt(x.v, d)}</span></${tag}>`);
   const missing = items.length - shown.length;
   return `<div class="bars" id="bars">${head}${list.map(row).join("")}</div>${missing ? `<p class="note">値のない${esc(v.unitWord)} ${missing}件はグラフに含めていません（表には含めています）。</p>` : ""}`;
 }
@@ -371,7 +416,7 @@ function tableHtml(v) {
   const { doc } = RS, { items, d } = v;
   if (RS.pref) {
     return `<div class="tw"><table class="rt"><thead><tr>${doc.columns.map((c) => `<th class="${c.type === "string" ? "" : "num"}">${esc(colHead(c))}</th>`).join("")}</tr></thead>
-    <tbody>${items.map((x) => `<tr>${doc.columns.map((c, i) => `<td class="${c.type === "string" ? "" : "num"}">${esc(fmtCell(c, x.r[i], d))}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+    <tbody>${items.map((x) => `<tr${v.hl.has(x.code) ? ` class="hl"` : ""}>${doc.columns.map((c, i) => `<td class="${c.type === "string" ? "" : "num"}">${esc(fmtCell(c, x.r[i], d))}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
   }
   const num = v.NUM !== null ? doc.columns[v.NUM] : null, den = v.DEN !== null ? doc.columns[v.DEN] : null;
   const head = ["都道府県", `${v.unitWord}の数`, ...(num ? [`${colHead(num)}の合計`, `${colHead(den)}の合計`, "都道府県計"] : []), "中央値", "最小", "最大"];
@@ -413,7 +458,7 @@ function recordHtml() {
   <ul class="c"><li>計算日時：<span class="num">${esc(doc.generated_at)}</span>（指標カード v${esc(doc.card_version)}）</li>
   <li>計算スクリプト：<a href="${gh(doc.script)}">${esc(doc.script)}</a>（SHA-256 <span class="hash">${esc(doc.script_sha256.slice(0, 16))}…</span>）</li>
   ${(doc.notes || []).map((n) => `<li>${esc(n)}</li>`).join("")}</ul>
-  <p>${ins.map((i) => esc(i.attribution)).join("<br>")}</p></details>`;
+  <p>${ins.map((i) => esc(i.attribution)).join("<br>")}${CAT.geo?.length ? `<br>${esc(CAT.geo[0].attribution)}（地図の境界）` : ""}</p></details>`;
 }
 
 function drawResult() {
@@ -422,7 +467,9 @@ function drawResult() {
   const v = resultView(), { d, o } = v;
   const s = pref ? doc.by_pref[pref] : doc.summary;
   const card = (l, val, u) => `<div class="kpi"><div class="l">${esc(l)}</div><div class="v">${val}</div>${u ? `<div class="u">${esc(u)}</div>` : ""}</div>`;
+  const hlItems = v.items.filter((x) => v.hl.has(x.code));
   const kpis = [
+    ...hlItems.slice(0, 3).map((x) => card(`選んだ地域：${x.name}`, fmt(x.v, d), o.unit)),
     pref && v.pooled ? card(`${v.region}計`, fmt(s.pooled, d), o.unit) : "",
     card(v.refLabel, fmt(v.ref, d), o.unit),
     card(pref ? `${v.region}内の中央値` : `中央値（${v.unitWord}ごとの値）`, fmt(s.median, d), o.unit),
@@ -439,8 +486,10 @@ function drawResult() {
     <label>地域<select id="rp"><option value="">全国（都道府県ごと）</option>${prefOpts}</select></label>
     <label>並べ方<select id="rsort">${Object.entries(SORTS).map(([k, t]) => `<option value="${k}" ${k === RS.sort ? "selected" : ""}>${t}</option>`).join("")}</select></label>
   </div>
+  ${hlItems.length ? `<div class="hlbar"><span>強調している地域：${hlItems.map((x) => esc(x.name)).join("、")}（グラフと表の太字の行）</span><button class="btn ghost np" type="button" id="hl-off">強調をやめる</button></div>` : ""}
   <div class="kpis">${kpis}</div>
   <p class="note">「計」は、表の行の分子と分母をそれぞれ合計して計算した値です。中央値は${esc(v.unitWord)}ごとの値の中央値です。どちらも計算スクリプトの出力から作成しています。</p>
+  ${CAT.geo?.length ? `<section class="mapw" id="mapw" aria-labelledby="map-h"><p class="ch" id="map-h">${pref ? `${esc(v.region)}の` : "全国の"}${esc(v.unitWord)}ごとの値（地図）${pref ? "" : `<span class="note np" style="font-weight:400">　地域を押すと、その都道府県を表示します</span>`}</p><div class="map" id="map"><p class="msg">地図を読み込んでいます…</p></div><div class="legend" id="legend"></div><div class="maptools" id="maptools"></div></section>` : ""}
   <p class="ch">${pref ? `${esc(v.region)}の${esc(v.unitWord)}ごとの値` : `都道府県ごとの${v.pooled ? "計" : "中央値"}`}（${esc(o.unit || "")}）${pref ? "" : `<span class="note np" style="font-weight:400">　棒を押すと、その都道府県の${esc(v.unitWord)}ごとの値を表示します</span>`}</p>
   ${barsHtml(v, !pref)}
   <p class="note">縦線は${esc(v.refLabel)}。読む前に<a href="#caveats" id="to-cav">注意点</a>を確認してください。</p>
@@ -469,17 +518,142 @@ function drawResult() {
     try { saveFile(doc.csv.split("/").pop(), await fetch(doc.csv).then((r) => r.text())); } catch (_) { $("dl-st").textContent = "CSVを読み込めませんでした。"; }
   });
   $("ask-res").addEventListener("click", () => setFocus(c.id, true));
+  $("hl-off")?.addEventListener("click", () => setResultState({ hl: [] }));
   bindBars(v);
+  drawMap(v);
 }
 
-function setResultState(next) {
-  Object.assign(RS, next);
+// ---- 塗り分け地図 ------------------------------------------------------------
+// 境界は scripts/make_boundaries.py が国土数値情報（N03）から作った TopoJSON（site/geo/）。
+// 色の区切りは結果のファイルにある全国の四分位（25パーセント点・中央値・75パーセント点）で、サイトでは新しい数値を作らない。
+let GEO = null, GEO_P = null;
+const R2D = 180 / Math.PI;
+function decodeTopo(t) {
+  const [sx, sy] = t.transform.scale, [tx, ty] = t.transform.translate;
+  // メルカトル図法（経度はそのまま、緯度を伸ばす）。y は下向き
+  const arcs = t.arcs.map((a) => { let x = 0, y = 0; return a.map(([dx, dy]) => { x += dx; y += dy; const lat = (y * sy + ty) / R2D; return [x * sx + tx, -Math.log(Math.tan(Math.PI / 4 + lat / 2)) * R2D]; }); });
+  const ring = (ids) => { const pts = []; for (const i of ids) { const a = i < 0 ? arcs[~i].slice().reverse() : arcs[i]; for (let k = pts.length ? 1 : 0; k < a.length; k++) pts.push(a[k]); } return pts; };
+  const layers = {};
+  for (const [name, obj] of Object.entries(t.objects)) {
+    const feats = obj.geometries.map((g) => {
+      const polys = g.type === "Polygon" ? [g.arcs] : g.type === "MultiPolygon" ? g.arcs : [];
+      const rings = polys.flatMap((p) => p.map(ring));
+      return { ...g.properties, rings, bbox: bboxOf(rings) };
+    });
+    layers[name] = { feats, byCode: new Map(feats.map((f) => [f.code, f])) };
+  }
+  return { layers, bbox: bboxOf(layers.prefecture.feats.flatMap((f) => f.rings)) };
+}
+function bboxOf(rings) {
+  const b = [Infinity, Infinity, -Infinity, -Infinity];
+  for (const r of rings) for (const [x, y] of r) { if (x < b[0]) b[0] = x; if (y < b[1]) b[1] = y; if (x > b[2]) b[2] = x; if (y > b[3]) b[3] = y; }
+  return b;
+}
+const meets = (a, b) => a[0] <= b[2] && b[0] <= a[2] && a[1] <= b[3] && b[1] <= a[3];
+const gapOf = (a, b) => Math.max(0, b[0] - a[2], a[0] - b[2], b[1] - a[3], a[1] - b[3]);
+const ringArea = (r) => { let s = 0; for (let i = 0, j = r.length - 1; i < r.length; j = i++) s += (r[j][0] + r[i][0]) * (r[j][1] - r[i][1]); return Math.abs(s / 2); };
+function pathOf(f) {
+  return (f.d ||= f.rings.map((r) => "M" + r.map(([x, y]) => `${x.toFixed(3)},${y.toFixed(3)}`).join("L") + "Z").join(""));
+}
+// 都道府県の地図の枠：いちばん大きい島から始めて、0.6度以内にある島を順に加える（遠い離島は枠の外）
+function prefFrame(code, all) {
+  const pf = GEO.layers.prefecture.byCode.get(code); if (!pf) return GEO.bbox;
+  if (all) return pf.bbox;
+  const rs = pf.rings.map((r) => ({ b: bboxOf([r]), a: ringArea(r) })).sort((x, y) => y.a - x.a);
+  let b = [...rs[0].b]; const used = new Set([0]); let added = true;
+  while (added) { added = false; rs.forEach((r, i) => { if (!used.has(i) && gapOf(b, r.b) <= 0.6) { b = [Math.min(b[0], r.b[0]), Math.min(b[1], r.b[1]), Math.max(b[2], r.b[2]), Math.max(b[3], r.b[3])]; used.add(i); added = true; } }); }
+  return b;
+}
+// 結果の地域コードが最も多く一致する層を使う（9割に満たなければ地図は出さない）
+function mapLayer(doc) {
+  const { CODE } = areaIx(doc); let best = null;
+  for (const name of ["municipality", "municipality_ward", "koso_kuiki", "prefecture"]) {
+    const L = GEO.layers[name]; if (!L) continue;
+    const n = doc.rows.filter((r) => L.byCode.has(r[CODE])).length;
+    if (!best || n > best.n) best = { name, n };
+  }
+  return best && best.n >= doc.rows.length * 0.9 ? best.name : null;
+}
+
+async function drawMap(v) {
+  const box = $("map"); if (!box) return;
+  const token = resToken, state = RS;
+  try { GEO ||= await (GEO_P ||= fetch(CAT.geo[0].path).then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); }).then(decodeTopo)); }
+  catch (_) { GEO_P = null; box.innerHTML = `<p class="msg">地図の境界（${esc(CAT.geo[0].path)}）を読み込めませんでした。</p>`; return; }
+  if (token !== resToken || RS !== state || !$("map")) return;
+  const { doc, pref } = RS, s = doc.summary, d = v.d, o = v.o;
+  const layer = mapLayer(doc);
+  if (!layer) { $("mapw").hidden = true; return; }
+  const L = GEO.layers[layer];
+  const rowOf = new Map(doc.rows.map((r) => [r[v.CODE], r]));
+  const cls = (x) => (x === null || x === undefined ? "nod" : x <= s.p25 ? "q1" : x <= s.median ? "q2" : x <= s.p75 ? "q3" : "q4");
+  const frame = pref ? prefFrame(pref, RS.mapAll) : GEO.bbox;
+  const pad = Math.max(frame[2] - frame[0], frame[3] - frame[1]) * 0.03;
+  const vb = [frame[0] - pad, frame[1] - pad, frame[2] - frame[0] + pad * 2, frame[3] - frame[1] + pad * 2];
+  const view = [vb[0], vb[1], vb[0] + vb[2], vb[1] + vb[3]];
+  const mine = L.feats.filter((f) => !pref || f.pref === pref);
+  const shown = mine.filter((f) => meets(f.bbox, view));
+  const ctx = pref ? GEO.layers.prefecture.feats.filter((f) => f.code !== pref && meets(f.bbox, view)) : [];
+  const hl = shown.filter((f) => v.hl.has(f.code));
+  const label = (f) => { const r = rowOf.get(f.code); return `${f.name} ${r ? fmt(r[v.V], d) : "値なし"}`; };
+  const paths = shown.map((f, i) => { const r = rowOf.get(f.code); return `<path class="a ${cls(r ? r[v.V] : null)}" data-k="${i}" d="${pathOf(f)}"${pref ? ` tabindex="0" role="button" aria-pressed="${v.hl.has(f.code)}" aria-label="${esc(label(f))}"` : ""}/>`; }).join("");
+  const outline = pref ? `<path class="sel" d="${pathOf(GEO.layers.prefecture.byCode.get(pref))}"/>` : GEO.layers.prefecture.feats.map((f) => `<path class="pl" d="${pathOf(f)}"/>`).join("");
+  box.innerHTML = `<svg viewBox="${vb.map((x) => x.toFixed(3)).join(" ")}" preserveAspectRatio="xMidYMid meet" ${pref ? `role="group" aria-label="${esc(v.region)}の${esc(v.unitWord)}の地図。地域を押すと強調します"` : `role="img" aria-label="全国の${esc(v.unitWord)}ごとの値の地図。値は下の表にもあります"`} fill-rule="evenodd">
+    ${ctx.map((f) => `<path class="ctx" d="${pathOf(f)}"/>`).join("")}<g>${paths}</g>${outline}${hl.map((f) => `<path class="hlp" d="${pathOf(f)}"/>`).join("")}</svg>`;
+
+  // 凡例：全国の四分位（結果のファイルの summary の値）
+  const k = (c, t) => `<span class="k"><span class="sw" style="background:var(--${c})"></span>${t}</span>`;
+  $("legend").innerHTML = `<span class="t">色：全国の${esc(v.unitWord)}ごとの値の四分位で4段階（凡例の右ほど値が大きい）。単位は${esc(o.unit || "")}</span>`
+    + k("q1", `${fmt(s.min, d)}〜${fmt(s.p25, d)}`) + k("q2", `${fmt(s.p25, d)}超〜${fmt(s.median, d)}`) + k("q3", `${fmt(s.median, d)}超〜${fmt(s.p75, d)}`) + k("q4", `${fmt(s.p75, d)}超〜${fmt(s.max, d)}`) + k("nod", "値なし");
+
+  const out = pref ? mine.filter((f) => !meets(f.bbox, view)) : [];
+  const far = pref && !RS.mapAll && prefFrame(pref, true).some((x, i) => Math.abs(x - frame[i]) > 1e-9);
+  $("maptools").innerHTML = `${out.length ? `<span>地図の枠の外：${out.slice(0, 8).map((f) => esc(f.name)).join("、")}${out.length > 8 ? ` ほか${out.length - 8}` : ""}（値は表にあります）</span>` : ""}
+    ${far || RS.mapAll ? `<button class="btn ghost np" type="button" id="map-all">${RS.mapAll ? "本土側を中心に表示" : "離島も含めて表示"}</button>` : ""}
+    <span>${esc(CAT.geo[0].attribution)}。境界は表示用に簡略化しています。</span>`;
+  $("map-all")?.addEventListener("click", () => { RS.mapAll = !RS.mapAll; drawMap(resultView()); });
+
+  // ツールチップと操作（全国：押すとその都道府県へ。都道府県：押すと強調を切り替え）
+  const svg = box.querySelector("svg");
+  const num = v.NUM !== null ? doc.columns[v.NUM] : null, den = v.DEN !== null ? doc.columns[v.DEN] : null;
+  const tipLines = (f) => { const r = rowOf.get(f.code); return r ? [[`${fmt(r[v.V], d)} ${o.unit || ""}`, "v"], [f.name + (pref ? "" : `（${CAT.prefectures[f.pref] || ""}）`)], ...(num ? [[`${num.label}：${fmtCell(num, r[v.NUM], d)}`, "s"], [`${den.label}：${fmtCell(den, r[v.DEN], d)}`, "s"]] : [])] : [["値なし", "v"], [f.name]]; };
+  const featOf = (e) => { const p = e.target.closest?.("path.a"); return p ? shown[+p.dataset.k] : null; };
+  const act = (f) => {
+    tip.hidden = true;
+    if (!pref) return setResultState({ pref: f.pref, hl: rowOf.has(f.code) ? [f.code] : [] });
+    const set = new Set(RS.hl || []); set.has(f.code) ? set.delete(f.code) : set.add(f.code);
+    setResultState({ hl: [...set].filter((c) => rowOf.has(c)) }, { keep: true });
+    $("map")?.querySelector(`path.a[data-k="${shown.indexOf(f)}"]`)?.focus({ preventScroll: true });
+  };
+  svg.addEventListener("pointermove", (e) => { const f = featOf(e); if (f) showTip(tipLines(f), e.clientX, e.clientY); else tip.hidden = true; });
+  svg.addEventListener("pointerleave", () => (tip.hidden = true));
+  svg.addEventListener("click", (e) => { const f = featOf(e); if (f) act(f); });
+  svg.addEventListener("keydown", (e) => { if (e.key !== "Enter" && e.key !== " ") return; const f = featOf(e); if (f) { e.preventDefault(); act(f); } });
+  svg.addEventListener("focusin", (e) => { const f = featOf(e); if (f) { const r = e.target.getBoundingClientRect(); showTip(tipLines(f), r.left + r.width / 2, r.bottom); } });
+  svg.addEventListener("focusout", () => (tip.hidden = true));
+}
+
+// URLに残す表示の状態（共有すれば同じ表示を開ける）
+function viewQuery(s) {
   const qs = new URLSearchParams();
-  if (RS.pref) qs.set("pref", RS.pref);
-  if (RS.sort !== "desc") qs.set("sort", RS.sort);
-  history.replaceState(null, "", `#ind-${toHash(RS.c.id)}${qs.toString() ? "?" + qs : ""}`);
+  if (s.pref) qs.set("pref", s.pref);
+  if (s.sort && s.sort !== "desc") qs.set("sort", s.sort);
+  if (s.hl?.length) qs.set("hl", s.hl.join(","));
+  return qs.toString() ? "?" + qs.toString().replace(/%2C/g, ",") : "";
+}
+function scrollToResult() { (document.querySelector("#bars .br.hl") || $("res"))?.scrollIntoView({ block: "center" }); }
+// opts.chat：チャットから切り替えたとき。入力欄にフォーカスを残し、強調した地域まで送る
+// opts.keep：地図の上で強調を切り替えたとき。画面の位置とフォーカスを動かさない
+function setResultState(next, opts = {}) {
+  Object.assign(RS, next);
+  if (next.pref !== undefined && next.hl === undefined) RS.hl = (RS.hl || []).filter((h) => h.slice(0, 2) === RS.pref);
+  if (next.pref !== undefined) RS.mapAll = false;
+  history.replaceState(null, "", `#ind-${toHash(RS.c.id)}${viewQuery(RS)}`);
   const y = $("res").getBoundingClientRect().top;
   drawResult();
+  renderSug();
+  if (opts.keep) return;
+  if (opts.chat) return scrollToResult();
   if (y < 0 || next.pref !== undefined) $("res").scrollIntoView({ block: "start" });
   $(next.sort !== undefined ? "rsort" : "rp")?.focus({ preventScroll: true });
 }
@@ -549,7 +723,24 @@ window.addEventListener("beforeprint", () => {
 window.addEventListener("afterprint", () => document.querySelectorAll("details.pr").forEach((x) => { x.open = !!x.dataset.was; }));
 
 // 質問窓口に渡す、表示中の結果（数値は結果のファイルの値をそのまま使う）
-function resultItem() {
+// 質問に地域名（市区町村・構想区域・都道府県）があれば、その行も渡す。表に載っていない地域の値も引用できるように
+function mentionedRows(q, v) {
+  const { c, doc } = RS, out = [];
+  if (!q || !window.ChiikiCommand) return out;
+  const p = ChiikiCommand.parse(q, { prefectures: CAT.prefectures });
+  const r = ChiikiCommand.resolve(p, areasOf(doc), c.unit_of_analysis);
+  const codes = [...new Set([...(RS.hl || []), ...r.areas.map((a) => a.code)])].slice(0, 10);
+  const rows = codes.map((k) => doc.rows.find((x) => x[v.CODE] === k)).filter(Boolean);
+  const col = (i) => doc.columns[i], d = v.d;
+  if (rows.length) {
+    const cols = [v.CODE, v.NAME, v.NUM, v.DEN, v.V].filter((i) => i !== null);
+    out.push(`質問に出てきた・強調している${v.unitWord}の行：\n` + [cols.map((i) => col(i).label).join("\t"), ...rows.map((x) => cols.map((i) => fmtCell(col(i), x[i], d)).join("\t"))].join("\n"));
+  }
+  const prefs = r.prefs.filter((k) => k !== RS.pref && doc.by_pref[k]);
+  if (prefs.length && RS.pref) out.push("質問に出てきた都道府県：" + prefs.map((k) => { const s = doc.by_pref[k]; return `${s.name}：${v.pooled ? `計 ${fmt(s.pooled, d)}、` : ""}${v.unitWord} ${s.n}件、中央値 ${fmt(s.median, d)}`; }).join("。") + "。");
+  return out;
+}
+function resultItem(q) {
   if (!RS || RS.c.id !== focusId) return null;
   const { c, doc } = RS, v = resultView(), { d, o } = v;
   const col = (i) => doc.columns[i];
@@ -558,6 +749,7 @@ function resultItem() {
     `${v.refLabel}：${fmt(v.ref, d)}${doc.national?.numerator_sum != null ? `（${col(v.NUM).label}の合計 ${fmtCell(col(v.NUM), doc.national.numerator_sum, d)}、${col(v.DEN).label}の合計 ${fmtCell(col(v.DEN), doc.national.denominator_sum, d)}）` : ""}。`,
     `全国の${v.unitWord}ごとの値：${doc.summary.n}件、中央値 ${fmt(doc.summary.median, d)}、最小 ${fmt(doc.summary.min, d)}、最大 ${fmt(doc.summary.max, d)}、25パーセント点 ${fmt(doc.summary.p25, d)}、75パーセント点 ${fmt(doc.summary.p75, d)}。`,
   ];
+  parts.push(...mentionedRows(q, v));
   let list = v.items, note = "";
   if (list.length > 60) { note = `（${list.length}件のうち、${SORTS[RS.sort]}で先頭30件と末尾30件）`; list = [...list.slice(0, 30), ...list.slice(-30)]; }
   if (RS.pref) {
@@ -568,8 +760,7 @@ function resultItem() {
   } else {
     parts.push(`表示中：全国（都道府県ごと）。都道府県ごとの表${note}：\n` + [["都道府県", v.pooled ? "都道府県計" : "", `${v.unitWord}の数`, "中央値"].filter(Boolean).join("\t"), ...list.map(({ s }) => [s.name, ...(v.pooled ? [fmt(s.pooled, d)] : []), s.n, fmt(s.median, d)].join("\t"))].join("\n"));
   }
-  const qs = RS.pref ? `?pref=${RS.pref}` : "";
-  return { id: `result:${c.id}`, kind: "result", title: `${c.name}の結果（${v.region}）`, href: `#ind-${toHash(c.id)}${qs}`, text: parts.join("\n") };
+  return { id: `result:${c.id}`, kind: "result", title: `${c.name}の結果（${v.region}）`, href: `#ind-${toHash(c.id)}${viewQuery(RS)}`, text: parts.join("\n") };
 }
 
 function viewDatasets() {
@@ -606,7 +797,8 @@ function viewAbout() {
   $("view").innerHTML = `<h2>このサイトについて</h2>
   <p>地域医療構想の分析に携わる研究者どうしで、オープンデータを使った基本的な分析の考え方と方法を共有するためのサイトです。指標ごとに作成者の意図を「指標カード」に書き残し、計算はスクリプトで誰でも再現できるようにしています。</p>
   <h3>3つの約束</h3><ul class="c"><li>数値はスクリプトが作る。質問窓口のAIは数値を作らない。</li><li>指標には必ずカードを付ける（意図・分子と分母・なぜその分母か・注意点）。</li><li>出典と加工を明記する。</li></ul>
-  <h3>結果を見る（ボタン出力）</h3><p>指標のページで地域と並べ方を選ぶと、計算スクリプトの結果を表・グラフ・CSV・印刷用の1枚で出します。都道府県計・全国計・中央値も、Pythonで計算してファイルに入れたものを表示しています。サイトの中で新しい数値は計算しません。結果は、各自が取得した元データから <code>chiiki-od results</code> で作り、計算日時・元データのハッシュ値と一緒にリポジトリに入れています。</p>
+  <h3>結果を見る（ボタン出力）</h3><p>指標のページで地域と並べ方を選ぶと、計算スクリプトの結果を表・グラフ・地図・CSV・印刷用の1枚で出します。都道府県計・全国計・中央値も、Pythonで計算してファイルに入れたものを表示しています。地図の色の区切りも、結果のファイルにある全国の四分位をそのまま使います。サイトの中で新しい数値は計算しません。結果は、各自が取得した元データから <code>chiiki-od results</code> で作り、計算日時・元データのハッシュ値と一緒にリポジトリに入れています。</p>
+  <p>表示の切り替えは、右の窓口に「熊本県の結果を出して」「熊本市を表示して」「値の小さい順に並べて」のように書いてもできます。依頼の言葉はサイトが決まった規則で読み取るので、AIの設定がなくても使えます。</p>
   <h3>質問窓口のしくみ</h3><p>質問に近い指標カード・データの説明・列の見出しをこのサイトの中から探し、それだけを根拠にAIが答えます。根拠にした資料を回答の下に示します。カードに書かれていないことは「作成者の説明はありません」と答えます。</p>
   <p>接続先は「接続の設定」で選べます。claude.ai 上ではClaudeを、それ以外ではOpenAI互換のAPI（ローカルのOllamaなど）を使います。</p>
   <h3>指標を追加する</h3><p><a href="${REPO}">GitHubのリポジトリ</a>から、Issueで相談してプルリクエストを送ってください（<a href="${gh("CONTRIBUTING.md")}">貢献の手引き</a>）。</p>
@@ -616,7 +808,7 @@ function route() {
   if (!CAT) return;
   const [h, qs] = (decodeURIComponent(location.hash.slice(1)) || "indicators").split("?");
   RS = null;
-  if (h.startsWith("ind-")) { const c = fromHash(h.slice(4), CAT.indicators); if (c) { setFocus(c.id, false); viewIndicator(c, new URLSearchParams(qs || "")); return window.scrollTo(0, 0); } }
+  if (h.startsWith("ind-")) { const c = fromHash(h.slice(4), CAT.indicators); if (c) { setFocus(c.id, false); const done = viewIndicator(c, new URLSearchParams(qs || "")); window.scrollTo(0, 0); return done; } }
   if (h.startsWith("ds-")) { const d = fromHash(h.slice(3), CAT.datasets); if (d) { viewDataset(d); return window.scrollTo(0, 0); } }
   if (h === "datasets") return viewDatasets();
   if (h === "references") return viewDocs("references", ["reference/README.md"], "共通対応表", `<p class="note">市区町村コード・構想区域・二次医療圏の対応は、全員が同じ表を使います。<a href="${REPO}/tree/main/reference">表の一覧（GitHub）</a></p>`);
@@ -650,16 +842,18 @@ function retrieve(q, focusId) {
   const pick = (kind, n) => scored.filter((x) => x.it.kind === kind).slice(0, n).map((x) => x.it);
   const sel = [...pick("card", 3), ...pick("dataset", 2), ...pick("doc", 3), ...pick("col", 6)];
   if (focusId && !sel.some((x) => x.id === `card:${focusId}`)) sel.unshift(DOCS.find((x) => x.id === `card:${focusId}`));
-  const res = resultItem();
+  const res = resultItem(q);
   if (res) sel.splice(sel.findIndex((x) => x?.id === `card:${focusId}`) + 1, 0, res);
   if (!sel.some((x) => x.kind === "card")) sel.push(...DOCS.filter((x) => x.kind === "card").slice(0, 3));
   return sel.filter(Boolean);
 }
 
 // ---- 質問窓口 ---------------------------------------------------------------
-const SUG_DEFAULT = ["回復期病床の割合の分母から休棟中の病床を除いたのはなぜ？", "病床機能報告の「*」や「-」は分析でどう扱えばいい？", "人口を構想区域にまとめるとき、二重に数えないためには？", "指標を新しく追加するには何をすればいい？"];
+const SUG_DEFAULT = ["回復期病床の割合の分母から休棟中の病床を除いたのはなぜ？", "病床機能報告の「*」や「-」は分析でどう扱えばいい？", "人口を構想区域にまとめるとき、二重に数えないためには？", "熊本県の訪問介護事業所数を表示して", "指標を新しく追加するには何をすればいい？"];
 const SUG_CARD = ["この指標の意図を短く説明して", "なぜこの分母を選んだの？", "この指標から言えないことは？", "代わりに使える指標は？"];
-const SUG_RES = ["表示中の結果で、値が特に低い地域はどこ？", "この結果を読むときの注意点は？", "この指標の意図を短く説明して", "なぜこの分母を選んだの？"];
+const SUG_RES = ["表示中の結果で、値が特に低い地域はどこ？", "この結果を読むときの注意点は？", "なぜこの分母を選んだの？"];
+// 表示の切り替えはAIを使わずにできる。説明の文は、AIの設定がないときの案内にも使う
+const HELP_VIEW = "表示は、都道府県名（例：熊本県）、「全国」、市区町村名・構想区域名、並べ方（値の小さい順・大きい順・コード順）で切り替えられます。指標の名前を入れると、その指標に移ります。";
 let focusId = null, busy = false, sample = null, settings = {};
 const hist = [];
 try { settings = JSON.parse(localStorage.getItem("chiiki-od-chat") || "{}"); } catch (_) { settings = {}; }
@@ -673,18 +867,19 @@ function setFocus(id, ask) {
 }
 function renderSug() {
   const el = $("sug"); if (!el) return;
-  const list = !focusId ? SUG_DEFAULT : RS?.c.id === focusId ? SUG_RES : SUG_CARD;
+  const list = !focusId ? SUG_DEFAULT : RS?.c.id === focusId ? [RS.pref ? "全国に戻して" : "熊本県の結果を出して", ...SUG_RES] : SUG_CARD;
   el.innerHTML = `<p class="note" style="margin:0">${focusId ? "この指標について：" : "たとえば："}</p>` + list.map((s, i) => `<button type="button" data-i="${i}">${esc(s)}</button>`).join("");
   el.querySelectorAll("button").forEach((b) => b.addEventListener("click", () => ask(list[+b.dataset.i])));
 }
 function provider() { return settings.provider || (sample ? "claude" : "openai"); }
+function ready() { return provider() === "claude" ? !!sample : !!settings.base && !!settings.model; }
 function status() {
   const p = provider();
-  const ready = p === "claude" ? !!sample : !!settings.base && !!settings.model;
-  $("send").disabled = busy || !ready;
-  $("st").textContent = ready
+  // AIの設定がなくても、表示の切り替えはできるので送信できる
+  $("send").disabled = busy;
+  $("st").textContent = ready()
     ? (p === "claude" ? "Claude（claude.ai）で回答します。" : `接続先：${settings.base}（${settings.model}）`) + " 回答は根拠の資料で確かめてください。"
-    : p === "claude" ? "この表示環境ではClaudeを使えません。「接続の設定」でOpenAI互換APIを指定してください。" : "「接続の設定」で接続先を指定すると質問できます。";
+    : (p === "claude" ? "この表示環境ではClaudeを使えません。「接続の設定」でOpenAI互換APIを指定すると、質問に答えます。" : "「接続の設定」で接続先を指定すると、質問に答えます。") + " 表示の切り替え（例：熊本県の結果を出して）はAIなしでもできます。";
 }
 
 function systemPrompt(ctx) {
@@ -695,6 +890,7 @@ function systemPrompt(ctx) {
 - 数値（件数・割合・病床数など）は、資料に書かれているものしか書かない。計算して新しい数値を作らない。
 - 【資料】に「result:」で始まる結果の表があるときは、その値は計算スクリプトが出したものなので、そのまま引用してよい。値を読み比べて答えるのはよいが、差・比・平均などの新しい数値は計算しない。値の意味は、指標カードの「読み方」と「注意点」に沿って説明し、注意点を1つ以上添える。
 - 結果の表がない指標の値を聞かれたら、指標のページの「結果を見る」か、計算スクリプトの実行方法を案内する。
+- 利用者の依頼に表示の切り替え（地域や並べ方）が含まれていても、切り替えはサイトが済ませている。切り替えには触れず、質問の部分にだけ答える。
 - 結論を先に、400字程度、長くても800字以内。
 - 最後の行に、根拠にした資料のIDを「出典: card:xxx, doc:yyy」の形式で必ず書く。
 
@@ -738,14 +934,44 @@ async function callOpenAI(messages) {
   catch (e) { throw new Error("接続できませんでした。URL、接続先の起動状態、CORSの許可（Ollamaなら OLLAMA_ORIGINS）を確認してください。"); }
   if (!r.ok) throw new Error(`接続先がエラーを返しました（${r.status}）。モデル名やAPIキーを確認してください。`);
   const j = await r.json();
-  return j.choices?.[0]?.message?.content || "";
+  return stripThink(j.choices?.[0]?.message?.content || "");
 }
+// 考える過程を返すモデル（Qwen3 など）の <think>…</think> は表示しない
+const stripThink = (t) => String(t || "").replace(/<think>[\s\S]*?(<\/think>\s*|$)/g, "");
+async function complete(messages) {
+  if (provider() === "claude") return stripThink((await sample(messages, { cache: false })).text);
+  return callOpenAI(messages);
+}
+const errText = (e) => (e?.code === "rate_limited" ? "利用が集中しています。少し時間をおいてください。" : e?.code === "not_granted" ? "Claudeの利用が許可されていません。" : e?.message || "回答を作成できませんでした。");
+
+function bubble() { const a = document.createElement("div"); a.className = "m a"; $("log").appendChild(a); return a; }
 
 async function ask(q) {
   q = (q || "").trim(); if (!q || busy) return;
   busy = true; status(); $("q").value = ""; $("sug")?.remove();
   const u = document.createElement("div"); u.className = "m u"; u.textContent = q; $("log").appendChild(u);
-  const a = document.createElement("div"); a.className = "m a"; $("log").appendChild(a);
+  let a = bubble();
+  try {
+    // 表示の切り替えの依頼なら、サイトが切り替える（AIは使わない）。質問も含んでいれば、切り替えたあとで答える
+    const view = await readView(q);
+    if (view.r.display) {
+      const entry = { role: "assistant", content: "" };
+      hist.push({ role: "user", content: q }, entry);
+      const out = await runView(q, view, a, entry);
+      if (!(out.applied && view.r.question)) return;
+      a = bubble();
+    }
+    if (!ready()) {
+      a.innerHTML = `<p>質問に答えるには、「接続の設定」で回答を作るAIを指定してください。</p><p class="note">${esc(HELP_VIEW)}この切り替えはAIなしでもできます。</p>`;
+      return;
+    }
+    await answer(q, a);
+  } catch (e) {
+    a.innerHTML = `<p>${esc(errText(e))}</p>`;
+  } finally { busy = false; status(); a.scrollIntoView({ block: "end" }); }
+}
+
+async function answer(q, a) {
   const items = retrieve(q, focusId);
   renderAnswer(a, "", items, false); a.scrollIntoView({ block: "end" });
   const sys = systemPrompt(contextOf(items));
@@ -755,8 +981,8 @@ async function ask(q) {
     let text;
     if (provider() === "claude") {
       const input = recent.map((m, i) => (i === 0 ? { role: "user", content: sys + "\n\n---\n利用者の質問：\n" + m.content } : m));
-      const r = await sample(input, { cache: false, onText: ({ text }) => renderAnswer(a, text, items, false) });
-      text = r.text;
+      const r = await sample(input, { cache: false, onText: ({ text }) => renderAnswer(a, stripThink(text), items, false) });
+      text = stripThink(r.text);
     } else {
       text = await callOpenAI([{ role: "system", content: sys }, ...recent]);
     }
@@ -764,8 +990,132 @@ async function ask(q) {
     hist.push({ role: "assistant", content: text });
   } catch (e) {
     hist.pop();
-    a.innerHTML = `<p>${esc(e?.code === "rate_limited" ? "利用が集中しています。少し時間をおいてください。" : e?.code === "not_granted" ? "Claudeの利用が許可されていません。" : e?.message || "回答を作成できませんでした。")}</p>`;
-  } finally { busy = false; status(); a.scrollIntoView({ block: "end" }); }
+    a.innerHTML = `<p>${esc(errText(e))}</p>`;
+  }
+}
+
+// ---- チャットからの表示の切り替え ---------------------------------------------
+// 指標・地域・並べ方の指定を、決まった規則（command.js）で読み取って表示を変える。AIは使わない。
+// 規則では何に切り替えるか読み取れないときだけ、接続先のAIに「表示の指定」をJSONで返させる。
+// AIの返した指定は、選べる値（指標のid・都道府県コード・並べ方）と照らして使う。数値はAIから受け取らない。
+const withResults = () => CAT.indicators.filter((c) => CAT.results?.[c.id]);
+const indName = (id) => CAT.indicators.find((x) => x.id === id)?.name || id;
+const currentInd = () => RS?.c.id || (focusId && CAT.results?.[focusId] ? focusId : null);
+async function docOf(id) {
+  const meta = CAT.results?.[id]; if (!meta) return null;
+  try { RES[id] ||= await fetch(meta.path).then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); }); } catch (_) { return null; }
+  return RES[id];
+}
+async function resolveFor(p, id) {
+  const doc = await docOf(id), c = CAT.indicators.find((x) => x.id === id);
+  return { p, target: id, doc, c, r: ChiikiCommand.resolve(p, doc ? areasOf(doc) : [], c?.unit_of_analysis) };
+}
+async function readView(q) {
+  if (!window.ChiikiCommand) return { r: { display: false } };
+  const cur = currentInd();
+  const p = ChiikiCommand.parse(q, { prefectures: CAT.prefectures, indicators: withResults().map((c) => ({ id: c.id, name: c.name })), current: cur });
+  const target = p.indicator || (p.ties.length ? null : cur);
+  if (target) return resolveFor(p, target);
+  return { p, target: null, doc: null, c: null, r: ChiikiCommand.resolve(p, [], null) };
+}
+
+function choose(el, text, options) {
+  el.innerHTML = `<p>${esc(text)}</p><div class="sug choice">${options.map((o, i) => `<button type="button" data-i="${i}">${esc(o.label)}</button>`).join("")}</div>`;
+  el.querySelectorAll(".choice button").forEach((b) => b.addEventListener("click", async () => {
+    if (busy) return; busy = true; status();
+    try { await options[+b.dataset.i].run(); } catch (e) { el.innerHTML = `<p>${esc(e?.message || "切り替えられませんでした。")}</p>`; } finally { busy = false; status(); }
+  }));
+  return { applied: false };
+}
+
+async function runView(q, view, el, entry) {
+  const { p } = view;
+  if (!view.target) {
+    const ids = p.ties.length ? p.ties : withResults().map((c) => c.id);
+    if (!ids.length) { el.innerHTML = `<p>結果がサイトに載っている指標は、まだありません。</p>`; entry.content = "（サイトの操作）表示できる指標がなかった。"; return {}; }
+    if (ids.length > 1) {
+      entry.content = "（サイトの操作）どの指標を表示するか、候補を示した。";
+      return choose(el, "どの指標の結果を出しますか？", ids.map((id) => ({ label: indName(id), run: async () => runView(q, await resolveFor(p, id), el, entry) })));
+    }
+    view = await resolveFor(p, ids[0]);
+  }
+  const { r, c, doc } = view, id = view.target;
+  if (!doc) { el.innerHTML = `<p>「${esc(indName(id))}」の結果を読み込めませんでした。</p>`; return {}; }
+  const areas = r.areas;
+  // 同じ名前の地域が別の都道府県にある（府中市、各県の「県南」など）
+  if (new Set(areas.map((x) => x.code.slice(0, 2))).size > 1) {
+    entry.content = "（サイトの操作）同じ名前の地域が複数あるため、候補を示した。";
+    return choose(el, "どの地域ですか？", areas.slice(0, 12).map((x) => ({ label: `${x.name}（${CAT.prefectures[x.code.slice(0, 2)] || x.code.slice(0, 2)}）`, run: () => finishView(el, entry, { indicator: id, pref: x.code.slice(0, 2), sort: p.sort, hl: [x.code] }, "rule") })));
+  }
+  if (!areas.length && r.prefs.length > 1) {
+    entry.content = "（サイトの操作）都道府県が複数あるため、候補を示した。";
+    return choose(el, "一度に表示できる都道府県は1つです。どれを出しますか？", r.prefs.map((k) => ({ label: CAT.prefectures[k], run: () => finishView(el, entry, { indicator: id, pref: k, sort: p.sort, hl: [] }, "rule") })));
+  }
+  const same = RS?.c.id === id;
+  if (same && r.pref === undefined && !p.sort && !areas.length) {
+    // 何に切り替えるか読み取れない（「くまもと」「九州」など）
+    if (ready()) return aiView(q, el, entry);
+    el.innerHTML = `<p>どの地域や並べ方に切り替えるか、読み取れませんでした。</p><p class="note">${esc(HELP_VIEW)}</p>`;
+    entry.content = "（サイトの操作）表示の指定を読み取れなかった。";
+    return {};
+  }
+  const note = c.unit_of_analysis !== "municipality" && !areas.length && /[市町村](の|を|で|に|は|だけ|$)/.test(p.text) ? `この指標は${UNIT[c.unit_of_analysis] || "地域"}ごとの値のため、市区町村は選べません。都道府県の表示にしました。` : "";
+  return finishView(el, entry, {
+    indicator: id,
+    pref: r.pref !== undefined ? r.pref : same ? RS.pref : "",
+    sort: p.sort || (same ? RS.sort : "desc"),
+    hl: areas.map((x) => x.code),
+  }, "rule", note);
+}
+
+async function aiView(q, el, entry) {
+  el.innerHTML = `<p class="dots">表示の指定を読み取っています</p>`;
+  const inds = withResults(), cur = RS;
+  const prompt = `あなたは「地域医療構想 オープンデータ指標カタログ」の表示を切り替える係です。利用者の依頼から、表示の指定だけを1行のJSONで返してください。説明の文や数値は書かないでください。
+選べる指標（id：名前）：
+${inds.map((c) => `- ${c.id}：${c.name}`).join("\n")}
+選べる地域：全国は ""、都道府県は2桁のコード（${Object.entries(CAT.prefectures).map(([k, n]) => `${k} ${n}`).join("、")}）
+並べ方：desc（値の大きい順）、asc（値の小さい順）、code（コード順）
+いまの表示：${cur ? `指標 ${cur.c.id}、地域 "${cur.pref}"、並べ方 ${cur.sort}` : "指標のページではない"}
+返す形：{"indicator": "指標のid（変えないなら null）", "pref": "地域（変えないなら null）", "sort": "並べ方（変えないなら null）"}
+一度に表示できる都道府県は1つです。できない依頼（複数の都道府県を並べる、ほかのサイトの表示など）には {"unsupported": "できない理由（30字以内）"} を返してください。
+依頼：${q}`;
+  let j = null;
+  try { const m = (await complete([{ role: "user", content: prompt }])).match(/\{[^{}]*\}/); j = m && JSON.parse(m[0]); } catch (_) { j = null; }
+  const fail = (t) => { el.innerHTML = `<p>${esc(t)}</p><p class="note">${esc(HELP_VIEW)}</p>`; entry.content = "（サイトの操作）表示を切り替えなかった。"; return {}; };
+  if (!j || typeof j !== "object") return fail("どの地域や並べ方に切り替えるか、読み取れませんでした。");
+  if (j.unsupported) return fail(`その切り替えはできません（AIの判断：${String(j.unsupported).slice(0, 60)}）。`);
+  const id = inds.some((c) => c.id === j.indicator) ? j.indicator : currentInd() || inds[0]?.id;
+  if (!id) return fail("結果がサイトに載っている指標は、まだありません。");
+  const same = RS?.c.id === id;
+  const pr = j.pref === "" ? "" : j.pref == null ? null : String(j.pref).padStart(2, "0");
+  const pref = pr === "" || CAT.prefectures[pr] ? pr : same ? RS.pref : "";
+  const sort = SORTS[j.sort] ? j.sort : same ? RS.sort : "desc";
+  if (same && pref === RS.pref && sort === RS.sort) return fail("いまの表示から変えるところが見つかりませんでした。");
+  return finishView(el, entry, { indicator: id, pref, sort, hl: [] }, "ai");
+}
+
+async function applyView(v) {
+  if (RS && RS.c.id === v.indicator && $("res")) return setResultState({ pref: v.pref, sort: v.sort, hl: v.hl }, { chat: true });
+  history.pushState(null, "", `#ind-${toHash(v.indicator)}${viewQuery(v)}`);
+  await route();
+  scrollToResult();
+}
+
+async function finishView(el, entry, v, how, note) {
+  v.sort ||= "desc";
+  v.hl = (v.hl || []).filter((h) => h.slice(0, 2) === v.pref);
+  await applyView(v);
+  const names = v.hl.map((h) => areasOf(RES[v.indicator]).find((a) => a.code === h)?.name).filter(Boolean);
+  const region = v.pref ? CAT.prefectures[v.pref] : "全国（都道府県ごと）";
+  const desc = `${indName(v.indicator)}／${region}／${SORTS[v.sort]}${names.length ? `／${names.join("・")}を強調` : ""}`;
+  el.className = "m a sys";
+  el.innerHTML = `<p>表示を切り替えました：<strong>${esc(desc)}</strong></p>${note ? `<p>${esc(note)}</p>` : ""}
+  <p class="note">${how === "ai" ? "AIが返した表示の指定（指標・地域・並べ方）だけを使って、サイトが切り替えました。" : "依頼の言葉をサイトが読み取って切り替えました（AIは使っていません）。"}値は「結果を見る」の表とグラフで確かめてください。</p>
+  <div class="src"><button type="button" class="go">結果を見る</button></div>`;
+  el.querySelector(".go").addEventListener("click", scrollToResult);
+  entry.content = `（サイトの操作）表示を「${desc}」に切り替えた。`;
+  return { applied: true };
 }
 $("f").addEventListener("submit", (e) => { e.preventDefault(); ask($("q").value); });
 $("q").addEventListener("keydown", (e) => { if (e.key === "Enter" && (e.ctrlKey || e.metaKey) && !e.isComposing) { e.preventDefault(); ask($("q").value); } });

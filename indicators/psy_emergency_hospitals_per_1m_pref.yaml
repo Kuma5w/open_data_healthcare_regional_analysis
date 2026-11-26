@@ -1,0 +1,85 @@
+id: psy_emergency_hospitals_per_1m_pref
+version: 0.1.0
+status: draft
+name: 都道府県ごとの人口100万人あたり精神科救急医療体制整備事業に参画する精神科病院数
+short_description: 精神科救急医療体制整備事業に参画している、精神病床を有する病院の数を、人口に対して都道府県ごとに比べる
+unit_of_analysis: prefecture
+unit_note: 都道府県（政令指定都市の分を含む）。630調査は都道府県と政令指定都市ごとの集計表で、構想区域や市区町村の値はない。
+
+numerator:
+  description: 精神病床を有する病院のうち、精神科救急医療体制整備事業で、常時対応型精神科救急医療施設・病院群輪番型精神科救急医療施設・身体合併症対応施設・外来対応施設のいずれかの役割を持つ病院の数（医療機関の回答、1病院1つの役割）。役割ごとの数と、参画していない病院の数（救急対応の有無別）も出す
+  dataset: mental_health_630_clinical_r7
+  as_of: 2025年6月30日
+denominator:
+  description: 総人口（住民基本台帳の総計）
+  dataset: population_jumin_r8
+  as_of: 2026年1月1日
+formula: 精神科救急医療体制整備事業に参画する病院数 ÷ 総人口 × 1,000,000
+
+intent: >
+  改正医療法により、地域医療構想に精神医療が位置付けられた（地域医療構想策定ガイドライン
+  Ⅰ-３）。国のワーキンググループで精神医療の地域医療構想のガイドラインが検討されている（2026年度中に結論の予定）。WG資料は、精神科救急医療体制整備事業の参画医療機関数（令和7年度）を都道府県別に示している。夜間・休日の精神科救急の受け皿を、人口に対してどれくらいの病院で支えているかを、都道府県ごとに比べるための指標。
+
+why_this_denominator: >
+  精神科救急は全年齢の住民が対象なので総人口を分母にした。参画する病院は都道府県に数か所〜数十か所なので、人口100万人あたりにした。常時対応型と輪番型では1病院の負担が大きく違うため、役割ごとの数も列に出し、常時対応型＋輪番型の数（full_time_or_rotation）も出した。
+
+interpretation: >
+  値が大きいほど、人口に対して精神科救急に参画する病院が多い。少ない場合は、少数の病院に夜間・休日の救急が集中している可能性がある。輪番の回数や受入の件数は反映しない。面積の広い県では、病院の数だけでなく距離も問題になる。
+
+policy_questions:
+  - 精神科救急に参画する病院が人口に対して少ない都道府県はどこか
+  - 常時対応型の施設がない、または少ない都道府県はどこか
+
+caveats:
+  - 630調査（精神保健福祉資料）医療機関票の集計表。医療機関の数は令和7年6月30日時点。
+  - 公表されているのは都道府県と政令指定都市ごとの集計だけで、医療機関ごとの値や構想区域ごとの値はない。精神医療の地域医療構想をどの単位で考えるか（都道府県か構想区域か）は国のワーキンググループで検討中。
+  - 医療機関の所在地の都道府県で数えている。患者が都道府県をまたいで受診・入院する流出入は反映しない。都道府県の値には政令指定都市の分が含まれる。
+  - 精神病床を有する病院だけを数えている。精神病床を有しない医療機関（クリニックなど）の表は、都道府県ごとの回答率が約20〜100％と違うため使っていない。
+  - 精神科救急医療体制整備事業の役割の定義は、630調査の定義書に書かれていない。医療機関の回答による（1病院1つ）。
+  - 精神病床を有しない医療機関（外来対応施設になりうるクリニックなど）は含まない。
+  - 人口は住民基本台帳（2026年1月1日）の総数。調査の時点（2025年6月30日）と半年ずれる。
+
+alternatives:
+  - id: involuntary_bed_use_pref
+    reason: 措置入院の受け皿の利用状況と合わせて見る
+  - id: psychiatric_beds_per_100k_pref
+    reason: 精神病床の量と合わせて見る
+
+authors:
+  - name: H.I.
+
+script: indicators/psy_emergency_hospitals_per_1m_pref.py
+
+output:
+  area_code: pref_code
+  area_name: pref_name
+  value: participating_per_1m
+  numerator: participating_hospitals
+  denominator: population
+  scale: 1000000
+  digits: 2
+  unit: 病院／人口100万人
+  columns:
+    - {name: pref_code, label: 都道府県コード}
+    - {name: pref_name, label: 都道府県名}
+    - {name: hospitals, label: 精神病床を有する病院数, unit: 病院}
+    - {name: psy_emergency_full_time, label: 常時対応型精神科救急医療施設, unit: 病院}
+    - {name: psy_emergency_rotation, label: 病院群輪番型精神科救急医療施設, unit: 病院}
+    - {name: psy_emergency_comorbidity, label: 身体合併症対応施設, unit: 病院}
+    - {name: psy_emergency_outpatient, label: 外来対応施設, unit: 病院}
+    - {name: psy_emergency_nonparticipant_responding, label: 事業に参加していないが救急対応を行っている, unit: 病院}
+    - {name: psy_emergency_nonparticipant_not_responding, label: 事業に参加しておらず救急対応も行っていない, unit: 病院}
+    - {name: participating_hospitals, label: 参画する病院数（4つの役割の合計）, unit: 病院}
+    - {name: full_time_or_rotation, label: うち常時対応型＋病院群輪番型, unit: 病院}
+    - {name: population, label: 総人口, unit: 人}
+    - {name: participating_per_1m, label: 人口100万人あたり参画する病院数, unit: 病院／100万人}
+
+references:
+  - title: 精神保健福祉資料（630調査）令和7年度 医療機関票 診療実績（国立精神・神経医療研究センター 精神保健研究所）
+    url: https://www.ncnp.go.jp/nimh/seisaku/data/630.html
+  - title: 地域医療構想策定ガイドライン（2026）Ⅰ-３ 精神医療に関する地域医療構想について
+  - title: 精神医療に関する地域医療構想の検討ワーキンググループ 資料（厚生労働省、令和8年11月）
+    url: https://www.mhlw.go.jp/content/10800000/001772794.pdf
+
+created: "2026-11-26"
+updated: "2026-11-26"

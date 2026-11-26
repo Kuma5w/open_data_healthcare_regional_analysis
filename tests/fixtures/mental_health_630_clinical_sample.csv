@@ -1,0 +1,5 @@
+﻿table_no,table_name,level,area_code,area_name,facilities,clinic_child_yes,clinic_addiction_yes,clinic_dementia_yes,clinic_depression_yes,clinic_developmental_yes,clinic_eating_yes,dementia_center_yes,hub_addiction_specialized_yes,hub_addiction_treatment_yes,hub_eating_yes,psy_emergency_full_time,psy_emergency_rotation,psy_emergency_comorbidity,psy_emergency_outpatient,psy_emergency_nonparticipant_responding,psy_emergency_nonparticipant_not_responding
+1,精神病床有_全病院,prefecture,43,熊本県,4,2,1,2,1,1,0,1,1,0,0,1,2,0,0,1,0
+1,精神病床有_全病院,prefecture,01,北海道,2,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0
+1,精神病床有_全病院,national,00,全国,6,2,1,3,1,1,0,1,1,0,0,1,3,0,0,1,0
+1,精神病床有_全病院,designated_city,43100,熊本市,2,1,1,1,1,1,0,1,1,0,0,1,1,0,0,0,0

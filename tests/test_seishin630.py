@@ -102,3 +102,59 @@ def test_psychiatrists_per_100k():
     r, _ = _run("psychiatrists_per_100k_pref")
     assert r.loc["43", "psychiatrists_ft_per_100k"] == 30.0 and r.loc["43", "designated_physicians_ft_per_100k"] == 20.0
     assert r.loc["43", "pref_name"] == "熊本県"
+
+
+# ---- 診療実績（r7_630_shinryou）-------------------------------------------------
+# tests/fixtures/mental_health_630_clinical_sample.csv・mental_health_630_outcome_sample.csv
+#   熊本県：精神病床を有する病院 4。児童・思春期の専門外来 2、認知症 2、依存症 1。精神科救急は常時対応型 1・輪番型 2・不参加 1。
+#           人口（合成）総数 100,000、20歳未満 17,000、65歳以上 30,000
+#           医療保護入院 40人（3か月 50％・6か月 75％・1年 90％）
+#   北海道：病院 2 に対し救急の役割の内訳が 1（内訳の不一致の注記）。医療保護入院 200人
+
+
+def test_clinical_header_labels_match_columns():
+    rows = [("診療実績_専門外来_届出状況1（精神病床有_全病院）（都道府県）",)]
+    width = 81
+    hdr = [[None] * width for _ in range(5)]
+    hdr[0][0], hdr[0][1] = "都道府県\n番号", "都道府県名"
+    for pos, name, word in seishin630.CLINICAL_COLUMNS:
+        parts = word.split(" > ")
+        for k, p in enumerate(parts[:4]):
+            hdr[k][pos] = p
+        if name.endswith(("_yes", "_no")):
+            hdr[len(parts)][pos] = "有り" if name.endswith("_yes") else "無し"
+    rows += [tuple(r) for r in hdr] + [(1, "北海道", *range(79))]
+    df, _ = seishin630.parse_sheet(rows, "診療実績1", seishin630.CLINICAL_COLUMNS, depth=5)
+    assert df.loc[0, "facilities"] == 0 and df.loc[0, "notif_psy_emergency_no"] == 78
+
+
+def _run_clin(card_id):
+    res, notes = runner.execute(card_id, sample=True)[:2]
+    return res.set_index("pref_code"), notes
+
+
+def test_specialty_clinics_use_age_specific_population():
+    r, _ = _run_clin("child_adolescent_clinics_per_1m_pref")
+    assert r.loc["43", "population"] == 17000 and r.loc["43", "clinic_hospitals_per_1m"] == 117.65  # 2 ÷ 17,000 × 100万
+    assert r.loc["43", "clinic_share_pct"] == 50.0
+    r, _ = _run_clin("dementia_clinics_per_1m_pref")
+    assert r.loc["43", "population"] == 30000 and r.loc["43", "clinic_hospitals_per_1m"] == 66.67
+    assert r.loc["43", "dementia_center"] == 1
+    r, notes = _run_clin("addiction_clinics_per_1m_pref")
+    assert r.loc["43", "clinic_hospitals_per_1m"] == 10.0 and r.loc["43", "hub_addiction_specialized"] == 1
+    assert any("0の都道府県 1" in n for n in notes)  # 北海道
+
+
+def test_psy_emergency_participation():
+    r, notes = _run_clin("psy_emergency_hospitals_per_1m_pref")
+    assert r.loc["43", "participating_hospitals"] == 3 and r.loc["43", "participating_per_1m"] == 30.0
+    assert r.loc["43", "full_time_or_rotation"] == 3
+    assert any("内訳の合計が病院数と一致しない都道府県 1" in n for n in notes)
+
+
+def test_medical_protection_discharge():
+    r, notes = _run_clin("medical_protection_discharge_1y_pref")
+    assert r.loc["43", ["discharged_3m", "discharged_6m", "discharged_1y"]].tolist() == [20, 30, 36]
+    assert r.loc["43", "discharge_rate_1y_pct"] == 90.0 and r.loc["43", "support_referral_pct"] == 25.0
+    assert set(r.index) == {"01", "43"}
+    assert any("50人未満の都道府県 1" in n for n in notes)

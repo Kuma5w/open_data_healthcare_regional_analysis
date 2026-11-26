@@ -1,0 +1,154 @@
+table,column,position,label
+main,facilities,3,病院数
+main,new_admissions_june,4,6月の精神病床への新規入院患者の総数(実人数)(※2)
+main,outpatients_june,5,6月の外来受診患者数(※1、※3)(実人数)
+main,outpatients_june_jiritsu,6,6月の外来受診患者数(※1、※3)(実人数) > うち自立支援医療(精神通院医療)の患者数(※3)
+main,outpatients_june_welfare,7,6月の外来受診患者数(※1、※3)(実人数) > うち生活保護の患者数(※3)
+main,outpatients_june_psychotherapy,8,6月の外来受診患者数(※1、※3)(実人数) > うち通院・在宅精神療法を算定した患者数(※3)
+main,outpatients_june_continuing_support,9,6月の外来受診患者数(※1、※3)(実人数) > うち療養生活継続支援加算を算定した患者数(※3)
+main,outpatients_june_first_visit,10,6月の外来受診患者数(※1、※3)(実人数) > うち初診患者数(※3)
+main,home_visits_june,11,6月の実施件数(※1) > 訪問診療(延べ件数)
+main,house_calls_june,12,6月の実施件数(※1) > 往診(延べ件数)
+main,home_nursing_june,13,6月の訪問看護の実施状況(※1)(延べ件数)
+main,liaison_june_other_dept,14,6月のリエゾン診療の実施件数(※1) > 院内他科(延べ件数)
+main,liaison_june_emergency_center,15,6月のリエゾン診療の実施件数(※1) > 救命救急センター(延べ件数)
+main,clinic_child_yes,16,専門外来の設置状況 > 児童・思春期 > 有り
+main,clinic_child_no,17,専門外来の設置状況 > 児童・思春期 > 無し
+main,clinic_addiction_yes,18,専門外来の設置状況 > 依存症 > 有り
+main,clinic_addiction_no,19,専門外来の設置状況 > 依存症 > 無し
+main,clinic_dementia_yes,20,専門外来の設置状況 > 認知症 > 有り
+main,clinic_dementia_no,21,専門外来の設置状況 > 認知症 > 無し
+main,clinic_depression_yes,22,専門外来の設置状況 > うつ病 > 有り
+main,clinic_depression_no,23,専門外来の設置状況 > うつ病 > 無し
+main,clinic_developmental_yes,24,専門外来の設置状況 > 発達障害 > 有り
+main,clinic_developmental_no,25,専門外来の設置状況 > 発達障害 > 無し
+main,clinic_eating_yes,26,専門外来の設置状況 > 摂食障害 > 有り
+main,clinic_eating_no,27,専門外来の設置状況 > 摂食障害 > 無し
+main,emergency_center_yes,28,医療機関の特徴 > 救命救急センターの有無 > 有り
+main,emergency_center_no,29,医療機関の特徴 > 救命救急センターの有無 > 無し
+main,dementia_center_yes,30,医療機関の特徴 > 認知症疾患医療センターの有無 > 有り
+main,dementia_center_no,31,医療機関の特徴 > 認知症疾患医療センターの有無 > 無し
+main,psy_emergency_full_time,32,医療機関の特徴 > 精神科救急医療体制整備事業における役割 > 常時対応型精神科救急医療施設
+main,psy_emergency_rotation,33,医療機関の特徴 > 精神科救急医療体制整備事業における役割 > 病院群輪番型精神科救急医療施設
+main,psy_emergency_comorbidity,34,医療機関の特徴 > 精神科救急医療体制整備事業における役割 > 身体合併症対応施設
+main,psy_emergency_outpatient,35,医療機関の特徴 > 精神科救急医療体制整備事業における役割 > 外来対応施設
+main,psy_emergency_nonparticipant_responding,36,医療機関の特徴 > 精神科救急医療体制整備事業における役割 > 当該事業に参加していないが、救急対応を行っている
+main,psy_emergency_nonparticipant_not_responding,37,医療機関の特徴 > 精神科救急医療体制整備事業における役割 > 当該事業に参加していない上、救急対応を行っていない
+main,hub_addiction_specialized_yes,38,拠点機能の有無 > 依存症専門医療拠点の有無 > 有り
+main,hub_addiction_specialized_no,39,拠点機能の有無 > 依存症専門医療拠点の有無 > 無し
+main,hub_addiction_treatment_yes,40,拠点機能の有無 > 依存症治療拠点の有無 > 有り
+main,hub_addiction_treatment_no,41,拠点機能の有無 > 依存症治療拠点の有無 > 無し
+main,hub_brain_injury_yes,42,拠点機能の有無 > 高次脳機能障害支援拠点の有無 > 有り
+main,hub_brain_injury_no,43,拠点機能の有無 > 高次脳機能障害支援拠点の有無 > 無し
+main,hub_eating_yes,44,拠点機能の有無 > 摂食障害治療支援センターの有無 > 有り
+main,hub_eating_no,45,拠点機能の有無 > 摂食障害治療支援センターの有無 > 無し
+main,hub_epilepsy_yes,46,拠点機能の有無 > てんかん診療拠点の有無 > 有り
+main,hub_epilepsy_no,47,拠点機能の有無 > てんかん診療拠点の有無 > 無し
+main,dpat_yes,48,拠点機能の有無 > DPAT先遣隊登録の有無 > 有り
+main,dpat_no,49,拠点機能の有無 > DPAT先遣隊登録の有無 > 無し
+main,cbt_doctor_claims,50,6月1か月間の算定 > 認知療法・認知行動療法(医師による場合) > 総算定件数
+main,cbt_doctor_facilities_any,51,6月1か月間の算定 > 認知療法・認知行動療法(医師による場合) > 医療機関数 > 算定有り
+main,cbt_doctor_facilities_1_5,52,6月1か月間の算定 > 認知療法・認知行動療法(医師による場合) > 医療機関数 > 算定有り > 1~5件
+main,cbt_doctor_facilities_6_10,53,6月1か月間の算定 > 認知療法・認知行動療法(医師による場合) > 医療機関数 > 算定有り > 6~10件
+main,cbt_doctor_facilities_11_50,54,6月1か月間の算定 > 認知療法・認知行動療法(医師による場合) > 医療機関数 > 算定有り > 11~50件
+main,cbt_doctor_facilities_51_100,55,6月1か月間の算定 > 認知療法・認知行動療法(医師による場合) > 医療機関数 > 算定有り > 51~100件
+main,cbt_doctor_facilities_101plus,56,6月1か月間の算定 > 認知療法・認知行動療法(医師による場合) > 医療機関数 > 算定有り > 101件~
+main,cbt_doctor_facilities_none,57,6月1か月間の算定 > 認知療法・認知行動療法(医師による場合) > 医療機関数 > 算定無し
+main,cbt_joint_claims,58,6月1か月間の算定 > 認知療法・認知行動療法(医師及び看護師が共同して行う場合) > 総算定件数
+main,cbt_joint_facilities_any,59,6月1か月間の算定 > 認知療法・認知行動療法(医師及び看護師が共同して行う場合) > 医療機関数 > 算定有り
+main,cbt_joint_facilities_1_5,60,6月1か月間の算定 > 認知療法・認知行動療法(医師及び看護師が共同して行う場合) > 医療機関数 > 算定有り > 1~5件
+main,cbt_joint_facilities_6_10,61,6月1か月間の算定 > 認知療法・認知行動療法(医師及び看護師が共同して行う場合) > 医療機関数 > 算定有り > 6~10件
+main,cbt_joint_facilities_11_50,62,6月1か月間の算定 > 認知療法・認知行動療法(医師及び看護師が共同して行う場合) > 医療機関数 > 算定有り > 11~50件
+main,cbt_joint_facilities_51_100,63,6月1か月間の算定 > 認知療法・認知行動療法(医師及び看護師が共同して行う場合) > 医療機関数 > 算定有り > 51~100件
+main,cbt_joint_facilities_101plus,64,6月1か月間の算定 > 認知療法・認知行動療法(医師及び看護師が共同して行う場合) > 医療機関数 > 算定有り > 101件~
+main,cbt_joint_facilities_none,65,6月1か月間の算定 > 認知療法・認知行動療法(医師及び看護師が共同して行う場合) > 医療機関数 > 算定無し
+main,cbt_facilities_doctor_only,66,6月1か月間の算定 > 認知療法・認知行動療法の算定医療機関数 > (医師による場合)のみを算定
+main,cbt_facilities_joint_only,67,6月1か月間の算定 > 認知療法・認知行動療法の算定医療機関数 > (医師及び看護師が共同して行う場合)のみを算定
+main,cbt_facilities_both,68,6月1か月間の算定 > 認知療法・認知行動療法の算定医療機関数 > 両方を算定
+main,cbt_facilities_neither,69,6月1か月間の算定 > 認知療法・認知行動療法の算定医療機関数 > いずれも算定していない
+main,comorbidity_claims,70,6月1か月間の算定 > 精神科身体合併症管理加算 > 総算定件数
+main,comorbidity_facilities_any,71,6月1か月間の算定 > 精神科身体合併症管理加算 > 医療機関数 > 算定有り
+main,comorbidity_facilities_1_5,72,6月1か月間の算定 > 精神科身体合併症管理加算 > 医療機関数 > 算定有り > 1~5件
+main,comorbidity_facilities_6_10,73,6月1か月間の算定 > 精神科身体合併症管理加算 > 医療機関数 > 算定有り > 6~10件
+main,comorbidity_facilities_11_50,74,6月1か月間の算定 > 精神科身体合併症管理加算 > 医療機関数 > 算定有り > 11~50件
+main,comorbidity_facilities_51_100,75,6月1か月間の算定 > 精神科身体合併症管理加算 > 医療機関数 > 算定有り > 51~100件
+main,comorbidity_facilities_101plus,76,6月1か月間の算定 > 精神科身体合併症管理加算 > 医療機関数 > 算定有り > 101件~
+main,comorbidity_facilities_none,77,6月1か月間の算定 > 精神科身体合併症管理加算 > 医療機関数 > 算定無し
+main,notif_psy_enhanced_yes,78,届出の有無 > 精神科充実体制加算(小児・周産期・精神科充実加算を含む) > 有り
+main,notif_psy_enhanced_no,79,届出の有無 > 精神科充実体制加算(小児・周産期・精神科充実加算を含む) > 無し
+main,notif_psy_emergency_yes,80,届出の有無 > 精神科救急医療体制加算 > 有り
+main,notif_psy_emergency_no,81,届出の有無 > 精神科救急医療体制加算 > 無し
+outcome_1y,admitted,3,2024年6月に医療保護入院で入院した合計患者数
+outcome_1y,discharge_rate_3m,4,退院率 > 3か月時点での退院率
+outcome_1y,discharge_rate_6m,5,退院率 > 6か月時点での退院率
+outcome_1y,discharge_rate_1y,6,退院率 > 1年時点での退院率
+outcome_1y,planned_stay_lt_2w,7,当初の入院診療計画書もしくは入院届出で推定された入院月数(※2) > 2週間未満
+outcome_1y,planned_stay_2w_1m,8,当初の入院診療計画書もしくは入院届出で推定された入院月数(※2) > 2週間以上1か月未満
+outcome_1y,planned_stay_1m_2m,9,当初の入院診療計画書もしくは入院届出で推定された入院月数(※2) > 1か月以上2か月未満
+outcome_1y,planned_stay_2m_3m,10,当初の入院診療計画書もしくは入院届出で推定された入院月数(※2) > 2か月以上3か月未満
+outcome_1y,planned_stay_3m,11,当初の入院診療計画書もしくは入院届出で推定された入院月数(※2) > 3か月
+outcome_1y,planned_stay_gt_3m,12,当初の入院診療計画書もしくは入院届出で推定された入院月数(※2) > 3か月を超える期間
+outcome_1y,planned_stay_unknown,13,当初の入院診療計画書もしくは入院届出で推定された入院月数(※2) > 不明
+outcome_1y,dx_f0,14,主診断の内訳(※2) > F0 > 症状性を含む器質性精神障害
+outcome_1y,dx_f00,15,主診断の内訳(※2) > F00アルツハイマー病型認知症
+outcome_1y,dx_f01,16,主診断の内訳(※2) > F01血管性認知症
+outcome_1y,dx_f02_09,17,主診断の内訳(※2) > F02-09上記以外の症状性を含む器質性精神障害
+outcome_1y,dx_f1,18,主診断の内訳(※2) > F1 > 精神作用物質による精神及び行動の障害
+outcome_1y,dx_f10,19,主診断の内訳(※2) > F10アルコール使用による精神及び行動の障害
+outcome_1y,dx_stimulants,20,主診断の内訳(※2) > 覚せい剤による精神及び行動の障害
+outcome_1y,dx_other_substances,21,主診断の内訳(※2) > アルコール、覚せい剤を除く精神作用物質使用による精神及び行動の障害
+outcome_1y,dx_f2,22,主診断の内訳(※2) > F2 > 統合失調症、統合失調症型障害及び妄想性障害
+outcome_1y,dx_f3,23,主診断の内訳(※2) > F3 > 気分(感情)障害
+outcome_1y,dx_f30_31,24,主診断の内訳(※2) > F3 > F30‐31躁病エピソード・双極性感情障害(躁うつ病)
+outcome_1y,dx_f32_39,25,主診断の内訳(※2) > F3 > F32-39その他の気分障害
+outcome_1y,dx_f4,26,主診断の内訳(※2) > F4 > 神経症性障害、ストレス関連障害及び身体表現性障害
+outcome_1y,dx_f5,27,主診断の内訳(※2) > F5 > 生理的障害及び身体的要因に関連した行動症候群
+outcome_1y,dx_f6,28,主診断の内訳(※2) > F6 > 成人のパーソナリティ及び行動の障害
+outcome_1y,dx_f7,29,主診断の内訳(※2) > F7 > 精神遅滞〔知的障害〕
+outcome_1y,dx_f8,30,主診断の内訳(※2) > F8 > 心理的発達の障害
+outcome_1y,dx_f9,31,主診断の内訳(※2) > F9 > 小児期及び青年期に通常発症する行動及び情緒の障害及び特定不能の精神障害
+outcome_1y,dx_epilepsy,32,主診断の内訳(※2) > てんかん(F0に属さないものを計上する)
+outcome_1y,dx_other,33,主診断の内訳(※2) > その他
+outcome_1y,dx_unknown,34,主診断の内訳(※2) > 不明
+outcome_1y,consenter_spouse,35,同意者(※2) > 配偶者
+outcome_1y,consenter_parents,36,同意者(※2) > 父母
+outcome_1y,consenter_grandparents,37,同意者(※2) > 祖父母等
+outcome_1y,consenter_children,38,同意者(※2) > 子・孫等
+outcome_1y,consenter_siblings,39,同意者(※2) > 兄弟姉妹
+outcome_1y,consenter_guardian,40,同意者(※2) > 後見人又は補佐人
+outcome_1y,consenter_court_appointed,41,同意者(※2) > 家庭裁判所が選任した扶養義務者
+outcome_1y,consenter_mayor,42,同意者(※2) > 市町村長
+outcome_1y,consenter_other_family,43,同意者(※2) > その他の家族等
+outcome_1y,consenter_unknown,44,同意者(※2) > 不明
+outcome_1y,committee_0,45,退院支援委員会 > 実施回数(※2) > 0回
+outcome_1y,committee_1,46,退院支援委員会 > 実施回数(※2) > 1回
+outcome_1y,committee_2,47,退院支援委員会 > 実施回数(※2) > 2回
+outcome_1y,committee_3,48,退院支援委員会 > 実施回数(※2) > 3回
+outcome_1y,committee_4,49,退院支援委員会 > 実施回数(※2) > 4回
+outcome_1y,committee_5,50,退院支援委員会 > 実施回数(※2) > 5回
+outcome_1y,committee_6,51,退院支援委員会 > 実施回数(※2) > 6回
+outcome_1y,committee_7,52,退院支援委員会 > 実施回数(※2) > 7回
+outcome_1y,committee_8,53,退院支援委員会 > 実施回数(※2) > 8回
+outcome_1y,committee_9,54,退院支援委員会 > 実施回数(※2) > 9回
+outcome_1y,committee_10,55,退院支援委員会 > 実施回数(※2) > 10回
+outcome_1y,committee_11plus,56,退院支援委員会 > 実施回数(※2) > 11回以上
+outcome_1y,committee_unknown,57,退院支援委員会 > 実施回数(※2) > 不明
+outcome_1y,committee_patient_participation,58,退院支援委員会 > 本人参加割合(※1)
+outcome_1y,committee_family_participation,59,退院支援委員会 > 家族参加割合(※1)
+outcome_1y,committee_support_participation,60,退院支援委員会 > 地域援助事業者参加割合(※1)
+outcome_1y,extension_none,61,入院期間の延長 > 延長なし(※2)
+outcome_1y,extension_any,62,入院期間の延長 > 延長あり(※2)
+outcome_1y,extension_1,63,入院期間の延長 > 延長あり(※2) > 1回
+outcome_1y,extension_2,64,入院期間の延長 > 延長あり(※2) > 2回
+outcome_1y,extension_3,65,入院期間の延長 > 延長あり(※2) > 3回
+outcome_1y,extension_4plus,66,入院期間の延長 > 延長あり(※2) > 4回以上
+outcome_1y,extension_unknown,67,入院期間の延長 > 延長回数不明(※2)
+outcome_1y,support_referral_rate,68,地域援助事業者の紹介があった割合
+outcome_1y,status_1y_voluntary,69,1年時点入院継続者の入院形態(※2) > 任意入院
+outcome_1y,status_1y_medical_protection,70,1年時点入院継続者の入院形態(※2) > 医療保護入院
+outcome_1y,status_1y_involuntary,71,1年時点入院継続者の入院形態(※2) > 措置入院
+outcome_1y,status_1y_emergency_involuntary,72,1年時点入院継続者の入院形態(※2) > 緊急措置入院
+outcome_1y,status_1y_urgent,73,1年時点入院継続者の入院形態(※2) > 応急入院
+outcome_1y,status_1y_assessment,74,1年時点入院継続者の入院形態(※2) > 鑑定入院
+outcome_1y,status_1y_medical_observation,75,1年時点入院継続者の入院形態(※2) > 医療観察法による入院
+outcome_1y,status_1y_unknown,76,1年時点入院継続者の入院形態(※2) > 不明

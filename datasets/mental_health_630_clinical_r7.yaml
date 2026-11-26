@@ -1,0 +1,115 @@
+id: mental_health_630_clinical_r7
+title: 精神保健福祉資料（630調査）令和7年度 医療機関票 診療実績・専門外来・届出状況と医療保護入院の1年間転帰（都道府県・政令指定都市別の集計表）
+publisher: 国立精神・神経医療研究センター 精神保健研究所（厚生労働行政推進調査事業費補助金「効率的かつ効果的な精神保健医療福祉システム構築とそのモニタリングのための研究」研究班）
+source_page: https://www.ncnp.go.jp/nimh/seisaku/data/630.html
+license:
+  terms_url: https://www.ncnp.go.jp/nimh/seisaku/data/630.html
+  attribution: 出典：国立精神・神経医療研究センター 精神保健研究所「精神保健福祉資料（630調査）令和7年度 医療機関票 診療実績」を加工して作成
+  notes: 公表ページと定義書（teigisyo(R7_630).pdf）に利用条件と出典の書き方の指定はない（2026-11-26に確認）。
+update_frequency: 年1回（6月30日時点）
+verified: true
+verified_note: 2026-11-26に公表ファイル（r7_630_shinryou.zip、Excel 1冊・13シート）で確認。診療実績1〜11の各表の全列で、都道府県47行の合計が全国の行と一致し、内訳の表（医療法の区分・精神保健福祉法の区分・病院と診療所）の合計も一致。医療保護入院の1年間転帰は、都道府県の患者数の合計が全国（13,861人）と一致。
+parser: seishin630_facility
+parser_options:
+  kind: clinical
+related:
+- mental_health_630_facility_r7
+files:
+- key: shinryou
+  url: https://www.ncnp.go.jp/nimh/seisaku/data/assets/excel/r7/r7_630_shinryou.zip
+  local_name: r7_630_shinryou.zip
+  as_of: 令和7年6月30日
+  format: zip
+columns:
+- {source: 表の番号（診療実績_専門外来_届出状況n）, name: table_no, type: int, description: 1 全病院（精神病床あり）、2 特定機能病院、3 地域医療支援病院、4 一般病院、5 精神病床のみを有する病院、6 国立・都道府県立精神科病院等、7 指定病院、8 非指定病院、9 精神病床なしの全施設、10 精神病床なしの病院、11 精神病床なしのクリニック・診療所}
+- {source: 表の名前, name: table_name, type: str}
+- {source: 表の区分, name: level, type: str, description: prefecture（都道府県。政令市の分を含む）、designated_city（政令指定都市）、national（全国）}
+- {source: 都道府県番号・政令指定都市番号, name: area_code, type: str, description: 都道府県は2桁、政令指定都市は5桁、全国は00}
+- {source: 都道府県名・政令指定都市名, name: area_name, type: str}
+- {source: '3列目 病院数', name: facilities, type: int}
+- {source: '4列目 6月の精神病床への新規入院患者の総数(実人数)(※2)', name: new_admissions_june, type: int}
+- {source: '5列目 6月の外来受診患者数(※1、※3)(実人数)', name: outpatients_june, type: int}
+- {source: '6列目 6月の外来受診患者数(※1、※3)(実人数)　うち自立支援医療(精神通院医療)の患者数(※3)', name: outpatients_june_jiritsu, type: int}
+- {source: '7列目 6月の外来受診患者数(※1、※3)(実人数)　うち生活保護の患者数(※3)', name: outpatients_june_welfare, type: int}
+- {source: '8列目 6月の外来受診患者数(※1、※3)(実人数)　うち通院・在宅精神療法を算定した患者数(※3)', name: outpatients_june_psychotherapy, type: int}
+- {source: '9列目 6月の外来受診患者数(※1、※3)(実人数)　うち療養生活継続支援加算を算定した患者数(※3)', name: outpatients_june_continuing_support, type: int}
+- {source: '10列目 6月の外来受診患者数(※1、※3)(実人数)　うち初診患者数(※3)', name: outpatients_june_first_visit, type: int}
+- {source: '11列目 6月の実施件数(※1)　訪問診療(延べ件数)', name: home_visits_june, type: int}
+- {source: '12列目 6月の実施件数(※1)　往診(延べ件数)', name: house_calls_june, type: int}
+- {source: '13列目 6月の訪問看護の実施状況(※1)(延べ件数)', name: home_nursing_june, type: int}
+- {source: '14列目 6月のリエゾン診療の実施件数(※1)　院内他科(延べ件数)', name: liaison_june_other_dept, type: int}
+- {source: '15列目 6月のリエゾン診療の実施件数(※1)　救命救急センター(延べ件数)', name: liaison_june_emergency_center, type: int}
+- {source: '16列目 専門外来の設置状況　児童・思春期　有り', name: clinic_child_yes, type: int}
+- {source: '17列目 専門外来の設置状況　児童・思春期　無し', name: clinic_child_no, type: int}
+- {source: '18列目 専門外来の設置状況　依存症　有り', name: clinic_addiction_yes, type: int}
+- {source: '19列目 専門外来の設置状況　依存症　無し', name: clinic_addiction_no, type: int}
+- {source: '20列目 専門外来の設置状況　認知症　有り', name: clinic_dementia_yes, type: int}
+- {source: '21列目 専門外来の設置状況　認知症　無し', name: clinic_dementia_no, type: int}
+- {source: '22列目 専門外来の設置状況　うつ病　有り', name: clinic_depression_yes, type: int}
+- {source: '23列目 専門外来の設置状況　うつ病　無し', name: clinic_depression_no, type: int}
+- {source: '24列目 専門外来の設置状況　発達障害　有り', name: clinic_developmental_yes, type: int}
+- {source: '25列目 専門外来の設置状況　発達障害　無し', name: clinic_developmental_no, type: int}
+- {source: '26列目 専門外来の設置状況　摂食障害　有り', name: clinic_eating_yes, type: int}
+- {source: '27列目 専門外来の設置状況　摂食障害　無し', name: clinic_eating_no, type: int}
+- {source: '28列目 医療機関の特徴　救命救急センターの有無　有り', name: emergency_center_yes, type: int}
+- {source: '29列目 医療機関の特徴　救命救急センターの有無　無し', name: emergency_center_no, type: int}
+- {source: '30列目 医療機関の特徴　認知症疾患医療センターの有無　有り', name: dementia_center_yes, type: int}
+- {source: '31列目 医療機関の特徴　認知症疾患医療センターの有無　無し', name: dementia_center_no, type: int}
+- {source: '32列目 医療機関の特徴　精神科救急医療体制整備事業における役割　常時対応型精神科救急医療施設', name: psy_emergency_full_time, type: int}
+- {source: '33列目 医療機関の特徴　精神科救急医療体制整備事業における役割　病院群輪番型精神科救急医療施設', name: psy_emergency_rotation, type: int}
+- {source: '34列目 医療機関の特徴　精神科救急医療体制整備事業における役割　身体合併症対応施設', name: psy_emergency_comorbidity, type: int}
+- {source: '35列目 医療機関の特徴　精神科救急医療体制整備事業における役割　外来対応施設', name: psy_emergency_outpatient, type: int}
+- {source: '36列目 医療機関の特徴　精神科救急医療体制整備事業における役割　当該事業に参加していないが、救急対応を行っている', name: psy_emergency_nonparticipant_responding, type: int}
+- {source: '37列目 医療機関の特徴　精神科救急医療体制整備事業における役割　当該事業に参加していない上、救急対応を行っていない', name: psy_emergency_nonparticipant_not_responding, type: int}
+- {source: '38列目 拠点機能の有無　依存症専門医療拠点の有無　有り', name: hub_addiction_specialized_yes, type: int}
+- {source: '39列目 拠点機能の有無　依存症専門医療拠点の有無　無し', name: hub_addiction_specialized_no, type: int}
+- {source: '40列目 拠点機能の有無　依存症治療拠点の有無　有り', name: hub_addiction_treatment_yes, type: int}
+- {source: '41列目 拠点機能の有無　依存症治療拠点の有無　無し', name: hub_addiction_treatment_no, type: int}
+- {source: '42列目 拠点機能の有無　高次脳機能障害支援拠点の有無　有り', name: hub_brain_injury_yes, type: int}
+- {source: '43列目 拠点機能の有無　高次脳機能障害支援拠点の有無　無し', name: hub_brain_injury_no, type: int}
+- {source: '44列目 拠点機能の有無　摂食障害治療支援センターの有無　有り', name: hub_eating_yes, type: int}
+- {source: '45列目 拠点機能の有無　摂食障害治療支援センターの有無　無し', name: hub_eating_no, type: int}
+- {source: '46列目 拠点機能の有無　てんかん診療拠点の有無　有り', name: hub_epilepsy_yes, type: int}
+- {source: '47列目 拠点機能の有無　てんかん診療拠点の有無　無し', name: hub_epilepsy_no, type: int}
+- {source: '48列目 拠点機能の有無　DPAT先遣隊登録の有無　有り', name: dpat_yes, type: int}
+- {source: '49列目 拠点機能の有無　DPAT先遣隊登録の有無　無し', name: dpat_no, type: int}
+- {source: '50列目 6月1か月間の算定　認知療法・認知行動療法(医師による場合)　総算定件数', name: cbt_doctor_claims, type: int}
+- {source: '51列目 6月1か月間の算定　認知療法・認知行動療法(医師による場合)　医療機関数　算定有り', name: cbt_doctor_facilities_any, type: int}
+- {source: '52列目 6月1か月間の算定　認知療法・認知行動療法(医師による場合)　医療機関数　算定有り　1~5件', name: cbt_doctor_facilities_1_5, type: int}
+- {source: '53列目 6月1か月間の算定　認知療法・認知行動療法(医師による場合)　医療機関数　算定有り　6~10件', name: cbt_doctor_facilities_6_10, type: int}
+- {source: '54列目 6月1か月間の算定　認知療法・認知行動療法(医師による場合)　医療機関数　算定有り　11~50件', name: cbt_doctor_facilities_11_50, type: int}
+- {source: '55列目 6月1か月間の算定　認知療法・認知行動療法(医師による場合)　医療機関数　算定有り　51~100件', name: cbt_doctor_facilities_51_100, type: int}
+- {source: '56列目 6月1か月間の算定　認知療法・認知行動療法(医師による場合)　医療機関数　算定有り　101件~', name: cbt_doctor_facilities_101plus, type: int}
+- {source: '57列目 6月1か月間の算定　認知療法・認知行動療法(医師による場合)　医療機関数　算定無し', name: cbt_doctor_facilities_none, type: int}
+- {source: '58列目 6月1か月間の算定　認知療法・認知行動療法(医師及び看護師が共同して行う場合)　総算定件数', name: cbt_joint_claims, type: int}
+- {source: '59列目 6月1か月間の算定　認知療法・認知行動療法(医師及び看護師が共同して行う場合)　医療機関数　算定有り', name: cbt_joint_facilities_any, type: int}
+- {source: '60列目 6月1か月間の算定　認知療法・認知行動療法(医師及び看護師が共同して行う場合)　医療機関数　算定有り　1~5件', name: cbt_joint_facilities_1_5, type: int}
+- {source: '61列目 6月1か月間の算定　認知療法・認知行動療法(医師及び看護師が共同して行う場合)　医療機関数　算定有り　6~10件', name: cbt_joint_facilities_6_10, type: int}
+- {source: '62列目 6月1か月間の算定　認知療法・認知行動療法(医師及び看護師が共同して行う場合)　医療機関数　算定有り　11~50件', name: cbt_joint_facilities_11_50, type: int}
+- {source: '63列目 6月1か月間の算定　認知療法・認知行動療法(医師及び看護師が共同して行う場合)　医療機関数　算定有り　51~100件', name: cbt_joint_facilities_51_100, type: int}
+- {source: '64列目 6月1か月間の算定　認知療法・認知行動療法(医師及び看護師が共同して行う場合)　医療機関数　算定有り　101件~', name: cbt_joint_facilities_101plus, type: int}
+- {source: '65列目 6月1か月間の算定　認知療法・認知行動療法(医師及び看護師が共同して行う場合)　医療機関数　算定無し', name: cbt_joint_facilities_none, type: int}
+- {source: '66列目 6月1か月間の算定　認知療法・認知行動療法の算定医療機関数　(医師による場合)のみを算定', name: cbt_facilities_doctor_only, type: int}
+- {source: '67列目 6月1か月間の算定　認知療法・認知行動療法の算定医療機関数　(医師及び看護師が共同して行う場合)のみを算定', name: cbt_facilities_joint_only, type: int}
+- {source: '68列目 6月1か月間の算定　認知療法・認知行動療法の算定医療機関数　両方を算定', name: cbt_facilities_both, type: int}
+- {source: '69列目 6月1か月間の算定　認知療法・認知行動療法の算定医療機関数　いずれも算定していない', name: cbt_facilities_neither, type: int}
+- {source: '70列目 6月1か月間の算定　精神科身体合併症管理加算　総算定件数', name: comorbidity_claims, type: int}
+- {source: '71列目 6月1か月間の算定　精神科身体合併症管理加算　医療機関数　算定有り', name: comorbidity_facilities_any, type: int}
+- {source: '72列目 6月1か月間の算定　精神科身体合併症管理加算　医療機関数　算定有り　1~5件', name: comorbidity_facilities_1_5, type: int}
+- {source: '73列目 6月1か月間の算定　精神科身体合併症管理加算　医療機関数　算定有り　6~10件', name: comorbidity_facilities_6_10, type: int}
+- {source: '74列目 6月1か月間の算定　精神科身体合併症管理加算　医療機関数　算定有り　11~50件', name: comorbidity_facilities_11_50, type: int}
+- {source: '75列目 6月1か月間の算定　精神科身体合併症管理加算　医療機関数　算定有り　51~100件', name: comorbidity_facilities_51_100, type: int}
+- {source: '76列目 6月1か月間の算定　精神科身体合併症管理加算　医療機関数　算定有り　101件~', name: comorbidity_facilities_101plus, type: int}
+- {source: '77列目 6月1か月間の算定　精神科身体合併症管理加算　医療機関数　算定無し', name: comorbidity_facilities_none, type: int}
+- {source: '78列目 届出の有無　精神科充実体制加算(小児・周産期・精神科充実加算を含む)　有り', name: notif_psy_enhanced_yes, type: int}
+- {source: '79列目 届出の有無　精神科充実体制加算(小児・周産期・精神科充実加算を含む)　無し', name: notif_psy_enhanced_no, type: int}
+- {source: '80列目 届出の有無　精神科救急医療体制加算　有り', name: notif_psy_emergency_yes, type: int}
+- {source: '81列目 届出の有無　精神科救急医療体制加算　無し', name: notif_psy_emergency_no, type: int}
+- {source: 表の1行目, name: as_of, type: str}
+output: mental_health_630_clinical_r7
+notes:
+- 医療機関ごとの値はない。都道府県（政令指定都市の分を含む）と政令指定都市ごとの集計表で、変換後は1行＝表×地域。表の区分は施設概要（mental_health_630_facility_r7）と同じ。
+- 人数・件数は6月の1か月の値。医療機関の数（専門外来・拠点・届出の有無、精神科救急医療体制整備事業の役割など）は令和7年6月30日時点。
+- 6月の新規入院患者数は、届出病床数を大きく上回る回答を公表元が補正している。6月の外来受診患者数は、過去の調査の回答と大きく乖離する医療機関を集計から除いている（定義書 teigisyo(R7_630).pdf）。
+- 「医療保護入院の1年間転帰（都道府県別）」のシートは data/processed/<output>__outcome_1y.parquet。2024年6月に医療保護入院で入院した患者（全国13,861人）の、3か月・6か月・1年時点の退院率と、内訳の割合（0〜1）。列は codebooks/<id>.csv の table＝outcome_1y の行。
+- 精神病床を有しない医療機関（表9〜11）は回答率が都道府県で約20〜100％と違う（施設概要の回答率の表）。精神科救急医療体制整備事業の役割の列は、表9〜11では空欄。

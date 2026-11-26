@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-26T06:07:11+00:00",
+  "generated_at": "2026-11-26T06:12:48+00:00",
   "repo_url": "https://github.com/Kuma5w/open_data_healthcare_regional_analysis",
   "pages_url": "https://kuma5w.github.io/open_data_healthcare_regional_analysis/",
   "indicators": [
@@ -230,6 +230,441 @@
       "updated": "2026-11-26"
     },
     {
+      "id": "dental_clinics_per_100k",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": "人口10万人あたり歯科診療所数（市区町村別）",
+      "short_description": "口腔管理の担い手になる歯科診療所の数を、人口に対して市区町村ごとに比べる入口の指標",
+      "unit_of_analysis": "municipality",
+      "unit_note": "政令指定都市は市単位に集約する（医療施設調査の表は区単位なので、区を足し上げる）。 区単位で見たいときは --ward-level で出力できる。\n",
+      "numerator": {
+        "description": "歯科診療所数（有床・無床を含む）",
+        "dataset": "medical_facility_survey_r7",
+        "as_of": "2025年10月1日"
+      },
+      "denominator": {
+        "description": "総人口（住民基本台帳の総計＝日本人住民＋外国人住民）",
+        "dataset": "population_jumin_r8",
+        "as_of": "2026年1月1日"
+      },
+      "formula": "歯科診療所数 ÷ 総人口 × 100,000",
+      "intent": "口腔管理の担い手になる歯科診療所が、市区町村ごとにどれくらいあるかを、全国で同じ方法で比べるための入口の指標。 地域医療構想策定ガイドラインは、在宅医療を支える関連資源として訪問歯科診療を担う歯科医療機関の確保状況を把握することを挙げている。 訪問は移動を伴うため、身近な市区町村の単位で偏りを見る目的で作った。\n",
+      "why_this_denominator": "歯科は全年齢の住民が使うため、総人口を分母にした（医療施設調査の公表値も人口10万対）。 在宅療養中の高齢者の口腔管理を考えるなら高齢者人口を分母にする考え方もあるが、歯科診療所の多くは外来が中心なので総人口を基本にした。\n",
+      "interpretation": "値が大きいほど、人口に対して歯科診療所が多い。訪問歯科診療を行っているか、歯科医師の数は分からない。 都市の中心部では、昼間に通勤・通学してくる人が多いため、住民の人口あたりの値が大きく出やすい。\n",
+      "policy_questions": [
+        "歯科診療所が少ない（または無い）市区町村はどこか"
+      ],
+      "caveats": [
+        "訪問歯科診療を行う歯科診療所かどうかは、このデータでは分からない（ガイドラインが挙げる「在宅歯科医療を担う歯科医療機関数」とは別物）。",
+        "病院の歯科（歯科口腔外科など）は含まない。",
+        "歯科診療所のない市区町村がある（全国1,741市区町村のうち90）。",
+        "施設の数であり、規模（病床数）・診療科・医師などの職員数・診療の実績は反映しない。",
+        "施設の所在地で数えている。患者が市区町村や構想区域をまたいで受診する流出入は反映しない。",
+        "人口は住民基本台帳（2026年1月1日）の総数を使っている。医療施設調査の公表値の「人口10万対」（推計人口による）とは一致しない。",
+        "施設数（2025年10月1日）と人口（2026年1月1日）の時点が3か月ずれている。",
+        "医療施設調査（動態調査）は開設・廃止などの届出をもとにしており、届出の時期によって実態とずれることがある。",
+        "人口の少ない町村では、1施設の差で値が大きく変わる。"
+      ],
+      "alternatives": [
+        {
+          "id": "dental_clinics_per_100k_koso",
+          "reason": "構想区域ごとにまとめて見る"
+        },
+        {
+          "id": "general_clinics_per_100k",
+          "reason": "一般診療所の分布と並べて見る"
+        }
+      ],
+      "authors": [
+        {
+          "name": "H.I."
+        }
+      ],
+      "script": "indicators/dental_clinics_per_100k.py",
+      "output": {
+        "area_code": "municipality_code5",
+        "area_name": "municipality_name",
+        "value": "dental_clinics_per_100k",
+        "numerator": "dental_clinics",
+        "denominator": "pop_total",
+        "scale": 100000,
+        "digits": 1,
+        "unit": "施設／人口10万人",
+        "columns": [
+          {
+            "name": "municipality_code5",
+            "label": "市区町村コード"
+          },
+          {
+            "name": "municipality_name",
+            "label": "市区町村名"
+          },
+          {
+            "name": "dental_clinics",
+            "label": "歯科診療所数",
+            "unit": "施設"
+          },
+          {
+            "name": "pop_total",
+            "label": "総人口",
+            "unit": "人"
+          },
+          {
+            "name": "dental_clinics_per_100k",
+            "label": "人口10万人あたり歯科診療所数",
+            "unit": "施設／10万人"
+          }
+        ]
+      },
+      "references": [
+        {
+          "title": "医療施設調査（厚生労働省、e-Stat）",
+          "url": "https://www.e-stat.go.jp/stat-search/files?toukei=00450021"
+        },
+        {
+          "title": "住民基本台帳に基づく人口、人口動態及び世帯数（総務省）",
+          "url": "https://www.soumu.go.jp/main_sosiki/jichi_gyousei/daityo/jinkou_jinkoudoutai-setaisuu.html"
+        },
+        {
+          "title": "地域医療構想策定ガイドライン（厚生労働省医政局）"
+        }
+      ],
+      "created": "2026-11-26",
+      "updated": "2026-11-26"
+    },
+    {
+      "id": "dental_clinics_per_100k_koso",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": "構想区域ごとの人口10万人あたり歯科診療所数",
+      "short_description": "口腔管理の担い手になる歯科診療所の数を、人口に対して構想区域ごとに比べる入口の指標",
+      "unit_of_analysis": "koso_kuiki",
+      "unit_note": "市区町村（政令市は区）の施設数と人口を、reference/koso_kuiki.csv（令和7年度病床機能報告の構想区域マスタ、339区域）で構想区域ごとに合計する。",
+      "numerator": {
+        "description": "歯科診療所数（有床・無床を含む）",
+        "dataset": "medical_facility_survey_r7",
+        "as_of": "2025年10月1日"
+      },
+      "denominator": {
+        "description": "総人口（住民基本台帳の総計＝日本人住民＋外国人住民）",
+        "dataset": "population_jumin_r8",
+        "as_of": "2026年1月1日"
+      },
+      "formula": "歯科診療所数 ÷ 総人口 × 100,000",
+      "intent": "口腔管理の担い手になる歯科診療所が、構想区域ごとにどれくらいあるかを、全国で同じ方法で比べるための入口の指標。 地域医療構想策定ガイドラインは、在宅医療を支える関連資源として、訪問歯科診療を担う歯科医療機関の確保状況を把握することや、医歯薬の連携を挙げている。 その前提として、歯科診療所の分布を見る出発点として作った。\n",
+      "why_this_denominator": "歯科は全年齢の住民が使うため、総人口を分母にした（医療施設調査の公表値も人口10万対）。 在宅療養中の高齢者の口腔管理を考えるなら高齢者人口を分母にする考え方もあるが、歯科診療所の多くは外来が中心なので総人口を基本にした。\n",
+      "interpretation": "値が大きいほど、人口に対して歯科診療所が多い。訪問歯科診療を行っているか、歯科医師の数は分からない。 都市の中心部では、昼間に通勤・通学してくる人が多いため、住民の人口あたりの値が大きく出やすい。\n",
+      "policy_questions": [
+        "人口に対して歯科診療所が少ない構想区域はどこか"
+      ],
+      "caveats": [
+        "訪問歯科診療を行う歯科診療所かどうかは、このデータでは分からない（ガイドラインが挙げる「在宅歯科医療を担う歯科医療機関数」とは別物）。",
+        "病院の歯科（歯科口腔外科など）は含まない。",
+        "施設の数であり、規模（病床数）・診療科・医師などの職員数・診療の実績は反映しない。",
+        "施設の所在地で数えている。患者が市区町村や構想区域をまたいで受診する流出入は反映しない。",
+        "人口は住民基本台帳（2026年1月1日）の総数を使っている。医療施設調査の公表値の「人口10万対」（推計人口による）とは一致しない。",
+        "施設数（2025年10月1日）と人口（2026年1月1日）の時点が3か月ずれている。",
+        "医療施設調査（動態調査）は開設・廃止などの届出をもとにしており、届出の時期によって実態とずれることがある。",
+        "構想区域は、市区町村を reference/koso_kuiki.csv（令和7年度の構想区域マスタ）でまとめたもの。表には二次医療圏（令和7年10月1日時点、330圏）の行もあるが、構想区域とは区切りが違う地域がある。"
+      ],
+      "alternatives": [
+        {
+          "id": "dental_clinics_per_100k",
+          "reason": "同じ指標を市区町村ごとに見る"
+        },
+        {
+          "id": "general_clinics_per_100k_koso",
+          "reason": "一般診療所の分布と並べて見る"
+        }
+      ],
+      "authors": [
+        {
+          "name": "H.I."
+        }
+      ],
+      "script": "indicators/dental_clinics_per_100k_koso.py",
+      "output": {
+        "area_code": "koso_kuiki_code",
+        "area_name": "koso_kuiki_name",
+        "value": "dental_clinics_per_100k",
+        "numerator": "dental_clinics",
+        "denominator": "pop_total",
+        "scale": 100000,
+        "digits": 1,
+        "unit": "施設／人口10万人",
+        "columns": [
+          {
+            "name": "pref_code",
+            "label": "都道府県コード"
+          },
+          {
+            "name": "koso_kuiki_code",
+            "label": "構想区域コード"
+          },
+          {
+            "name": "koso_kuiki_name",
+            "label": "構想区域名"
+          },
+          {
+            "name": "dental_clinics",
+            "label": "歯科診療所数",
+            "unit": "施設"
+          },
+          {
+            "name": "pop_total",
+            "label": "総人口",
+            "unit": "人"
+          },
+          {
+            "name": "dental_clinics_per_100k",
+            "label": "人口10万人あたり歯科診療所数",
+            "unit": "施設／10万人"
+          }
+        ]
+      },
+      "references": [
+        {
+          "title": "医療施設調査（厚生労働省、e-Stat）",
+          "url": "https://www.e-stat.go.jp/stat-search/files?toukei=00450021"
+        },
+        {
+          "title": "住民基本台帳に基づく人口、人口動態及び世帯数（総務省）",
+          "url": "https://www.soumu.go.jp/main_sosiki/jichi_gyousei/daityo/jinkou_jinkoudoutai-setaisuu.html"
+        },
+        {
+          "title": "地域医療構想策定ガイドライン（厚生労働省医政局）"
+        }
+      ],
+      "created": "2026-11-26",
+      "updated": "2026-11-26"
+    },
+    {
+      "id": "general_clinics_per_100k",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": "人口10万人あたり一般診療所数（市区町村別）",
+      "short_description": "外来医療や在宅医療の担い手になる一般診療所の数を、人口に対して市区町村ごとに比べる入口の指標",
+      "unit_of_analysis": "municipality",
+      "unit_note": "政令指定都市は市単位に集約する（医療施設調査の表は区単位なので、区を足し上げる）。 区単位で見たいときは --ward-level で出力できる。\n",
+      "numerator": {
+        "description": "一般診療所数（有床・無床を含む。内訳として有床診療所の数も出す）",
+        "dataset": "medical_facility_survey_r7",
+        "as_of": "2025年10月1日"
+      },
+      "denominator": {
+        "description": "総人口（住民基本台帳の総計＝日本人住民＋外国人住民）",
+        "dataset": "population_jumin_r8",
+        "as_of": "2026年1月1日"
+      },
+      "formula": "一般診療所数 ÷ 総人口 × 100,000",
+      "intent": "外来医療や在宅医療（訪問診療・往診）の担い手になる一般診療所が、市区町村ごとにどれくらいあるかを、全国で同じ方法で比べるための入口の指標。 在宅医療は訪問の移動を伴うため、構想区域よりも身近な市区町村の単位で担い手の偏りを見る必要があると考えて作った。 訪問看護や訪問介護など、介護サービスの指標（市区町村別）と並べて見ることを想定している。\n",
+      "why_this_denominator": "外来は全年齢の住民が使うため、総人口を分母にした（医療施設調査の公表値も人口10万対）。 在宅医療の担い手として見るなら高齢者人口を分母にする考え方もあるが、診療所の多くは外来が中心なので総人口を基本にした。\n",
+      "interpretation": "値が大きいほど、人口に対して一般診療所が多い。診療科、在宅医療（訪問診療・往診）を行っているか、医師の数や年齢は分からない。 都市の中心部では、昼間に通勤・通学してくる人が多いため、住民の人口あたりの値が大きく出やすい。\n",
+      "policy_questions": [
+        "一般診療所が少ない（または無い）市区町村はどこか",
+        "訪問看護・訪問介護の拠点と合わせて、在宅療養を支える資源が少ない市区町村はどこか"
+      ],
+      "caveats": [
+        "在宅医療を行う診療所かどうか（在宅療養支援診療所の届出など）は、このデータでは分からない。",
+        "美容医療など自由診療が中心の診療所や、企業・学校の中の診療所も含む。",
+        "有床診療所の数は内訳の列に再掲した。",
+        "施設の数であり、規模（病床数）・診療科・医師などの職員数・診療の実績は反映しない。",
+        "施設の所在地で数えている。患者が市区町村や構想区域をまたいで受診する流出入は反映しない。",
+        "人口は住民基本台帳（2026年1月1日）の総数を使っている。医療施設調査の公表値の「人口10万対」（推計人口による）とは一致しない。",
+        "施設数（2025年10月1日）と人口（2026年1月1日）の時点が3か月ずれている。",
+        "医療施設調査（動態調査）は開設・廃止などの届出をもとにしており、届出の時期によって実態とずれることがある。",
+        "人口の少ない町村では、1施設の差で値が大きく変わる。"
+      ],
+      "alternatives": [
+        {
+          "id": "general_clinics_per_100k_koso",
+          "reason": "構想区域ごとにまとめて見る"
+        },
+        {
+          "id": "visiting_nursing_offices_per_65plus",
+          "reason": "在宅医療を支える訪問看護の拠点と並べて見る"
+        }
+      ],
+      "authors": [
+        {
+          "name": "H.I."
+        }
+      ],
+      "script": "indicators/general_clinics_per_100k.py",
+      "output": {
+        "area_code": "municipality_code5",
+        "area_name": "municipality_name",
+        "value": "general_clinics_per_100k",
+        "numerator": "general_clinics",
+        "denominator": "pop_total",
+        "scale": 100000,
+        "digits": 1,
+        "unit": "施設／人口10万人",
+        "columns": [
+          {
+            "name": "municipality_code5",
+            "label": "市区町村コード"
+          },
+          {
+            "name": "municipality_name",
+            "label": "市区町村名"
+          },
+          {
+            "name": "general_clinics",
+            "label": "一般診療所数",
+            "unit": "施設"
+          },
+          {
+            "name": "clinics_with_beds",
+            "label": "うち有床診療所",
+            "unit": "施設"
+          },
+          {
+            "name": "pop_total",
+            "label": "総人口",
+            "unit": "人"
+          },
+          {
+            "name": "general_clinics_per_100k",
+            "label": "人口10万人あたり一般診療所数",
+            "unit": "施設／10万人"
+          }
+        ]
+      },
+      "references": [
+        {
+          "title": "医療施設調査（厚生労働省、e-Stat）",
+          "url": "https://www.e-stat.go.jp/stat-search/files?toukei=00450021"
+        },
+        {
+          "title": "住民基本台帳に基づく人口、人口動態及び世帯数（総務省）",
+          "url": "https://www.soumu.go.jp/main_sosiki/jichi_gyousei/daityo/jinkou_jinkoudoutai-setaisuu.html"
+        },
+        {
+          "title": "地域医療構想策定ガイドライン（厚生労働省医政局）"
+        }
+      ],
+      "created": "2026-11-26",
+      "updated": "2026-11-26"
+    },
+    {
+      "id": "general_clinics_per_100k_koso",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": "構想区域ごとの人口10万人あたり一般診療所数",
+      "short_description": "外来医療や在宅医療の担い手になる一般診療所の数を、人口に対して構想区域ごとに比べる入口の指標",
+      "unit_of_analysis": "koso_kuiki",
+      "unit_note": "市区町村（政令市は区）の施設数と人口を、reference/koso_kuiki.csv（令和7年度病床機能報告の構想区域マスタ、339区域）で構想区域ごとに合計する。",
+      "numerator": {
+        "description": "一般診療所数（有床・無床を含む。内訳として有床診療所の数も出す）",
+        "dataset": "medical_facility_survey_r7",
+        "as_of": "2025年10月1日"
+      },
+      "denominator": {
+        "description": "総人口（住民基本台帳の総計＝日本人住民＋外国人住民）",
+        "dataset": "population_jumin_r8",
+        "as_of": "2026年1月1日"
+      },
+      "formula": "一般診療所数 ÷ 総人口 × 100,000",
+      "intent": "外来医療や在宅医療（訪問診療・往診）の担い手になる一般診療所が、構想区域ごとにどれくらいあるかを、全国で同じ方法で比べるための入口の指標。 地域医療構想策定ガイドラインは、在宅療養中の患者の急変時には在宅医療を担う診療所が中心となって初期対応を行うことを基本とし、 これまで在宅医療を担ってきた診療所で引き続き担えるかを検討するよう求めている。その前提として、診療所の分布を見る出発点として作った。\n",
+      "why_this_denominator": "外来は全年齢の住民が使うため、総人口を分母にした（医療施設調査の公表値も人口10万対）。 在宅医療の担い手として見るなら高齢者人口を分母にする考え方もあるが、診療所の多くは外来が中心なので総人口を基本にした。\n",
+      "interpretation": "値が大きいほど、人口に対して一般診療所が多い。診療科、在宅医療（訪問診療・往診）を行っているか、医師の数や年齢は分からない。 都市の中心部では、昼間に通勤・通学してくる人が多いため、住民の人口あたりの値が大きく出やすい。\n",
+      "policy_questions": [
+        "人口に対して一般診療所が少ない構想区域はどこか",
+        "在宅医療の担い手の確保を、診療所以外（在宅医療等連携機能を担う病院など）に頼る必要がある区域はどこか"
+      ],
+      "caveats": [
+        "在宅医療を行う診療所かどうか（在宅療養支援診療所の届出など）は、このデータでは分からない。",
+        "美容医療など自由診療が中心の診療所や、企業・学校の中の診療所も含む。",
+        "有床診療所の数は内訳の列に再掲した。",
+        "施設の数であり、規模（病床数）・診療科・医師などの職員数・診療の実績は反映しない。",
+        "施設の所在地で数えている。患者が市区町村や構想区域をまたいで受診する流出入は反映しない。",
+        "人口は住民基本台帳（2026年1月1日）の総数を使っている。医療施設調査の公表値の「人口10万対」（推計人口による）とは一致しない。",
+        "施設数（2025年10月1日）と人口（2026年1月1日）の時点が3か月ずれている。",
+        "医療施設調査（動態調査）は開設・廃止などの届出をもとにしており、届出の時期によって実態とずれることがある。",
+        "構想区域は、市区町村を reference/koso_kuiki.csv（令和7年度の構想区域マスタ）でまとめたもの。表には二次医療圏（令和7年10月1日時点、330圏）の行もあるが、構想区域とは区切りが違う地域がある。"
+      ],
+      "alternatives": [
+        {
+          "id": "general_clinics_per_100k",
+          "reason": "同じ指標を市区町村ごとに見る"
+        },
+        {
+          "id": "hospitals_per_100k_koso",
+          "reason": "病院の分布と並べて見る"
+        },
+        {
+          "id": "dental_clinics_per_100k_koso",
+          "reason": "歯科診療所の分布と並べて見る"
+        }
+      ],
+      "authors": [
+        {
+          "name": "H.I."
+        }
+      ],
+      "script": "indicators/general_clinics_per_100k_koso.py",
+      "output": {
+        "area_code": "koso_kuiki_code",
+        "area_name": "koso_kuiki_name",
+        "value": "general_clinics_per_100k",
+        "numerator": "general_clinics",
+        "denominator": "pop_total",
+        "scale": 100000,
+        "digits": 1,
+        "unit": "施設／人口10万人",
+        "columns": [
+          {
+            "name": "pref_code",
+            "label": "都道府県コード"
+          },
+          {
+            "name": "koso_kuiki_code",
+            "label": "構想区域コード"
+          },
+          {
+            "name": "koso_kuiki_name",
+            "label": "構想区域名"
+          },
+          {
+            "name": "general_clinics",
+            "label": "一般診療所数",
+            "unit": "施設"
+          },
+          {
+            "name": "clinics_with_beds",
+            "label": "うち有床診療所",
+            "unit": "施設"
+          },
+          {
+            "name": "pop_total",
+            "label": "総人口",
+            "unit": "人"
+          },
+          {
+            "name": "general_clinics_per_100k",
+            "label": "人口10万人あたり一般診療所数",
+            "unit": "施設／10万人"
+          }
+        ]
+      },
+      "references": [
+        {
+          "title": "医療施設調査（厚生労働省、e-Stat）",
+          "url": "https://www.e-stat.go.jp/stat-search/files?toukei=00450021"
+        },
+        {
+          "title": "住民基本台帳に基づく人口、人口動態及び世帯数（総務省）",
+          "url": "https://www.soumu.go.jp/main_sosiki/jichi_gyousei/daityo/jinkou_jinkoudoutai-setaisuu.html"
+        },
+        {
+          "title": "地域医療構想策定ガイドライン（厚生労働省医政局）"
+        }
+      ],
+      "created": "2026-11-26",
+      "updated": "2026-11-26"
+    },
+    {
       "id": "homecare_offices_per_65plus",
       "version": "0.2.1",
       "status": "draft",
@@ -331,6 +766,244 @@
         {
           "title": "住民基本台帳に基づく人口、人口動態及び世帯数（総務省）",
           "url": "https://www.soumu.go.jp/main_sosiki/jichi_gyousei/daityo/jinkou_jinkoudoutai-setaisuu.html"
+        }
+      ],
+      "created": "2026-11-26",
+      "updated": "2026-11-26"
+    },
+    {
+      "id": "hospitals_per_100k",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": "人口10万人あたり病院数（市区町村別）",
+      "short_description": "病院の数を、人口に対して市区町村ごとに同じ方法で比べる入口の指標",
+      "unit_of_analysis": "municipality",
+      "unit_note": "政令指定都市は市単位に集約する（医療施設調査の表は区単位なので、区を足し上げる）。 区単位で見たいときは --ward-level で出力できる。\n",
+      "numerator": {
+        "description": "病院数（精神科病院を含む。内訳として一般病院・精神科病院・救急告示病院（再掲）も出す）",
+        "dataset": "medical_facility_survey_r7",
+        "as_of": "2025年10月1日"
+      },
+      "denominator": {
+        "description": "総人口（住民基本台帳の総計＝日本人住民＋外国人住民）",
+        "dataset": "population_jumin_r8",
+        "as_of": "2026年1月1日"
+      },
+      "formula": "病院数 ÷ 総人口 × 100,000",
+      "intent": "市区町村ごとに、人口に対して病院がどれくらいあるかを全国で同じ方法で比べるための入口の指標。 構想区域版（hospitals_per_100k_koso）では区域の中の偏りが見えないため、地域医療構想策定ガイドラインが大都市型の地域で課題に挙げる「区域内の医療資源の偏在」を確かめる目的で、 市区町村の単位でも作った。介護サービスの指標（市区町村別）と同じ単位で並べられる。\n",
+      "why_this_denominator": "病院は全年齢の住民が使うため、総人口を分母にした（医療施設調査の公表値も人口10万対）。 入院の多くは高齢者なので75歳以上人口も考えられるが、精神科病院や小児・周産期の医療も含むため、総人口を基本にした。\n",
+      "interpretation": "値が大きいほど、人口に対して病院が多い。病院の規模（病床数）や機能は反映しない。 病院が多いことは、選べる医療機関が多いことと、医療資源が小規模に分散していることの、両方の意味がありうる。病床数や医療機能の指標と合わせて見る。\n",
+      "policy_questions": [
+        "構想区域の中で、病院のない市区町村や、病院が集中している市区町村はどこか"
+      ],
+      "caveats": [
+        "精神科病院（精神病床のみの病院）を含む。内訳の列で一般病院だけの数を確かめられる。救急告示病院は再掲。",
+        "病院のない市区町村が多い（全国1,741市区町村のうち453）。住民は近くの市区町村の病院を使うため、値が0でも病院に行けないとは限らない。",
+        "施設の数であり、規模（病床数）・診療科・医師などの職員数・診療の実績は反映しない。",
+        "施設の所在地で数えている。患者が市区町村や構想区域をまたいで受診する流出入は反映しない。",
+        "人口は住民基本台帳（2026年1月1日）の総数を使っている。医療施設調査の公表値の「人口10万対」（推計人口による）とは一致しない。",
+        "施設数（2025年10月1日）と人口（2026年1月1日）の時点が3か月ずれている。",
+        "医療施設調査（動態調査）は開設・廃止などの届出をもとにしており、届出の時期によって実態とずれることがある。",
+        "人口の少ない町村では、1施設の差で値が大きく変わる。"
+      ],
+      "alternatives": [
+        {
+          "id": "hospitals_per_100k_koso",
+          "reason": "構想区域ごとにまとめて見る（流出入の影響が小さくなる）"
+        }
+      ],
+      "authors": [
+        {
+          "name": "H.I."
+        }
+      ],
+      "script": "indicators/hospitals_per_100k.py",
+      "output": {
+        "area_code": "municipality_code5",
+        "area_name": "municipality_name",
+        "value": "hospitals_per_100k",
+        "numerator": "hospitals",
+        "denominator": "pop_total",
+        "scale": 100000,
+        "digits": 2,
+        "unit": "施設／人口10万人",
+        "columns": [
+          {
+            "name": "municipality_code5",
+            "label": "市区町村コード"
+          },
+          {
+            "name": "municipality_name",
+            "label": "市区町村名"
+          },
+          {
+            "name": "hospitals",
+            "label": "病院数",
+            "unit": "施設"
+          },
+          {
+            "name": "general_hospitals",
+            "label": "うち一般病院",
+            "unit": "施設"
+          },
+          {
+            "name": "psychiatric_hospitals",
+            "label": "うち精神科病院",
+            "unit": "施設"
+          },
+          {
+            "name": "emergency_hospitals",
+            "label": "うち救急告示病院（再掲）",
+            "unit": "施設"
+          },
+          {
+            "name": "pop_total",
+            "label": "総人口",
+            "unit": "人"
+          },
+          {
+            "name": "hospitals_per_100k",
+            "label": "人口10万人あたり病院数",
+            "unit": "施設／10万人"
+          }
+        ]
+      },
+      "references": [
+        {
+          "title": "医療施設調査（厚生労働省、e-Stat）",
+          "url": "https://www.e-stat.go.jp/stat-search/files?toukei=00450021"
+        },
+        {
+          "title": "住民基本台帳に基づく人口、人口動態及び世帯数（総務省）",
+          "url": "https://www.soumu.go.jp/main_sosiki/jichi_gyousei/daityo/jinkou_jinkoudoutai-setaisuu.html"
+        },
+        {
+          "title": "地域医療構想策定ガイドライン（厚生労働省医政局）"
+        }
+      ],
+      "created": "2026-11-26",
+      "updated": "2026-11-26"
+    },
+    {
+      "id": "hospitals_per_100k_koso",
+      "version": "0.1.0",
+      "status": "draft",
+      "name": "構想区域ごとの人口10万人あたり病院数",
+      "short_description": "病院の数を、人口に対して構想区域ごとに同じ方法で比べる入口の指標",
+      "unit_of_analysis": "koso_kuiki",
+      "unit_note": "市区町村（政令市は区）の施設数と人口を、reference/koso_kuiki.csv（令和7年度病床機能報告の構想区域マスタ、339区域）で構想区域ごとに合計する。",
+      "numerator": {
+        "description": "病院数（精神科病院を含む。内訳として一般病院・精神科病院・救急告示病院（再掲）も出す）",
+        "dataset": "medical_facility_survey_r7",
+        "as_of": "2025年10月1日"
+      },
+      "denominator": {
+        "description": "総人口（住民基本台帳の総計＝日本人住民＋外国人住民）",
+        "dataset": "population_jumin_r8",
+        "as_of": "2026年1月1日"
+      },
+      "formula": "病院数 ÷ 総人口 × 100,000",
+      "intent": "地域医療構想の協議の単位である構想区域ごとに、人口に対して病院がどれくらいあるかを、全国で同じ方法で比べるための入口の指標。 地域医療構想策定ガイドラインは、大都市型の地域で急性期医療が多数の医療機関に分散していることや、地方都市型の地域で手術や救急搬送の受入が小規模に分散していることを課題に挙げ、 医療機関の連携・再編・集約化を議論するよう求めている。病院の多さ（分散の程度）を見る出発点として作った。病床数や医療機能ではなく、施設の数を見ている。\n",
+      "why_this_denominator": "病院は全年齢の住民が使うため、総人口を分母にした（医療施設調査の公表値も人口10万対）。 入院の多くは高齢者なので75歳以上人口も考えられるが、精神科病院や小児・周産期の医療も含むため、総人口を基本にした。\n",
+      "interpretation": "値が大きいほど、人口に対して病院が多い。病院の規模（病床数）や機能は反映しない。 病院が多いことは、選べる医療機関が多いことと、医療資源が小規模に分散していることの、両方の意味がありうる。病床数や医療機能の指標と合わせて見る。\n",
+      "policy_questions": [
+        "人口に対して病院が多い（医療資源が分散している可能性がある）構想区域はどこか",
+        "病院が少なく、近接する構想区域との連携を前提にする必要がある区域はどこか"
+      ],
+      "caveats": [
+        "精神科病院（精神病床のみの病院）を含む。内訳の列で一般病院だけの数を確かめられる。救急告示病院は再掲。",
+        "施設の数であり、規模（病床数）・診療科・医師などの職員数・診療の実績は反映しない。",
+        "施設の所在地で数えている。患者が市区町村や構想区域をまたいで受診する流出入は反映しない。",
+        "人口は住民基本台帳（2026年1月1日）の総数を使っている。医療施設調査の公表値の「人口10万対」（推計人口による）とは一致しない。",
+        "施設数（2025年10月1日）と人口（2026年1月1日）の時点が3か月ずれている。",
+        "医療施設調査（動態調査）は開設・廃止などの届出をもとにしており、届出の時期によって実態とずれることがある。",
+        "構想区域は、市区町村を reference/koso_kuiki.csv（令和7年度の構想区域マスタ）でまとめたもの。表には二次医療圏（令和7年10月1日時点、330圏）の行もあるが、構想区域とは区切りが違う地域がある。"
+      ],
+      "alternatives": [
+        {
+          "id": "hospitals_per_100k",
+          "reason": "同じ指標を市区町村ごとに見る"
+        },
+        {
+          "id": "recovery_bed_share_koso",
+          "reason": "病床の機能の構成と合わせて見る"
+        },
+        {
+          "id": "general_clinics_per_100k_koso",
+          "reason": "一般診療所の分布と並べて見る"
+        }
+      ],
+      "authors": [
+        {
+          "name": "H.I."
+        }
+      ],
+      "script": "indicators/hospitals_per_100k_koso.py",
+      "output": {
+        "area_code": "koso_kuiki_code",
+        "area_name": "koso_kuiki_name",
+        "value": "hospitals_per_100k",
+        "numerator": "hospitals",
+        "denominator": "pop_total",
+        "scale": 100000,
+        "digits": 2,
+        "unit": "施設／人口10万人",
+        "columns": [
+          {
+            "name": "pref_code",
+            "label": "都道府県コード"
+          },
+          {
+            "name": "koso_kuiki_code",
+            "label": "構想区域コード"
+          },
+          {
+            "name": "koso_kuiki_name",
+            "label": "構想区域名"
+          },
+          {
+            "name": "hospitals",
+            "label": "病院数",
+            "unit": "施設"
+          },
+          {
+            "name": "general_hospitals",
+            "label": "うち一般病院",
+            "unit": "施設"
+          },
+          {
+            "name": "psychiatric_hospitals",
+            "label": "うち精神科病院",
+            "unit": "施設"
+          },
+          {
+            "name": "emergency_hospitals",
+            "label": "うち救急告示病院（再掲）",
+            "unit": "施設"
+          },
+          {
+            "name": "pop_total",
+            "label": "総人口",
+            "unit": "人"
+          },
+          {
+            "name": "hospitals_per_100k",
+            "label": "人口10万人あたり病院数",
+            "unit": "施設／10万人"
+          }
+        ]
+      },
+      "references": [
+        {
+          "title": "医療施設調査（厚生労働省、e-Stat）",
+          "url": "https://www.e-stat.go.jp/stat-search/files?toukei=00450021"
+        },
+        {
+          "title": "住民基本台帳に基づく人口、人口動態及び世帯数（総務省）",
+          "url": "https://www.soumu.go.jp/main_sosiki/jichi_gyousei/daityo/jinkou_jinkoudoutai-setaisuu.html"
+        },
+        {
+          "title": "地域医療構想策定ガイドライン（厚生労働省医政局）"
         }
       ],
       "created": "2026-11-26",
@@ -1863,6 +2536,141 @@
       "codebook": null
     },
     {
+      "id": "medical_facility_survey_r7",
+      "title": "医療施設調査 令和7年 二次医療圏・市区町村編 第1表・第2表（市区町村別の病院・診療所の施設数と病床数）",
+      "publisher": "厚生労働省（医療施設調査。e-Stat で公表）",
+      "source_page": "https://www.e-stat.go.jp/stat-search/files?toukei=00450021",
+      "attribution": "出典：厚生労働省「医療施設調査」（令和7年10月1日現在）を加工して作成",
+      "update_frequency": "年1回（10月1日現在）",
+      "verified": true,
+      "columns": [
+        {
+          "name": "municipality_code",
+          "type": "str",
+          "description": "5桁（検査数字なし）。政令市は区のコード（市の合計行はない）"
+        },
+        {
+          "name": "municipality_name",
+          "type": "str",
+          "description": "政令市の区は区名だけ（例「中央区」）"
+        },
+        {
+          "name": "pref_code",
+          "type": "str"
+        },
+        {
+          "name": "secondary_area_code",
+          "type": "str",
+          "description": "表の中で市区町村が属する二次医療圏（4桁、令和7年10月1日時点で330圏）"
+        },
+        {
+          "name": "secondary_area_name",
+          "type": "str"
+        },
+        {
+          "name": "hospitals",
+          "type": "int",
+          "description": "病院数"
+        },
+        {
+          "name": "psychiatric_hospitals",
+          "type": "int"
+        },
+        {
+          "name": "general_hospitals",
+          "type": "int"
+        },
+        {
+          "name": "general_hospitals_with_ltc_beds",
+          "type": "int"
+        },
+        {
+          "name": "regional_support_hospitals",
+          "type": "int"
+        },
+        {
+          "name": "emergency_hospitals",
+          "type": "int"
+        },
+        {
+          "name": "hospital_beds",
+          "type": "int"
+        },
+        {
+          "name": "beds_psychiatric",
+          "type": "int"
+        },
+        {
+          "name": "beds_infectious",
+          "type": "int"
+        },
+        {
+          "name": "beds_tuberculosis",
+          "type": "int"
+        },
+        {
+          "name": "beds_ltc",
+          "type": "int"
+        },
+        {
+          "name": "beds_general",
+          "type": "int"
+        },
+        {
+          "name": "beds_regional_support_hospitals",
+          "type": "int"
+        },
+        {
+          "name": "general_clinics",
+          "type": "int"
+        },
+        {
+          "name": "clinics_with_beds",
+          "type": "int"
+        },
+        {
+          "name": "clinics_with_ltc_beds",
+          "type": "int"
+        },
+        {
+          "name": "clinics_without_beds",
+          "type": "int"
+        },
+        {
+          "name": "dental_clinics",
+          "type": "int"
+        },
+        {
+          "name": "dental_clinics_with_beds",
+          "type": "int"
+        },
+        {
+          "name": "dental_clinics_without_beds",
+          "type": "int"
+        },
+        {
+          "name": "clinic_beds",
+          "type": "int"
+        },
+        {
+          "name": "clinic_ltc_beds",
+          "type": "int"
+        },
+        {
+          "name": "as_of",
+          "type": "str"
+        }
+      ],
+      "notes": [
+        "e-Stat の「医療施設調査」から、令和7年（動態調査）の二次医療圏・市区町村編 第1表（病院数・病床数）と第2表（一般診療所数・歯科診療所数・病床数）を CSV でダウンロードして使う（ファイル名 n0001.csv・n0002.csv）。",
+        "表の記号「-」は計数がない（0）。",
+        "表には都道府県・二次医療圏・市区町村の3段の行がある。変換後は市区町村の行だけを残し、二次医療圏は列にした。政令市は区の行だけで、市の合計行はない。",
+        "医師数・歯科医師数・薬剤師数はこの表にない（医師・歯科医師・薬剤師統計）。病院の従事者数は3年ごとの静態調査にある。"
+      ],
+      "related": [],
+      "codebook": null
+    },
+    {
       "id": "population_jumin_r7",
       "title": "住民基本台帳 年齢階級別人口（市区町村別・総計）令和7年1月1日",
       "publisher": "総務省",
@@ -1927,12 +2735,60 @@
       "rows": 1741,
       "stale": []
     },
+    "dental_clinics_per_100k": {
+      "path": "results/dental_clinics_per_100k.json",
+      "csv": "results/dental_clinics_per_100k.csv",
+      "generated_at": "2026-11-26T06:12:22+00:00",
+      "card_version": "0.1.0",
+      "rows": 1741,
+      "stale": []
+    },
+    "dental_clinics_per_100k_koso": {
+      "path": "results/dental_clinics_per_100k_koso.json",
+      "csv": "results/dental_clinics_per_100k_koso.csv",
+      "generated_at": "2026-11-26T06:12:22+00:00",
+      "card_version": "0.1.0",
+      "rows": 339,
+      "stale": []
+    },
+    "general_clinics_per_100k": {
+      "path": "results/general_clinics_per_100k.json",
+      "csv": "results/general_clinics_per_100k.csv",
+      "generated_at": "2026-11-26T06:12:22+00:00",
+      "card_version": "0.1.0",
+      "rows": 1741,
+      "stale": []
+    },
+    "general_clinics_per_100k_koso": {
+      "path": "results/general_clinics_per_100k_koso.json",
+      "csv": "results/general_clinics_per_100k_koso.csv",
+      "generated_at": "2026-11-26T06:12:22+00:00",
+      "card_version": "0.1.0",
+      "rows": 339,
+      "stale": []
+    },
     "homecare_offices_per_65plus": {
       "path": "results/homecare_offices_per_65plus.json",
       "csv": "results/homecare_offices_per_65plus.csv",
       "generated_at": "2026-11-26T06:06:42+00:00",
       "card_version": "0.2.1",
       "rows": 1741,
+      "stale": []
+    },
+    "hospitals_per_100k": {
+      "path": "results/hospitals_per_100k.json",
+      "csv": "results/hospitals_per_100k.csv",
+      "generated_at": "2026-11-26T06:12:22+00:00",
+      "card_version": "0.1.0",
+      "rows": 1741,
+      "stale": []
+    },
+    "hospitals_per_100k_koso": {
+      "path": "results/hospitals_per_100k_koso.json",
+      "csv": "results/hospitals_per_100k_koso.csv",
+      "generated_at": "2026-11-26T06:12:22+00:00",
+      "card_version": "0.1.0",
+      "rows": 339,
       "stale": []
     },
     "recovery_bed_share_koso": {

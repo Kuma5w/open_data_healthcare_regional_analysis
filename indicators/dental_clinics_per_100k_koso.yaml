@@ -1,0 +1,81 @@
+id: dental_clinics_per_100k_koso
+version: 0.1.0
+status: draft
+name: 構想区域ごとの人口10万人あたり歯科診療所数
+short_description: 口腔管理の担い手になる歯科診療所の数を、人口に対して構想区域ごとに比べる入口の指標
+unit_of_analysis: koso_kuiki
+unit_note: 市区町村（政令市は区）の施設数と人口を、reference/koso_kuiki.csv（令和7年度病床機能報告の構想区域マスタ、339区域）で構想区域ごとに合計する。
+
+numerator:
+  description: 歯科診療所数（有床・無床を含む）
+  dataset: medical_facility_survey_r7
+  as_of: 2025年10月1日
+denominator:
+  description: 総人口（住民基本台帳の総計＝日本人住民＋外国人住民）
+  dataset: population_jumin_r8
+  as_of: 2026年1月1日
+formula: 歯科診療所数 ÷ 総人口 × 100,000
+
+intent: >
+  口腔管理の担い手になる歯科診療所が、構想区域ごとにどれくらいあるかを、全国で同じ方法で比べるための入口の指標。
+  地域医療構想策定ガイドラインは、在宅医療を支える関連資源として、訪問歯科診療を担う歯科医療機関の確保状況を把握することや、医歯薬の連携を挙げている。
+  その前提として、歯科診療所の分布を見る出発点として作った。
+
+why_this_denominator: >
+  歯科は全年齢の住民が使うため、総人口を分母にした（医療施設調査の公表値も人口10万対）。
+  在宅療養中の高齢者の口腔管理を考えるなら高齢者人口を分母にする考え方もあるが、歯科診療所の多くは外来が中心なので総人口を基本にした。
+
+interpretation: >
+  値が大きいほど、人口に対して歯科診療所が多い。訪問歯科診療を行っているか、歯科医師の数は分からない。
+  都市の中心部では、昼間に通勤・通学してくる人が多いため、住民の人口あたりの値が大きく出やすい。
+
+policy_questions:
+  - 人口に対して歯科診療所が少ない構想区域はどこか
+
+caveats:
+  - 訪問歯科診療を行う歯科診療所かどうかは、このデータでは分からない（ガイドラインが挙げる「在宅歯科医療を担う歯科医療機関数」とは別物）。
+  - 病院の歯科（歯科口腔外科など）は含まない。
+  - 施設の数であり、規模（病床数）・診療科・医師などの職員数・診療の実績は反映しない。
+  - 施設の所在地で数えている。患者が市区町村や構想区域をまたいで受診する流出入は反映しない。
+  - 人口は住民基本台帳（2026年1月1日）の総数を使っている。医療施設調査の公表値の「人口10万対」（推計人口による）とは一致しない。
+  - 施設数（2025年10月1日）と人口（2026年1月1日）の時点が3か月ずれている。
+  - 医療施設調査（動態調査）は開設・廃止などの届出をもとにしており、届出の時期によって実態とずれることがある。
+  - 構想区域は、市区町村を reference/koso_kuiki.csv（令和7年度の構想区域マスタ）でまとめたもの。表には二次医療圏（令和7年10月1日時点、330圏）の行もあるが、構想区域とは区切りが違う地域がある。
+
+alternatives:
+  - id: dental_clinics_per_100k
+    reason: 同じ指標を市区町村ごとに見る
+  - id: general_clinics_per_100k_koso
+    reason: 一般診療所の分布と並べて見る
+
+authors:
+  - name: H.I.
+
+script: indicators/dental_clinics_per_100k_koso.py
+
+output:
+  area_code: koso_kuiki_code
+  area_name: koso_kuiki_name
+  value: dental_clinics_per_100k
+  numerator: dental_clinics
+  denominator: pop_total
+  scale: 100000
+  digits: 1
+  unit: 施設／人口10万人
+  columns:
+    - {name: pref_code, label: 都道府県コード}
+    - {name: koso_kuiki_code, label: 構想区域コード}
+    - {name: koso_kuiki_name, label: 構想区域名}
+    - {name: dental_clinics, label: 歯科診療所数, unit: 施設}
+    - {name: pop_total, label: 総人口, unit: 人}
+    - {name: dental_clinics_per_100k, label: 人口10万人あたり歯科診療所数, unit: 施設／10万人}
+
+references:
+  - title: 医療施設調査（厚生労働省、e-Stat）
+    url: https://www.e-stat.go.jp/stat-search/files?toukei=00450021
+  - title: 住民基本台帳に基づく人口、人口動態及び世帯数（総務省）
+    url: https://www.soumu.go.jp/main_sosiki/jichi_gyousei/daityo/jinkou_jinkoudoutai-setaisuu.html
+  - title: 地域医療構想策定ガイドライン（厚生労働省医政局）
+
+created: "2026-11-26"
+updated: "2026-11-26"

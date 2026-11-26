@@ -1,0 +1,110 @@
+{
+  "dataset": "medical_facility_survey_r7",
+  "files": {
+    "table1": {
+      "url": "https://www.e-stat.go.jp/stat-search/files?toukei=00450021",
+      "as_of": "令和7年10月1日",
+      "raw_path": "data/raw/medical_facility_survey_r7/table1.csv",
+      "bytes": 127981,
+      "sha256": "4cabedfef54e720c4737c2456e39f82206b212656649f7bc61cf160a55ed62d2",
+      "fetched_at": "2026-11-26T06:09:59+00:00",
+      "obtained": "local_copy"
+    },
+    "table2": {
+      "url": "https://www.e-stat.go.jp/stat-search/files?toukei=00450021",
+      "as_of": "令和7年10月1日",
+      "raw_path": "data/raw/medical_facility_survey_r7/table2.csv",
+      "bytes": 103246,
+      "sha256": "f999ffa4586c01f4e3cb61b3e99a7dd847889151fa6134e75c989103ba35007a",
+      "fetched_at": "2026-11-26T06:09:59+00:00",
+      "obtained": "local_copy"
+    }
+  },
+  "output": {
+    "path": "data/processed/medical_facility_survey_r7.parquet",
+    "rows": 1892,
+    "columns": [
+      "municipality_code",
+      "municipality_name",
+      "pref_code",
+      "secondary_area_code",
+      "secondary_area_name",
+      "hospitals",
+      "psychiatric_hospitals",
+      "general_hospitals",
+      "general_hospitals_with_ltc_beds",
+      "regional_support_hospitals",
+      "emergency_hospitals",
+      "hospital_beds",
+      "beds_psychiatric",
+      "beds_infectious",
+      "beds_tuberculosis",
+      "beds_ltc",
+      "beds_general",
+      "beds_regional_support_hospitals",
+      "general_clinics",
+      "clinics_with_beds",
+      "clinics_with_ltc_beds",
+      "clinics_without_beds",
+      "dental_clinics",
+      "dental_clinics_with_beds",
+      "dental_clinics_without_beds",
+      "clinic_beds",
+      "clinic_ltc_beds",
+      "as_of"
+    ],
+    "converted_at": "2026-11-26T06:10:00+00:00",
+    "converter_version": "0.1.0",
+    "extras": {},
+    "report": {
+      "table1": {
+        "title": "二次医療圏・市区町村編　第１表　病院数；病床数，病院－病床の種類・二次医療圏・市区町村別",
+        "as_of": "令和7(2025)年10月1日",
+        "levels": {
+          "municipality": 1892,
+          "secondary_area": 330,
+          "prefecture": 47
+        },
+        "national": {
+          "hospitals": 8001,
+          "psychiatric_hospitals": 1052,
+          "general_hospitals": 6949,
+          "general_hospitals_with_ltc_beds": 3290,
+          "regional_support_hospitals": 720,
+          "emergency_hospitals": 3854,
+          "hospital_beds": 1450322,
+          "beds_psychiatric": 311579,
+          "beds_infectious": 1949,
+          "beds_tuberculosis": 3331,
+          "beds_ltc": 264656,
+          "beds_general": 868807,
+          "beds_regional_support_hospitals": 305103
+        },
+        "subtotal_mismatches": [],
+        "identity_mismatches": []
+      },
+      "table2": {
+        "title": "二次医療圏・市区町村編　第２表　一般診療所数；歯科診療所数；病床数，病床の有無・二次医療圏・市区町村別",
+        "as_of": "令和7(2025)年10月1日",
+        "levels": {
+          "municipality": 1892,
+          "secondary_area": 330,
+          "prefecture": 47
+        },
+        "national": {
+          "general_clinics": 105521,
+          "clinics_with_beds": 5160,
+          "clinics_with_ltc_beds": 378,
+          "clinics_without_beds": 100361,
+          "dental_clinics": 65624,
+          "dental_clinics_with_beds": 20,
+          "dental_clinics_without_beds": 65604,
+          "clinic_beds": 67790,
+          "clinic_ltc_beds": 3553
+        },
+        "subtotal_mismatches": [],
+        "identity_mismatches": []
+      }
+    }
+  }
+}

@@ -1,0 +1,83 @@
+id: hospitals_per_100k
+version: 0.1.0
+status: draft
+name: 人口10万人あたり病院数（市区町村別）
+short_description: 病院の数を、人口に対して市区町村ごとに同じ方法で比べる入口の指標
+unit_of_analysis: municipality
+unit_note: >
+  政令指定都市は市単位に集約する（医療施設調査の表は区単位なので、区を足し上げる）。
+  区単位で見たいときは --ward-level で出力できる。
+
+numerator:
+  description: 病院数（精神科病院を含む。内訳として一般病院・精神科病院・救急告示病院（再掲）も出す）
+  dataset: medical_facility_survey_r7
+  as_of: 2025年10月1日
+denominator:
+  description: 総人口（住民基本台帳の総計＝日本人住民＋外国人住民）
+  dataset: population_jumin_r8
+  as_of: 2026年1月1日
+formula: 病院数 ÷ 総人口 × 100,000
+
+intent: >
+  市区町村ごとに、人口に対して病院がどれくらいあるかを全国で同じ方法で比べるための入口の指標。
+  構想区域版（hospitals_per_100k_koso）では区域の中の偏りが見えないため、地域医療構想策定ガイドラインが大都市型の地域で課題に挙げる「区域内の医療資源の偏在」を確かめる目的で、
+  市区町村の単位でも作った。介護サービスの指標（市区町村別）と同じ単位で並べられる。
+
+why_this_denominator: >
+  病院は全年齢の住民が使うため、総人口を分母にした（医療施設調査の公表値も人口10万対）。
+  入院の多くは高齢者なので75歳以上人口も考えられるが、精神科病院や小児・周産期の医療も含むため、総人口を基本にした。
+
+interpretation: >
+  値が大きいほど、人口に対して病院が多い。病院の規模（病床数）や機能は反映しない。
+  病院が多いことは、選べる医療機関が多いことと、医療資源が小規模に分散していることの、両方の意味がありうる。病床数や医療機能の指標と合わせて見る。
+
+policy_questions:
+  - 構想区域の中で、病院のない市区町村や、病院が集中している市区町村はどこか
+
+caveats:
+  - 精神科病院（精神病床のみの病院）を含む。内訳の列で一般病院だけの数を確かめられる。救急告示病院は再掲。
+  - 病院のない市区町村が多い（全国1,741市区町村のうち453）。住民は近くの市区町村の病院を使うため、値が0でも病院に行けないとは限らない。
+  - 施設の数であり、規模（病床数）・診療科・医師などの職員数・診療の実績は反映しない。
+  - 施設の所在地で数えている。患者が市区町村や構想区域をまたいで受診する流出入は反映しない。
+  - 人口は住民基本台帳（2026年1月1日）の総数を使っている。医療施設調査の公表値の「人口10万対」（推計人口による）とは一致しない。
+  - 施設数（2025年10月1日）と人口（2026年1月1日）の時点が3か月ずれている。
+  - 医療施設調査（動態調査）は開設・廃止などの届出をもとにしており、届出の時期によって実態とずれることがある。
+  - 人口の少ない町村では、1施設の差で値が大きく変わる。
+
+alternatives:
+  - id: hospitals_per_100k_koso
+    reason: 構想区域ごとにまとめて見る（流出入の影響が小さくなる）
+
+authors:
+  - name: H.I.
+
+script: indicators/hospitals_per_100k.py
+
+output:
+  area_code: municipality_code5
+  area_name: municipality_name
+  value: hospitals_per_100k
+  numerator: hospitals
+  denominator: pop_total
+  scale: 100000
+  digits: 2
+  unit: 施設／人口10万人
+  columns:
+    - {name: municipality_code5, label: 市区町村コード}
+    - {name: municipality_name, label: 市区町村名}
+    - {name: hospitals, label: 病院数, unit: 施設}
+    - {name: general_hospitals, label: うち一般病院, unit: 施設}
+    - {name: psychiatric_hospitals, label: うち精神科病院, unit: 施設}
+    - {name: emergency_hospitals, label: うち救急告示病院（再掲）, unit: 施設}
+    - {name: pop_total, label: 総人口, unit: 人}
+    - {name: hospitals_per_100k, label: 人口10万人あたり病院数, unit: 施設／10万人}
+
+references:
+  - title: 医療施設調査（厚生労働省、e-Stat）
+    url: https://www.e-stat.go.jp/stat-search/files?toukei=00450021
+  - title: 住民基本台帳に基づく人口、人口動態及び世帯数（総務省）
+    url: https://www.soumu.go.jp/main_sosiki/jichi_gyousei/daityo/jinkou_jinkoudoutai-setaisuu.html
+  - title: 地域医療構想策定ガイドライン（厚生労働省医政局）
+
+created: "2026-11-26"
+updated: "2026-11-26"

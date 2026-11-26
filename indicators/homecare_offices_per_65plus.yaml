@@ -58,6 +58,22 @@ authors:
 
 script: indicators/homecare_offices_per_65plus.py
 
+output:
+  area_code: municipality_code5
+  area_name: municipality_name
+  value: offices_per_10k_65plus
+  numerator: offices
+  denominator: pop_65plus
+  scale: 10000
+  digits: 3
+  unit: 事業所／65歳以上人口1万人
+  columns:
+    - {name: municipality_code5, label: 市区町村コード}
+    - {name: municipality_name, label: 市区町村名}
+    - {name: offices, label: 訪問介護事業所数, unit: 事業所}
+    - {name: pop_65plus, label: 65歳以上人口, unit: 人}
+    - {name: offices_per_10k_65plus, label: 65歳以上人口1万人あたり事業所数, unit: 事業所／1万人}
+
 references:
   - title: 介護サービス情報の公表システムデータのオープンデータ（厚生労働省）
     url: https://www.mhlw.go.jp/stf/kaigo-kouhyou_opendata.html

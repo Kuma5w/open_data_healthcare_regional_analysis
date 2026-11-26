@@ -50,6 +50,22 @@ authors:
 
 script: indicators/example_indicator.py
 
+output:                            # サイトの「結果を見る」で使う。計算結果の全列を columns に書く
+  area_code: municipality_code5    # 地域コードの列（先頭2桁が都道府県コード）
+  area_name: municipality_name
+  value: example_per_10k           # 指標の値の列
+  numerator: example_count         # 分子の列（都道府県計・全国計に使う）
+  denominator: pop_total           # 分母の列
+  scale: 10000
+  digits: 2
+  unit: 件／人口1万人
+  columns:
+    - {name: municipality_code5, label: 市区町村コード}
+    - {name: municipality_name, label: 市区町村名}
+    - {name: example_count, label: △△数, unit: 件}
+    - {name: pop_total, label: ○○人口, unit: 人}
+    - {name: example_per_10k, label: ○○人口1万人あたり△△数, unit: 件／1万人}
+
 references:
   - title: 元データや参考文献の名前
     url: https://

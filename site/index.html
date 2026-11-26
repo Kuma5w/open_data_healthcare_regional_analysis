@@ -94,6 +94,53 @@ dialog input,dialog select{width:100%;padding:8px 10px;border:1px solid var(--li
 @keyframes d{0%{content:"."}50%{content:".."}100%{content:"..."}}
 @media(prefers-reduced-motion:reduce){.dots::after{animation:none}}
 @media(max-width:600px){h2{font-size:21px}th,td{padding:6px}.stack thead{display:none}.stack tr{display:grid;padding-block:8px;border-bottom:1px solid var(--line)}.stack td{display:flow-root;border:0;padding:2px 0;padding-inline-start:6.5em}.stack td::before{content:attr(data-l);float:inline-start;width:6em;margin-inline-start:-6.5em;color:var(--mut);font-size:13px}}
+/* 結果を見る（ボタン出力）。棒の色は1系列なので1色（dataviz の slot 1、明暗それぞれ背景に対して検証済み） */
+:root{--s1:light-dark(#257de0,#338ced);--grid:light-dark(#e7e7e7,#303030)}
+.res{margin-top:28px;border:2px solid var(--ink);padding:4px 18px 18px}
+.res>h3:first-child{border:0;margin-top:12px;padding-top:0;font-size:20px}
+.res-tools{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:end;margin:12px 0 16px}
+.res-tools label{display:flex;flex-direction:column;gap:2px;font-size:13px;color:var(--mut)}
+.res-tools select{min-height:44px;padding:0 10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font-size:16px;min-width:11em}
+.warn{border-left:4px solid var(--ink);background:var(--pl);padding:10px 14px;margin:10px 0;font-size:14px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin:0 0 6px}
+.kpi{background:var(--bg);padding:10px 14px}
+.kpi .l{font-size:13px;color:var(--mut);line-height:1.4}
+.kpi .v{font:700 26px/1.25 "Hanken Grotesk",sans-serif;overflow-wrap:anywhere}
+.kpi .u{font-size:12px;color:var(--mut);line-height:1.4}
+.ch{margin:18px 0 6px;font-weight:700;font-size:15px}
+.bars{margin:0 0 4px}
+.br{display:grid;grid-template-columns:minmax(4.5em,9em) minmax(0,1fr) 5.2em;align-items:center;gap:0 10px;width:100%;min-height:24px;padding:0 4px;margin:0;border:0;background:none;color:var(--ink);font-size:14px;line-height:1.3;text-align:left}
+button.br{cursor:pointer}
+.br:not(.hd):hover,.br:focus-visible{background:var(--pl)}
+.br .n{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.br .tk{position:relative;align-self:stretch;min-height:24px}
+.br .bar{position:absolute;left:0;top:6px;height:12px;background:var(--s1);border-radius:0 4px 4px 0;print-color-adjust:exact;-webkit-print-color-adjust:exact}
+.br .ref{position:absolute;top:0;bottom:0;border-left:2px solid var(--ink)}
+.br .v{text-align:right;font-family:"Hanken Grotesk",sans-serif;font-variant-numeric:tabular-nums}
+.br.hd .rl{position:absolute;bottom:2px;white-space:nowrap;font-size:13px;color:var(--mut)}
+.br.hd .rl b{color:var(--ink);font-family:"Hanken Grotesk",sans-serif}
+.bars .gap{font-size:13px;color:var(--mut);padding:6px 4px 6px calc(min(9em,30%) + 14px);border-block:1px solid var(--grid)}
+.tip{position:fixed;z-index:10;pointer-events:none;background:var(--bg);color:var(--ink);border:1px solid var(--line);box-shadow:0 2px 8px rgb(0 0 0/.18);padding:8px 10px;font-size:13px;line-height:1.5;max-width:280px}
+.tip b{display:block;font:700 16px/1.3 "Hanken Grotesk",sans-serif}
+.tip .s{color:var(--mut)}
+.tw{overflow-x:auto;margin-top:6px}
+.rt{font-size:14px;width:auto;min-width:100%}.rt th{white-space:normal;vertical-align:bottom;font-size:13px;line-height:1.4;padding:6px 8px;min-width:4.5em}.rt td{padding:5px 8px;white-space:nowrap}.rt td.hash{white-space:normal;min-width:18em}.rt td.num,.rt th.num{text-align:right}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 4px}
+a.btn{display:inline-flex;align-items:center;text-decoration:none}
+details.rd{margin-top:10px;border-top:1px solid var(--line);padding-top:6px}
+details.rd summary{cursor:pointer;min-height:44px;display:flex;align-items:center;font-weight:700}
+.hash{font-family:"Hanken Grotesk",ui-monospace,monospace;font-size:12px;overflow-wrap:anywhere}
+.print-only{display:none}
+@media(max-width:600px){.res{padding:4px 12px 14px}.br{grid-template-columns:minmax(4em,6.5em) minmax(0,1fr) 4.6em;gap:0 6px}.bars .gap{padding-left:4px}}
+@media print{
+  body{font-size:11pt}.wrap{max-width:none;padding:0}
+  nav,.chat,.back,.res-tools,.actions,#ask-card,.tip,.np,details.rd:not(.pr){display:none!important}
+  .grid{display:block;margin-top:12px}header{padding-bottom:8px}
+  .res{border-width:1px;break-inside:auto}.br,.rt tr{break-inside:avoid}
+  .intent{print-color-adjust:exact;-webkit-print-color-adjust:exact}
+  details.rd summary{min-height:0}.print-only{display:block}
+  a{color:inherit}
+}
 </style>
 <script>new MutationObserver(()=>{for(const c of document.querySelectorAll('.stack td:not([data-l])')){let i=0,p=c;while(p=p.previousElementSibling)i+=p.colSpan;c.dataset.l=c.closest('table').rows[0].cells[i]?.textContent||''}}).observe(document,{childList:true,subtree:true})</script>
 </head>
@@ -214,7 +261,7 @@ function viewIndicators() {
   <div class="tools"><input id="iq" type="search" placeholder="指標を探す（例：回復期、訪問介護）" value="${esc(query)}" aria-label="指標を探す">
   <button class="chip" type="button" data-unit="" aria-pressed="${!unitFilter}">すべて</button>${units.map((u) => `<button class="chip" type="button" data-unit="${esc(u)}" aria-pressed="${unitFilter === u}">${esc(UNIT[u] || u)}</button>`).join("")}</div>
   <ul class="list">${list.map((c) => `<li><a class="row" href="#ind-${toHash(c.id)}"><span class="t">${esc(c.name)}</span>
-  <span class="badges"><span class="b">${esc(UNIT[c.unit_of_analysis] || c.unit_of_analysis)}</span><span class="b ${c.status === "draft" ? "draft" : ""}">${esc(STATUS[c.status] || c.status)}</span></span>
+  <span class="badges">${CAT.results?.[c.id] ? `<span class="b">結果あり</span>` : ""}<span class="b">${esc(UNIT[c.unit_of_analysis] || c.unit_of_analysis)}</span><span class="b ${c.status === "draft" ? "draft" : ""}">${esc(STATUS[c.status] || c.status)}</span></span>
   <span class="d">${esc(c.short_description || "")}</span></a></li>`).join("") || `<li class="note" style="padding:14px 4px">該当する指標はありません。</li>`}</ul>`;
   $("iq").addEventListener("input", (e) => { query = e.target.value.trim(); const pos = e.target.selectionStart; viewIndicators(); const el = $("iq"); el.focus(); el.setSelectionRange(pos, pos); });
   document.querySelectorAll("[data-unit]").forEach((b) => b.addEventListener("click", () => { unitFilter = b.dataset.unit; viewIndicators(); }));
@@ -224,7 +271,7 @@ function term(t) {
   const ds = CAT.datasets.find((d) => d.id === t.dataset);
   return `<td>${esc(t.description)}</td><td>${ds ? `<a href="#ds-${toHash(ds.id)}">${esc(ds.title)}</a>` : esc(t.dataset)}</td><td class="num">${esc(t.as_of || "")}</td>`;
 }
-function viewIndicator(c) {
+function viewIndicator(c, params) {
   setNav("indicators");
   const alt = (c.alternatives || []).map((a) => { const t = CAT.indicators.find((x) => x.id === a.id); return `<li>${t ? `<a href="#ind-${toHash(t.id)}">${esc(t.name)}</a>` : `<code>${esc(a.id)}</code>（未作成）`}：${esc(a.reason)}</li>`; }).join("");
   const refs = (c.references || []).map((r) => `<li>${safeUrl(r.url) ? `<a href="${esc(r.url)}">${esc(r.title)}</a>` : esc(r.title)}</li>`).join("");
@@ -233,6 +280,7 @@ function viewIndicator(c) {
   <div class="meta"><span>単位：${esc(UNIT[c.unit_of_analysis] || c.unit_of_analysis)}</span><span>状態：${esc(STATUS[c.status] || c.status)}</span><span class="num">v${esc(c.version)}</span><span>作成者：${esc((c.authors || []).map((a) => a.name).join("、"))}</span></div>
   <div class="formula">${esc(c.formula)}</div>
   <div class="intent"><h3>この指標の意図</h3><p>${esc(c.intent)}</p></div>
+  <section class="res" id="res" aria-labelledby="res-h"><h3 id="res-h">結果を見る</h3><p class="note">結果を読み込んでいます…</p></section>
   <h3>分子と分母</h3>
   <table class="stack"><thead><tr><th></th><th>内容</th><th>データ</th><th>時点</th></tr></thead><tbody>
   <tr><th>分子</th>${term(c.numerator)}</tr><tr><th>分母</th>${term(c.denominator)}</tr></tbody></table>
@@ -240,11 +288,272 @@ function viewIndicator(c) {
   <h3>なぜこの分母か</h3><p>${esc(c.why_this_denominator)}</p>
   ${c.interpretation ? `<h3>読み方</h3><p>${esc(c.interpretation)}</p>` : ""}
   ${(c.policy_questions || []).length ? `<h3>この指標で考えたい問い</h3><ul class="c">${c.policy_questions.map((q) => `<li>${esc(q)}</li>`).join("")}</ul>` : ""}
-  <h3>注意点</h3><ul class="c">${(c.caveats || []).map((x) => `<li>${esc(x)}</li>`).join("")}</ul>
+  <h3 id="caveats">注意点</h3><ul class="c">${(c.caveats || []).map((x) => `<li>${esc(x)}</li>`).join("")}</ul>
   ${alt ? `<h3>関連する指標</h3><ul class="c">${alt}</ul>` : ""}
   <h3>計算と出典</h3><ul class="c"><li><a href="${gh(c.script)}">計算スクリプト（${esc(c.script)}）</a></li><li><a href="${gh(`indicators/${c.id}.yaml`)}">指標カード（YAML）</a></li>${refs}</ul>
   <p style="margin-top:20px"><button class="btn" type="button" id="ask-card">この指標について質問する</button></p>`;
   $("ask-card").addEventListener("click", () => setFocus(c.id, true));
+  loadResult(c, params || new URLSearchParams());
+}
+
+// ---- 結果を見る（ボタン出力） -----------------------------------------------
+// 数値は Python（指標スクリプトの compute と chiiki_od.results）が作ったものだけを表示する。
+// ここで行うのは、絞り込み・並べ替え・表示・ダウンロードだけ。新しい数値は計算しない。
+const RES = {};   // 指標id → 結果のJSON
+let RS = null;    // 表示中の結果 { c, doc, meta, pref, sort }
+let resToken = 0;
+const SORTS = { desc: "値の大きい順", asc: "値の小さい順", code: "コード順" };
+const fmt = (v, d) => (v === null || v === undefined || Number.isNaN(+v) ? "—" : Number(v).toLocaleString("ja-JP", { minimumFractionDigits: d, maximumFractionDigits: d }));
+const fmtCell = (col, v, d) => (v === null || v === undefined ? "—" : col.type === "string" ? v : fmt(v, col.type === "integer" ? 0 : d));
+const colHead = (col) => col.label + (col.unit ? `（${col.unit}）` : "");
+
+async function loadResult(c, params) {
+  const token = ++resToken;
+  const el = $("res"); if (!el) return;
+  const meta = CAT.results?.[c.id];
+  if (!meta) {
+    el.innerHTML = `<h3 id="res-h">結果を見る</h3><p class="note">この指標の計算結果は、まだサイトに載っていません。手元で <code>chiiki-od run ${esc(c.id)}</code> を実行すると計算できます（<a href="${gh("docs/site.md")}">サイトに載せる手順</a>）。</p>`;
+    return;
+  }
+  try {
+    RES[c.id] ||= await fetch(meta.path).then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); });
+  } catch (_) {
+    if (token === resToken) el.innerHTML = `<h3 id="res-h">結果を見る</h3><p class="note">結果のファイル（${esc(meta.path)}）を読み込めませんでした。</p>`;
+    return;
+  }
+  if (token !== resToken || !$("res")) return;
+  const doc = RES[c.id], pref = params.get("pref") || "", sort = params.get("sort") || "desc";
+  RS = { c, doc, meta, pref: doc.by_pref[pref] ? pref : "", sort: SORTS[sort] ? sort : "desc" };
+  drawResult();
+  renderSug();
+}
+
+// 表示に使う形に並べる（値の計算はしない）
+function resultView() {
+  const { c, doc, pref, sort } = RS;
+  const o = doc.output, d = o.digits ?? 1;
+  const ix = Object.fromEntries(doc.columns.map((x, i) => [x.name, i]));
+  const V = ix[o.value], CODE = ix[o.area_code], NAME = ix[o.area_name];
+  const NUM = o.numerator ? ix[o.numerator] : null, DEN = o.denominator ? ix[o.denominator] : null;
+  const pooled = doc.national?.pooled != null;
+  const unitWord = UNIT[c.unit_of_analysis] || "地域";
+  const cmp = sort === "code" ? (a, b) => a.code.localeCompare(b.code)
+    : (a, b) => (a.v === null) - (b.v === null) || (sort === "asc" ? a.v - b.v : b.v - a.v) || a.code.localeCompare(b.code);
+  const items = pref
+    ? doc.rows.filter((r) => r[CODE].slice(0, 2) === pref).map((r) => ({ code: r[CODE], name: r[NAME], v: r[V], r }))
+    : Object.entries(doc.by_pref).map(([k, s]) => ({ code: k, name: s.name, v: pooled ? s.pooled : s.median, s }));
+  items.sort(cmp);
+  return { o, d, ix, V, CODE, NAME, NUM, DEN, pooled, unitWord, items,
+    region: pref ? doc.by_pref[pref].name : "全国",
+    ref: pooled ? doc.national.pooled : doc.summary.median, refLabel: pooled ? "全国計" : "全国の中央値" };
+}
+
+function barsHtml(v, clickable) {
+  const { items, ref, refLabel, d } = v;
+  const shown = items.map((x, i) => ({ ...x, i })).filter((x) => x.v !== null);
+  const max = Math.max(...shown.map((x) => x.v), ref ?? 0) || 1;
+  const pct = (x) => ((Math.max(0, x) / max) * 100).toFixed(3);
+  let list = shown, cut = 0;
+  if (shown.length > 60) { cut = shown.length - 50; list = [...shown.slice(0, 25), null, ...shown.slice(-25)]; }
+  const refEl = ref != null ? `<span class="ref" style="left:${pct(ref)}%"></span>` : "";
+  const rp = +pct(ref ?? 0);
+  const head = ref != null
+    ? `<div class="br hd" aria-hidden="true"><span></span><span class="tk"><span class="rl" style="${rp > 55 ? `right:calc(${(100 - rp).toFixed(3)}% + 6px)` : `left:calc(${rp}% + 6px)`}">${esc(refLabel)} <b>${fmt(ref, d)}</b></span>${refEl}</span><span></span></div>` : "";
+  const tag = clickable ? "button" : "div";
+  const row = (x) => (x === null
+    ? `<div class="gap">中略（${cut.toLocaleString("ja-JP")}件）。すべての値は下の表にあります</div>`
+    : `<${tag} ${clickable ? `type="button" aria-label="${esc(x.name)} ${fmt(x.v, d)}。この都道府県を表示"` : ""} class="br" data-i="${x.i}"><span class="n">${esc(x.name)}</span><span class="tk"><span class="bar" style="width:${pct(x.v)}%"></span>${refEl}</span><span class="v">${fmt(x.v, d)}</span></${tag}>`);
+  const missing = items.length - shown.length;
+  return `<div class="bars" id="bars">${head}${list.map(row).join("")}</div>${missing ? `<p class="note">値のない${esc(v.unitWord)} ${missing}件はグラフに含めていません（表には含めています）。</p>` : ""}`;
+}
+
+function tableHtml(v) {
+  const { doc } = RS, { items, d } = v;
+  if (RS.pref) {
+    return `<div class="tw"><table class="rt"><thead><tr>${doc.columns.map((c) => `<th class="${c.type === "string" ? "" : "num"}">${esc(colHead(c))}</th>`).join("")}</tr></thead>
+    <tbody>${items.map((x) => `<tr>${doc.columns.map((c, i) => `<td class="${c.type === "string" ? "" : "num"}">${esc(fmtCell(c, x.r[i], d))}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+  }
+  const num = v.NUM !== null ? doc.columns[v.NUM] : null, den = v.DEN !== null ? doc.columns[v.DEN] : null;
+  const head = ["都道府県", `${v.unitWord}の数`, ...(num ? [`${colHead(num)}の合計`, `${colHead(den)}の合計`, "都道府県計"] : []), "中央値", "最小", "最大"];
+  return `<div class="tw"><table class="rt"><thead><tr>${head.map((h, i) => `<th class="${i ? "num" : ""}">${esc(h)}</th>`).join("")}</tr></thead>
+  <tbody>${items.map(({ s }) => `<tr><td>${esc(s.name)}</td><td class="num">${fmt(s.n, 0)}</td>${num ? `<td class="num">${fmtCell(num, s.numerator_sum, d)}</td><td class="num">${fmtCell(den, s.denominator_sum, d)}</td><td class="num">${fmt(s.pooled, d)}</td>` : ""}<td class="num">${fmt(s.median, d)}</td><td class="num">${fmt(s.min, d)}</td><td class="num">${fmt(s.max, d)}</td></tr>`).join("")}</tbody></table></div>`;
+}
+
+function reproHtml() {
+  const { c, doc } = RS;
+  const ins = Array.isArray(doc.inputs) ? doc.inputs : [];
+  const lines = ["git clone " + REPO, "cd " + REPO.split("/").pop(), "pip install -e ."];
+  for (const i of ins) lines.push(i.manual_download ? `chiiki-od fetch ${i.dataset} --from-dir <保存したフォルダ>` : `chiiki-od fetch ${i.dataset}`, `chiiki-od convert ${i.dataset}`);
+  lines.push(`chiiki-od run ${c.id}`);
+  const csvUrl = (CAT.pages_url || "") + doc.csv;
+  const strCols = doc.columns.filter((x) => x.type === "string").map((x) => x.name);
+  const py = `import pandas as pd\ndf = pd.read_csv(\n    "${csvUrl}",\n    dtype={${strCols.map((n) => `"${n}": str`).join(", ")}},\n)`;
+  const r = `df <- readr::read_csv(\n  "${csvUrl}",\n  col_types = readr::cols(${strCols.map((n) => `${n} = "c"`).join(", ")})\n)`;
+  const manual = ins.filter((i) => i.manual_download);
+  const fileName = (f) => { const n = (f.url || "").split("/").pop() || ""; return /\.(xlsx?|zip|csv)$/i.test(n) ? n : "公表ページ"; };
+  return `<details class="rd"><summary>同じ結果を手元で作る（再現の手順）</summary>
+  <p>計算スクリプトと手順はすべて公開しています。元データ（公表ファイル）はリポジトリに含まれないため、各自で取得します。</p>
+  <pre><code>${esc(lines.join("\n"))}</code></pre>
+  ${manual.length ? `<p class="note">${manual.map((i) => `「${esc(i.title)}」は自動では取得できません。<a href="${esc(safeUrl(i.source_page) || "#")}">公表元のページ</a>から保存し、上の <code>--from-dir</code> で取り込みます。`).join("")}</p>` : ""}
+  <p>結果は <code>data/outputs/${esc(c.id)}.csv</code> に出ます。サイトに載せる結果は <code>chiiki-od results ${esc(c.id)}</code> で作ります。</p>
+  <h4>元データが同じか確かめる（SHA-256）</h4>
+  <p class="note">取得したファイルのハッシュ値が次と一致すれば、このページと同じファイルから計算しています。</p>
+  <div class="tw"><table class="rt"><thead><tr><th>ファイル</th><th>時点</th><th>SHA-256</th></tr></thead><tbody>
+  ${ins.map((i) => `<tr><th colspan="3" style="text-align:left">${esc(i.title)}</th></tr>${i.files.map((f) => `<tr><td>${safeUrl(f.url) ? `<a href="${esc(f.url)}">${esc(fileName(f))}</a>` : esc(f.key)}</td><td>${esc(f.as_of || "")}</td><td class="hash">${esc(f.sha256 || "")}</td></tr>`).join("")}`).join("")}
+  </tbody></table></div>
+  <h4>公開している結果をそのまま読み込む</h4>
+  <p class="note">列名は計算スクリプトのままです。コードの列は文字列として読み込みます（先頭の0を保つため）。</p>
+  <pre><code>${esc(py)}</code></pre><pre><code>${esc(r)}</code></pre></details>`;
+}
+
+function recordHtml() {
+  const { c, doc } = RS;
+  const ins = Array.isArray(doc.inputs) ? doc.inputs : [];
+  return `<details class="rd pr"><summary>計算の記録と出典</summary>
+  <ul class="c"><li>計算日時：<span class="num">${esc(doc.generated_at)}</span>（指標カード v${esc(doc.card_version)}）</li>
+  <li>計算スクリプト：<a href="${gh(doc.script)}">${esc(doc.script)}</a>（SHA-256 <span class="hash">${esc(doc.script_sha256.slice(0, 16))}…</span>）</li>
+  ${(doc.notes || []).map((n) => `<li>${esc(n)}</li>`).join("")}</ul>
+  <p>${ins.map((i) => esc(i.attribution)).join("<br>")}</p></details>`;
+}
+
+function drawResult() {
+  const el = $("res"); if (!el || !RS) return;
+  const { c, doc, meta, pref } = RS;
+  const v = resultView(), { d, o } = v;
+  const s = pref ? doc.by_pref[pref] : doc.summary;
+  const card = (l, val, u) => `<div class="kpi"><div class="l">${esc(l)}</div><div class="v">${val}</div>${u ? `<div class="u">${esc(u)}</div>` : ""}</div>`;
+  const kpis = [
+    pref && v.pooled ? card(`${v.region}計`, fmt(s.pooled, d), o.unit) : "",
+    card(v.refLabel, fmt(v.ref, d), o.unit),
+    card(pref ? `${v.region}内の中央値` : `中央値（${v.unitWord}ごとの値）`, fmt(s.median, d), o.unit),
+    card(`${v.unitWord}の数`, fmt(s.n, 0), s.n_missing ? `値のないもの ${s.n_missing}件` : ""),
+  ].join("");
+  const prefOpts = Object.entries(doc.by_pref).map(([k, p]) => `<option value="${k}" ${k === pref ? "selected" : ""}>${esc(p.name)}（${p.n}）</option>`).join("");
+  const ds = (t) => CAT.datasets.find((x) => x.id === t.dataset)?.title || t.dataset;
+  const same = c.numerator.dataset === c.denominator.dataset;
+  const nRows = pref ? v.items.length : doc.rows.length;
+  el.innerHTML = `<h3 id="res-h">結果を見る</h3>
+  <p class="note">データ：${esc(ds(c.numerator))}（${esc(c.numerator.as_of || "")}）${same ? "" : `、${esc(ds(c.denominator))}（${esc(c.denominator.as_of || "")}）`}。計算日 <span class="num">${esc(doc.generated_at.slice(0, 10))}</span>。</p>
+  ${meta.stale?.length ? `<div class="warn" role="note"><b>この結果は、いまの指標カードや計算スクリプトと食い違っている可能性があります。</b><br>${meta.stale.map(esc).join("。")}</div>` : ""}
+  <div class="res-tools">
+    <label>地域<select id="rp"><option value="">全国（都道府県ごと）</option>${prefOpts}</select></label>
+    <label>並べ方<select id="rsort">${Object.entries(SORTS).map(([k, t]) => `<option value="${k}" ${k === RS.sort ? "selected" : ""}>${t}</option>`).join("")}</select></label>
+  </div>
+  <div class="kpis">${kpis}</div>
+  <p class="note">「計」は、表の行の分子と分母をそれぞれ合計して計算した値です。中央値は${esc(v.unitWord)}ごとの値の中央値です。どちらも計算スクリプトの出力から作成しています。</p>
+  <p class="ch">${pref ? `${esc(v.region)}の${esc(v.unitWord)}ごとの値` : `都道府県ごとの${v.pooled ? "計" : "中央値"}`}（${esc(o.unit || "")}）${pref ? "" : `<span class="note np" style="font-weight:400">　棒を押すと、その都道府県の${esc(v.unitWord)}ごとの値を表示します</span>`}</p>
+  ${barsHtml(v, !pref)}
+  <p class="note">縦線は${esc(v.refLabel)}。読む前に<a href="#caveats" id="to-cav">注意点</a>を確認してください。</p>
+  <div class="actions">
+    <button class="btn" type="button" id="dl">${pref ? `${esc(v.region)}のCSV（${nRows.toLocaleString("ja-JP")}行）` : `全国のCSV（${nRows.toLocaleString("ja-JP")}行）`}</button>
+    ${pref ? "" : `<button class="btn ghost" type="button" id="dl-pref">都道府県計のCSV（${v.items.length}行）</button>`}
+    <button class="btn ghost" type="button" id="prt">印刷・PDFにする</button>
+    <button class="btn ghost" type="button" id="ask-res">この結果について質問する</button>
+  </div>
+  <p class="note np">CSVの見出しは日本語です。スクリプトの列名のままのCSVは <a href="${esc(doc.csv)}" download>${esc(doc.csv.split("/").pop())}</a>。Excelで開くとコードの先頭の0が消えることがあります。</p>
+  <h4>${pref ? `${esc(v.region)}の表` : "都道府県ごとの表"}（${esc(SORTS[RS.sort])}）</h4>
+  ${tableHtml(v)}
+  ${reproHtml()}${recordHtml()}
+  <p class="print-only note" id="prt-src"></p>`;
+
+  $("rp").addEventListener("change", (e) => setResultState({ pref: e.target.value }));
+  $("rsort").addEventListener("change", (e) => setResultState({ sort: e.target.value }));
+  $("to-cav").addEventListener("click", (e) => { e.preventDefault(); $("caveats")?.scrollIntoView({ behavior: "smooth" }); });
+  $("dl").addEventListener("click", () => downloadCsv(false));
+  $("dl-pref")?.addEventListener("click", () => downloadCsv(true));
+  $("prt").addEventListener("click", () => window.print());
+  $("ask-res").addEventListener("click", () => setFocus(c.id, true));
+  bindBars(v);
+}
+
+function setResultState(next) {
+  Object.assign(RS, next);
+  const qs = new URLSearchParams();
+  if (RS.pref) qs.set("pref", RS.pref);
+  if (RS.sort !== "desc") qs.set("sort", RS.sort);
+  history.replaceState(null, "", `#ind-${toHash(RS.c.id)}${qs.toString() ? "?" + qs : ""}`);
+  const y = $("res").getBoundingClientRect().top;
+  drawResult();
+  if (y < 0 || next.pref !== undefined) $("res").scrollIntoView({ block: "start" });
+  $(next.sort !== undefined ? "rsort" : "rp")?.focus({ preventScroll: true });
+}
+
+// ツールチップ（値は表にもあるので、ここだけに出す情報はない）
+const tip = document.createElement("div"); tip.className = "tip"; tip.hidden = true; document.body.appendChild(tip);
+function showTip(lines, x, y) {
+  tip.replaceChildren(...lines.map(([t, k]) => { const e = document.createElement(k === "v" ? "b" : "div"); if (k === "s") e.className = "s"; e.textContent = t; return e; }));
+  tip.hidden = false;
+  const w = tip.offsetWidth, h = tip.offsetHeight;
+  tip.style.left = Math.max(8, Math.min(x + 14, innerWidth - w - 8)) + "px";
+  tip.style.top = Math.max(8, Math.min(y + 14, innerHeight - h - 8)) + "px";
+}
+function bindBars(v) {
+  const { doc } = RS, { d, o } = v;
+  const num = v.NUM !== null ? doc.columns[v.NUM] : null, den = v.DEN !== null ? doc.columns[v.DEN] : null;
+  const lines = (x) => RS.pref
+    ? [[`${fmt(x.v, d)} ${o.unit || ""}`, "v"], [x.name], ...(num ? [[`${num.label}：${fmtCell(num, x.r[v.NUM], d)}`, "s"], [`${den.label}：${fmtCell(den, x.r[v.DEN], d)}`, "s"]] : [])]
+    : [[`${fmt(x.v, d)} ${o.unit || ""}`, "v"], [`${x.name}${v.pooled ? "計" : "の中央値"}`], ...(num ? [[`${num.label}の合計：${fmtCell(num, x.s.numerator_sum, d)}`, "s"], [`${den.label}の合計：${fmtCell(den, x.s.denominator_sum, d)}`, "s"]] : []), [`${x.s.n}${v.unitWord}・中央値 ${fmt(x.s.median, d)}`, "s"]];
+  for (const b of document.querySelectorAll("#bars .br[data-i]")) {
+    const x = v.items[+b.dataset.i];
+    b.addEventListener("pointermove", (e) => showTip(lines(x), e.clientX, e.clientY));
+    b.addEventListener("pointerleave", () => (tip.hidden = true));
+    b.addEventListener("focus", () => { const r = b.getBoundingClientRect(); showTip(lines(x), r.left + r.width * 0.4, r.bottom - 8); });
+    b.addEventListener("blur", () => (tip.hidden = true));
+    if (b.tagName === "BUTTON") b.addEventListener("click", () => { tip.hidden = true; setResultState({ pref: x.code }); });
+  }
+}
+
+function downloadCsv(prefTable) {
+  const { c, doc } = RS, v = resultView();
+  const q = (x) => { const t = x === null || x === undefined ? "" : String(x); return /[",\n\r]/.test(t) ? `"${t.replace(/"/g, '""')}"` : t; };
+  let head, rows, name;
+  if (prefTable) {
+    const num = v.NUM !== null ? doc.columns[v.NUM] : null, den = v.DEN !== null ? doc.columns[v.DEN] : null;
+    head = ["都道府県コード", "都道府県", `${v.unitWord}の数`, ...(num ? [`${colHead(num)}の合計`, `${colHead(den)}の合計`, `都道府県計（${v.o.unit || ""}）`] : []), "中央値", "最小", "最大"];
+    rows = v.items.map(({ code, s }) => [code, s.name, s.n, ...(num ? [s.numerator_sum, s.denominator_sum, s.pooled] : []), s.median, s.min, s.max]);
+    name = `${c.id}_prefectures.csv`;
+  } else {
+    head = doc.columns.map(colHead);
+    const list = RS.pref ? v.items.map((x) => x.r) : doc.rows;
+    rows = list;
+    name = `${c.id}_${RS.pref || "all"}.csv`;
+  }
+  const text = "﻿" + [head, ...rows].map((r) => r.map(q).join(",")).join("\r\n") + "\r\n";
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([text], { type: "text/csv;charset=utf-8" }));
+  a.download = name; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+
+window.addEventListener("beforeprint", () => {
+  const src = $("prt-src");
+  if (src) src.textContent = `印刷元：${location.href}（${new Date().toLocaleString("ja-JP")}）`;
+  document.querySelectorAll("details.pr").forEach((x) => { x.dataset.was = x.open ? "1" : ""; x.open = true; });
+});
+window.addEventListener("afterprint", () => document.querySelectorAll("details.pr").forEach((x) => { x.open = !!x.dataset.was; }));
+
+// 質問窓口に渡す、表示中の結果（数値は結果のファイルの値をそのまま使う）
+function resultItem() {
+  if (!RS || RS.c.id !== focusId) return null;
+  const { c, doc } = RS, v = resultView(), { d, o } = v;
+  const col = (i) => doc.columns[i];
+  const parts = [
+    `指標：${c.name}。値の列：${col(v.V).label}（${o.unit || ""}）。計算日 ${doc.generated_at.slice(0, 10)}、指標カード v${doc.card_version}。`,
+    `${v.refLabel}：${fmt(v.ref, d)}${doc.national?.numerator_sum != null ? `（${col(v.NUM).label}の合計 ${fmtCell(col(v.NUM), doc.national.numerator_sum, d)}、${col(v.DEN).label}の合計 ${fmtCell(col(v.DEN), doc.national.denominator_sum, d)}）` : ""}。`,
+    `全国の${v.unitWord}ごとの値：${doc.summary.n}件、中央値 ${fmt(doc.summary.median, d)}、最小 ${fmt(doc.summary.min, d)}、最大 ${fmt(doc.summary.max, d)}、25パーセント点 ${fmt(doc.summary.p25, d)}、75パーセント点 ${fmt(doc.summary.p75, d)}。`,
+  ];
+  let list = v.items, note = "";
+  if (list.length > 60) { note = `（${list.length}件のうち、${SORTS[RS.sort]}で先頭30件と末尾30件）`; list = [...list.slice(0, 30), ...list.slice(-30)]; }
+  if (RS.pref) {
+    const s = doc.by_pref[RS.pref];
+    parts.push(`表示中：${v.region}。${v.pooled ? `${v.region}計 ${fmt(s.pooled, d)}、` : ""}${v.unitWord} ${s.n}件、中央値 ${fmt(s.median, d)}。`);
+    const cols = [v.CODE, v.NAME, v.NUM, v.DEN, v.V].filter((i) => i !== null);
+    parts.push(`${v.region}の${v.unitWord}ごとの表${note}：\n` + [cols.map((i) => col(i).label).join("\t"), ...list.map((x) => cols.map((i) => fmtCell(col(i), x.r[i], d)).join("\t"))].join("\n"));
+  } else {
+    parts.push(`表示中：全国（都道府県ごと）。都道府県ごとの表${note}：\n` + [["都道府県", v.pooled ? "都道府県計" : "", `${v.unitWord}の数`, "中央値"].filter(Boolean).join("\t"), ...list.map(({ s }) => [s.name, ...(v.pooled ? [fmt(s.pooled, d)] : []), s.n, fmt(s.median, d)].join("\t"))].join("\n"));
+  }
+  const qs = RS.pref ? `?pref=${RS.pref}` : "";
+  return { id: `result:${c.id}`, kind: "result", title: `${c.name}の結果（${v.region}）`, href: `#ind-${toHash(c.id)}${qs}`, text: parts.join("\n") };
 }
 
 function viewDatasets() {
@@ -281,6 +590,7 @@ function viewAbout() {
   $("view").innerHTML = `<h2>このサイトについて</h2>
   <p>地域医療構想の分析に携わる研究者どうしで、オープンデータを使った基本的な分析の考え方と方法を共有するためのサイトです。指標ごとに作成者の意図を「指標カード」に書き残し、計算はスクリプトで誰でも再現できるようにしています。</p>
   <h3>3つの約束</h3><ul class="c"><li>数値はスクリプトが作る。質問窓口のAIは数値を作らない。</li><li>指標には必ずカードを付ける（意図・分子と分母・なぜその分母か・注意点）。</li><li>出典と加工を明記する。</li></ul>
+  <h3>結果を見る（ボタン出力）</h3><p>指標のページで地域と並べ方を選ぶと、計算スクリプトの結果を表・グラフ・CSV・印刷用の1枚で出します。都道府県計・全国計・中央値も、Pythonで計算してファイルに入れたものを表示しています。サイトの中で新しい数値は計算しません。結果は、各自が取得した元データから <code>chiiki-od results</code> で作り、計算日時・元データのハッシュ値と一緒にリポジトリに入れています。</p>
   <h3>質問窓口のしくみ</h3><p>質問に近い指標カード・データの説明・列の見出しをこのサイトの中から探し、それだけを根拠にAIが答えます。根拠にした資料を回答の下に示します。カードに書かれていないことは「作成者の説明はありません」と答えます。</p>
   <p>接続先は「接続の設定」で選べます。claude.ai 上ではClaudeを、それ以外ではOpenAI互換のAPI（ローカルのOllamaなど）を使います。</p>
   <h3>指標を追加する</h3><p><a href="${REPO}">GitHubのリポジトリ</a>から、Issueで相談してプルリクエストを送ってください（<a href="${gh("CONTRIBUTING.md")}">貢献の手引き</a>）。</p>
@@ -288,8 +598,9 @@ function viewAbout() {
 }
 function route() {
   if (!CAT) return;
-  const h = decodeURIComponent(location.hash.slice(1)) || "indicators";
-  if (h.startsWith("ind-")) { const c = fromHash(h.slice(4), CAT.indicators); if (c) { viewIndicator(c); setFocus(c.id, false); return window.scrollTo(0, 0); } }
+  const [h, qs] = (decodeURIComponent(location.hash.slice(1)) || "indicators").split("?");
+  RS = null;
+  if (h.startsWith("ind-")) { const c = fromHash(h.slice(4), CAT.indicators); if (c) { setFocus(c.id, false); viewIndicator(c, new URLSearchParams(qs || "")); return window.scrollTo(0, 0); } }
   if (h.startsWith("ds-")) { const d = fromHash(h.slice(3), CAT.datasets); if (d) { viewDataset(d); return window.scrollTo(0, 0); } }
   if (h === "datasets") return viewDatasets();
   if (h === "references") return viewDocs("references", ["reference/README.md"], "共通対応表", `<p class="note">市区町村コード・構想区域・二次医療圏の対応は、全員が同じ表を使います。<a href="${REPO}/tree/main/reference">表の一覧（GitHub）</a></p>`);
@@ -323,6 +634,8 @@ function retrieve(q, focusId) {
   const pick = (kind, n) => scored.filter((x) => x.it.kind === kind).slice(0, n).map((x) => x.it);
   const sel = [...pick("card", 3), ...pick("dataset", 2), ...pick("doc", 3), ...pick("col", 6)];
   if (focusId && !sel.some((x) => x.id === `card:${focusId}`)) sel.unshift(DOCS.find((x) => x.id === `card:${focusId}`));
+  const res = resultItem();
+  if (res) sel.splice(sel.findIndex((x) => x?.id === `card:${focusId}`) + 1, 0, res);
   if (!sel.some((x) => x.kind === "card")) sel.push(...DOCS.filter((x) => x.kind === "card").slice(0, 3));
   return sel.filter(Boolean);
 }
@@ -330,6 +643,7 @@ function retrieve(q, focusId) {
 // ---- 質問窓口 ---------------------------------------------------------------
 const SUG_DEFAULT = ["回復期病床の割合の分母から休棟中の病床を除いたのはなぜ？", "病床機能報告の「*」や「-」は分析でどう扱えばいい？", "人口を構想区域にまとめるとき、二重に数えないためには？", "指標を新しく追加するには何をすればいい？"];
 const SUG_CARD = ["この指標の意図を短く説明して", "なぜこの分母を選んだの？", "この指標から言えないことは？", "代わりに使える指標は？"];
+const SUG_RES = ["表示中の結果で、値が特に低い地域はどこ？", "この結果を読むときの注意点は？", "この指標の意図を短く説明して", "なぜこの分母を選んだの？"];
 let focusId = null, busy = false, sample = null, settings = {};
 const hist = [];
 try { settings = JSON.parse(localStorage.getItem("chiiki-od-chat") || "{}"); } catch (_) { settings = {}; }
@@ -343,7 +657,7 @@ function setFocus(id, ask) {
 }
 function renderSug() {
   const el = $("sug"); if (!el) return;
-  const list = focusId ? SUG_CARD : SUG_DEFAULT;
+  const list = !focusId ? SUG_DEFAULT : RS?.c.id === focusId ? SUG_RES : SUG_CARD;
   el.innerHTML = `<p class="note" style="margin:0">${focusId ? "この指標について：" : "たとえば："}</p>` + list.map((s, i) => `<button type="button" data-i="${i}">${esc(s)}</button>`).join("");
   el.querySelectorAll("button").forEach((b) => b.addEventListener("click", () => ask(list[+b.dataset.i])));
 }
@@ -362,7 +676,9 @@ function systemPrompt(ctx) {
 回答の決まり：
 - 下の【資料】に書かれていることだけを根拠に、日本語で答える。資料にないことは推測で補わず、「作成者の説明はありません」または「このカタログでは確認できません」と書き、どの資料を見ればよいか（データの公表元、コードブック、GitHubのIssueで作成者に聞く等）を示す。
 - 指標の意図・分母を選んだ理由・注意点を聞かれたら、指標カードの該当する欄の内容を、作成者の考えとして紹介する。あなた自身の評価は加えない。
-- 数値（件数・割合・病床数など）は、資料に書かれているものしか書かない。計算して新しい数値を作らない。指標の値が知りたいときは、計算スクリプトの実行方法を案内する。
+- 数値（件数・割合・病床数など）は、資料に書かれているものしか書かない。計算して新しい数値を作らない。
+- 【資料】に「result:」で始まる結果の表があるときは、その値は計算スクリプトが出したものなので、そのまま引用してよい。値を読み比べて答えるのはよいが、差・比・平均などの新しい数値は計算しない。値の意味は、指標カードの「読み方」と「注意点」に沿って説明し、注意点を1つ以上添える。
+- 結果の表がない指標の値を聞かれたら、指標のページの「結果を見る」か、計算スクリプトの実行方法を案内する。
 - 結論を先に、400字程度、長くても800字以内。
 - 最後の行に、根拠にした資料のIDを「出典: card:xxx, doc:yyy」の形式で必ず書く。
 
@@ -373,7 +689,7 @@ function contextOf(items) {
   let budget = 14000, out = [];
   for (const it of items) {
     let body = it.kind === "card" ? JSON.stringify(Object.fromEntries(Object.entries(JSON.parse(it.text)).filter(([k]) => !["authors", "created", "updated"].includes(k))), null, 1) : it.text;
-    body = body.slice(0, it.kind === "card" ? 5000 : 2200);
+    body = body.slice(0, it.kind === "card" ? 5000 : it.kind === "result" ? 4000 : 2200);
     if (budget - body.length < 0) break;
     budget -= body.length; out.push(`[${it.id}] ${it.title}\n${body}`);
   }

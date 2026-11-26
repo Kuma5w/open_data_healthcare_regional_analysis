@@ -1,6 +1,6 @@
 # 出典表記
 
-このリポジトリは元データを含みません。各データの取得元と利用規約は `datasets/<id>.yaml` の `source_page` と `license` に書いてあります。成果物（表・図・論文・スライド）には、そこに書いた出典表記を付けてください。`chiiki-od run` が出力する実行記録（`data/outputs/<指標>.json`）の `attribution` にも同じ文が入ります。
+このリポジトリは元データを含みません。各データの取得元と利用規約は `datasets/<id>.yaml` の `source_page` と `license` に書いてあります。成果物（表・図・論文・スライド）には、そこに書いた出典表記を付けてください。`chiiki-od run` が出力する実行記録（`data/outputs/<指標>.json`）の `attribution` と、サイトの「結果を見る」の「計算の記録と出典」（印刷にも入ります）にも同じ文が入ります。
 
 ## 厚生労働省のデータ
 
@@ -20,4 +20,4 @@
 
 ## 総務省のデータ
 
-住民基本台帳に基づく人口などは、総務省の利用規約に従います（URLは `datasets/population_65plus.yaml` に記載。要確認）。
+住民基本台帳に基づく人口などは、総務省の利用規約に従います（URLは `datasets/population_jumin_r7.yaml`・`population_jumin_r8.yaml` に記載。要確認）。

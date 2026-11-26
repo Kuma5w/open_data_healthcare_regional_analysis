@@ -159,3 +159,39 @@ def test_指標を選ぶ():
     assert r["indicator"] is None and sorted(r["ties"]) == ["per100k", "share"]
     # 指標名がなければ、表示中の指標のまま
     assert one("熊本県の結果を出して", current="share")["indicator"] is None
+
+
+KAIGO = [
+    {"id": "homecare", "name": "65歳以上人口1万人あたり訪問介護事業所数"},
+    {"id": "nursing", "name": "65歳以上人口1万人あたり訪問看護事業所数"},
+    {"id": "vrehab", "name": "65歳以上人口1万人あたり訪問リハビリテーション事業所数"},
+    {"id": "day", "name": "65歳以上人口1万人あたり通所介護事業所数（地域密着型通所介護を含む）"},
+    {"id": "drehab", "name": "65歳以上人口1万人あたり通所リハビリテーション事業所数"},
+    {"id": "short", "name": "65歳以上人口1万人あたり短期入所生活介護事業所数"},
+]
+
+
+def test_似た名前の介護サービスの指標を選び分ける():
+    ctx = {
+        "prefectures": codes.PREFECTURES,
+        "indicators": KAIGO,
+        "units": {k["id"]: "municipality" for k in KAIGO},
+        "areas": {k["id"]: MUNI for k in KAIGO},
+    }
+    cases = [
+        ("訪問看護を熊本県で出して", "nursing"),
+        ("訪問介護の結果を出して", "homecare"),
+        ("訪問リハビリの結果を表示", "vrehab"),
+        ("通所介護を北海道で", "day"),
+        ("デイサービスではなく通所リハビリテーションを出して", "drehab"),
+        ("短期入所生活介護を熊本県で", "short"),
+        ("ショートステイの結果を出して", None),  # 指標名に含まれない言い方は切り替えない
+    ]
+    r = subprocess.run(
+        ["node", str(RUNNER)],
+        input=json.dumps({"ctx": ctx, "cases": [{"q": q, "current": None} for q, _ in cases]}, ensure_ascii=False),
+        capture_output=True, text=True, encoding="utf-8", check=True,
+    )
+    got = json.loads(r.stdout)
+    for (q, want), g in zip(cases, got, strict=True):
+        assert g["indicator"] == want, (q, g)

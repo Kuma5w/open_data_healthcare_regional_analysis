@@ -2,10 +2,10 @@
  "format": 1,
  "indicator": "homecare_offices_per_65plus",
  "name": "65歳以上人口1万人あたり訪問介護事業所数",
- "card_version": "0.2.0",
+ "card_version": "0.2.1",
  "script": "indicators/homecare_offices_per_65plus.py",
  "script_sha256": "4fbc546a08f91d834f86ec8303947f341d6d43225b158069c1f6c6ad5157f44d",
- "generated_at": "2026-11-26T03:40:12+00:00",
+ "generated_at": "2026-11-26T06:06:42+00:00",
  "sample": false,
  "options": {},
  "output": {

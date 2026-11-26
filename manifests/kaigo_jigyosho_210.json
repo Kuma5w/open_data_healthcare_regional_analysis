@@ -1,0 +1,54 @@
+{
+  "dataset": "kaigo_jigyosho_210",
+  "files": {
+    "main": {
+      "url": "https://www.mhlw.go.jp/content/12300000/jigyosho_210_all_20260709180538.csv",
+      "as_of": "2026年6月末",
+      "raw_path": "data/raw/kaigo_jigyosho_210/main.csv",
+      "bytes": 4581143,
+      "sha256": "227d83539c9711ac2e16a5996a4db20c90d2e84589605b5cd2572441e69112a2",
+      "fetched_at": "2026-11-26T06:01:25+00:00",
+      "obtained": "local_copy"
+    }
+  },
+  "output": {
+    "path": "data/processed/kaigo_jigyosho_210.parquet",
+    "rows": 11275,
+    "columns": [
+      "municipality_code",
+      "record_no",
+      "pref_name",
+      "municipality_name",
+      "office_name",
+      "office_name_kana",
+      "service_type",
+      "address",
+      "address_building",
+      "lat",
+      "lon",
+      "tel",
+      "fax",
+      "corporate_number",
+      "corporate_name",
+      "office_number",
+      "available_days",
+      "available_days_note",
+      "capacity",
+      "url",
+      "kyosei_service",
+      "meets_kaigo_standard",
+      "meets_shogai_standard",
+      "remarks"
+    ],
+    "converted_at": "2026-11-26T06:01:26+00:00",
+    "converter_version": "0.1.0",
+    "extras": {},
+    "report": {
+      "main": {
+        "na_symbols": {},
+        "unparsed_numbers": {},
+        "unmapped_columns": []
+      }
+    }
+  }
+}

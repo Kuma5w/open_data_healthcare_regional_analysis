@@ -7,7 +7,7 @@ import zipfile
 
 import pytest
 
-from chiiki_od import boundaries, paths
+from chiiki_od import boundaries, paths, results, specs
 
 DESIGNATED = [{"code5": "43100", "pref_name": "熊本県", "city_name": "熊本市"}]
 KOSO = [
@@ -91,14 +91,51 @@ def test_境界の層と属性():
 
 @pytest.mark.skipif(not GEO, reason="site/geo に境界がない")
 def test_結果の地域はすべて地図にある():
-    topo = json.loads(GEO[-1].read_text(encoding="utf-8"))
-    layers = {k: {g["properties"]["code"] for g in o["geometries"]} for k, o in topo["objects"].items()}
+    layers = boundaries.layer_codes()
     for p in sorted((paths.SITE / "results").glob("*.json")):
         doc = json.loads(p.read_text(encoding="utf-8"))
+        card = specs.load_card(doc["indicator"])
         ix = [c["name"] for c in doc["columns"]].index(doc["output"]["area_code"])
-        area = {r[ix] for r in doc["rows"]}
-        best = max(layers.values(), key=lambda s: len(area & s))
-        assert area <= best, f"{p.name}: 地図にない地域 {sorted(area - best)[:5]}"
+        cov = boundaries.map_coverage(card["unit_of_analysis"], [r[ix] for r in doc["rows"]], layers)
+        assert cov["shown"] and cov["missing"] == [], f"{p.name}: {cov}"
+
+
+LAYERS = {
+    "municipality": {"43100", "43202"},
+    "municipality_ward": {"43101", "43202"},
+    "koso_kuiki": {"4301", "4305", "0503"},
+    "prefecture": {"43"},
+}
+
+
+def test_地図の層は集計単位で決める():
+    # 二次医療圏は構想区域とコードが同じでも、構想区域の境界では塗らない
+    cov = boundaries.map_coverage("secondary_medical_area", ["4301", "4305"], LAYERS)
+    assert cov["layer"] is None and not cov["shown"] and "二次医療圏" in cov["reason"]
+    assert boundaries.map_coverage("koso_kuiki", ["4301", "4305"], LAYERS)["layer"] == "koso_kuiki"
+    # 市区町村は、政令市を市にまとめた層と区の層のうち、よく一致するほう
+    assert boundaries.map_coverage("municipality", ["43100", "43202"], LAYERS)["layer"] == "municipality"
+    assert boundaries.map_coverage("municipality", ["43101", "43202"], LAYERS)["layer"] == "municipality_ward"
+
+
+def test_境界にないコードは数え_9割未満なら地図を出さない():
+    codes10 = [f"43{i:03d}" for i in range(10)]
+    layers = {"municipality": set(codes10[:9])}
+    cov = boundaries.map_coverage("municipality", codes10, layers)
+    assert cov["shown"] and cov["missing"] == ["43009"]
+    layers = {"municipality": set(codes10[:8])}
+    assert not boundaries.map_coverage("municipality", codes10, layers)["shown"]
+
+
+def test_checkの注意():
+    card = {"unit_of_analysis": "municipality"}
+    doc = {"output": {"area_code": "code"}, "columns": [{"name": "code"}], "rows": [["43100"], ["43202"], ["43999"]]}
+    # 3件中1件が境界にない（9割未満）→ 地図は出ない
+    assert "地図は出ません" in results.map_warnings(card, doc, LAYERS)[0]
+    doc["rows"] = [[c] for c in [f"43{i:03d}" for i in range(9)] + ["43100"]]
+    layers = {"municipality": {f"43{i:03d}" for i in range(9)}}
+    w = results.map_warnings(card, doc, layers)
+    assert "1件" in w[0] and "43100" in w[0]
 
 
 @pytest.mark.skipif(not GEO, reason="site/geo に境界がない")

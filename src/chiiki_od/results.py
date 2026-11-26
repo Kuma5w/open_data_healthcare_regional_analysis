@@ -18,7 +18,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from . import codes, manifest, paths, runner, specs
+from . import boundaries, codes, manifest, paths, runner, specs
 
 FORMAT = 1
 QUANTILES = {"min": 0.0, "p25": 0.25, "median": 0.5, "p75": 0.75, "max": 1.0}
@@ -200,11 +200,28 @@ def status(card: dict, doc: dict) -> list[str]:
     return out
 
 
+def map_warnings(card: dict, doc: dict, geo: dict[str, set[str]]) -> list[str]:
+    """サイトの地図に出ない地域・出ない理由を返す（地図の境界は site/geo/。時点は令和8年1月1日の市区町村）。"""
+    try:
+        ix = [c["name"] for c in doc["columns"]].index(doc["output"]["area_code"])
+    except (KeyError, ValueError):
+        return []
+    cov = boundaries.map_coverage(card.get("unit_of_analysis", ""), [r[ix] for r in doc.get("rows", [])], geo)
+    if not cov["shown"]:
+        return [f"地図は出ません（{cov['reason']}）"]
+    if cov["missing"]:
+        eg = "、".join(cov["missing"][:5])
+        return [f"地図の境界にない地域コードが{len(cov['missing'])}件あり、地図では値なしになります（例：{eg}）。"
+                "境界は令和8年1月1日の市区町村・令和7年度の構想区域です"]
+    return []
+
+
 def check(out_dir: Path | None = None) -> specs.CheckResult:
     """site/results/ の結果を検証する（CIで毎回実行）。"""
     res = specs.CheckResult()
     d = Path(out_dir) if out_dir else results_dir()
     cards = {p.stem: specs.load_card(p.stem) for p in specs.card_files()}
+    geo = boundaries.layer_codes()
     found = set()
     for p in sorted(d.glob("*.json")) if d.exists() else []:
         where = f"site/results/{p.name}"
@@ -229,6 +246,8 @@ def check(out_dir: Path | None = None) -> specs.CheckResult:
         if len({len(r) for r in doc.get("rows", [])} | {len(doc.get("columns", []))}) > 1:
             res.errors.append(f"{where}: 行の長さが列の数と一致しません")
         res.warnings += [f"{where}: {m}" for m in status(cards[cid], doc)]
+        if geo:
+            res.warnings += [f"{where}: {m}" for m in map_warnings(cards[cid], doc, geo)]
     for cid, c in cards.items():
         if not c.get("output"):
             res.warnings.append(f"indicators/{cid}.yaml: output がないため、サイトで結果を出せません")

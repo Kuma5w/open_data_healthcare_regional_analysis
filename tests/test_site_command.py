@@ -260,3 +260,34 @@ def test_精神科の指標を選び分ける():
     )
     for (q, want), g in zip(cases, json.loads(r.stdout), strict=True):
         assert g["indicator"] == want, (q, g)
+
+
+PSY2 = [
+    {"id": "child", "name": "都道府県ごとの20歳未満人口100万人あたり児童・思春期の専門外来を持つ精神科病院数"},
+    {"id": "addiction", "name": "都道府県ごとの人口100万人あたり依存症の専門外来を持つ精神科病院数"},
+    {"id": "dementia", "name": "都道府県ごとの65歳以上人口100万人あたり認知症の専門外来を持つ精神科病院数"},
+    {"id": "eating", "name": "都道府県ごとの人口100万人あたり摂食障害の専門外来を持つ精神科病院数"},
+    {"id": "emergency", "name": "都道府県ごとの人口100万人あたり精神科救急医療体制整備事業に参画する精神科病院数"},
+    {"id": "discharge", "name": "都道府県ごとの医療保護入院の1年時点の退院率"},
+    {"id": "beds", "name": "都道府県ごとの人口10万人あたり精神病床数"},
+]
+
+
+def test_精神科の専門外来と救急の指標を選び分ける():
+    ctx = {"prefectures": codes.PREFECTURES, "indicators": PSY2,
+           "units": {m["id"]: "prefecture" for m in PSY2}, "areas": {m["id"]: [] for m in PSY2}}
+    cases = [
+        ("児童・思春期の専門外来を出して", "child"),
+        ("依存症の専門外来を熊本県で", "addiction"),
+        ("認知症の専門外来の結果", "dementia"),
+        ("精神科救急の参画病院を出して", "emergency"),
+        ("医療保護入院の退院率を出して", "discharge"),
+        ("専門外来の結果を出して", None),  # どの専門外来か分からない → 候補を出す
+    ]
+    r = subprocess.run(
+        ["node", str(RUNNER)],
+        input=json.dumps({"ctx": ctx, "cases": [{"q": q, "current": None} for q, _ in cases]}, ensure_ascii=False),
+        capture_output=True, text=True, encoding="utf-8", check=True,
+    )
+    for (q, want), g in zip(cases, json.loads(r.stdout), strict=True):
+        assert g["indicator"] == want, (q, g)

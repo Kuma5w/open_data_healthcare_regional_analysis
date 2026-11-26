@@ -6,7 +6,7 @@ import pandas as pd
 
 from . import paths
 
-POP_INT = ["pop_total", "pop_65plus", "pop_75plus"]
+POP_INT = ["pop_total", "pop_65plus", "pop_75plus", "pop_0_14", "age_15_19"]
 
 
 def population(dataset_id: str, sample: bool = False, sex: str = "total") -> pd.DataFrame:

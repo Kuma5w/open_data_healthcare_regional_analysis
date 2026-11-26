@@ -1,0 +1,261 @@
+{
+  "dataset": "mental_health_630_clinical_r7",
+  "files": {
+    "shinryou": {
+      "url": "https://www.ncnp.go.jp/nimh/seisaku/data/assets/excel/r7/r7_630_shinryou.zip",
+      "as_of": "令和7年6月30日",
+      "raw_path": "data/raw/mental_health_630_clinical_r7/shinryou.zip",
+      "bytes": 1182289,
+      "sha256": "3836db6fe161ed93b18fdb54e895752216c76fe5b9d15f385f2581a2ce2c64b1",
+      "fetched_at": "2026-11-26T08:40:18+00:00",
+      "obtained": "local_copy"
+    }
+  },
+  "output": {
+    "path": "data/processed/mental_health_630_clinical_r7.parquet",
+    "rows": 748,
+    "columns": [
+      "table_no",
+      "table_name",
+      "level",
+      "area_code",
+      "area_name",
+      "facilities",
+      "new_admissions_june",
+      "outpatients_june",
+      "outpatients_june_jiritsu",
+      "outpatients_june_welfare",
+      "outpatients_june_psychotherapy",
+      "outpatients_june_continuing_support",
+      "outpatients_june_first_visit",
+      "home_visits_june",
+      "house_calls_june",
+      "home_nursing_june",
+      "liaison_june_other_dept",
+      "liaison_june_emergency_center",
+      "clinic_child_yes",
+      "clinic_child_no",
+      "clinic_addiction_yes",
+      "clinic_addiction_no",
+      "clinic_dementia_yes",
+      "clinic_dementia_no",
+      "clinic_depression_yes",
+      "clinic_depression_no",
+      "clinic_developmental_yes",
+      "clinic_developmental_no",
+      "clinic_eating_yes",
+      "clinic_eating_no",
+      "emergency_center_yes",
+      "emergency_center_no",
+      "dementia_center_yes",
+      "dementia_center_no",
+      "psy_emergency_full_time",
+      "psy_emergency_rotation",
+      "psy_emergency_comorbidity",
+      "psy_emergency_outpatient",
+      "psy_emergency_nonparticipant_responding",
+      "psy_emergency_nonparticipant_not_responding",
+      "hub_addiction_specialized_yes",
+      "hub_addiction_specialized_no",
+      "hub_addiction_treatment_yes",
+      "hub_addiction_treatment_no",
+      "hub_brain_injury_yes",
+      "hub_brain_injury_no",
+      "hub_eating_yes",
+      "hub_eating_no",
+      "hub_epilepsy_yes",
+      "hub_epilepsy_no",
+      "dpat_yes",
+      "dpat_no",
+      "cbt_doctor_claims",
+      "cbt_doctor_facilities_any",
+      "cbt_doctor_facilities_1_5",
+      "cbt_doctor_facilities_6_10",
+      "cbt_doctor_facilities_11_50",
+      "cbt_doctor_facilities_51_100",
+      "cbt_doctor_facilities_101plus",
+      "cbt_doctor_facilities_none",
+      "cbt_joint_claims",
+      "cbt_joint_facilities_any",
+      "cbt_joint_facilities_1_5",
+      "cbt_joint_facilities_6_10",
+      "cbt_joint_facilities_11_50",
+      "cbt_joint_facilities_51_100",
+      "cbt_joint_facilities_101plus",
+      "cbt_joint_facilities_none",
+      "cbt_facilities_doctor_only",
+      "cbt_facilities_joint_only",
+      "cbt_facilities_both",
+      "cbt_facilities_neither",
+      "comorbidity_claims",
+      "comorbidity_facilities_any",
+      "comorbidity_facilities_1_5",
+      "comorbidity_facilities_6_10",
+      "comorbidity_facilities_11_50",
+      "comorbidity_facilities_51_100",
+      "comorbidity_facilities_101plus",
+      "comorbidity_facilities_none",
+      "notif_psy_enhanced_yes",
+      "notif_psy_enhanced_no",
+      "notif_psy_emergency_yes",
+      "notif_psy_emergency_no",
+      "as_of"
+    ],
+    "converted_at": "2026-11-26T08:40:20+00:00",
+    "converter_version": "0.1.0",
+    "extras": {
+      "outcome_1y": "data/processed/mental_health_630_clinical_r7__outcome_1y.parquet",
+      "codebook": "codebooks/mental_health_630_clinical_r7.csv"
+    },
+    "report": {
+      "sheets": {
+        "診療実績_専門外来_届出状況1（精神病床有_全病院）": [
+          {
+            "table_no": 1,
+            "level": "prefecture",
+            "rows": 48
+          },
+          {
+            "table_no": 1,
+            "level": "designated_city",
+            "rows": 20
+          }
+        ],
+        "診療実績_専門外来_届出状況2（精神病床有_特定機能病院）": [
+          {
+            "table_no": 2,
+            "level": "prefecture",
+            "rows": 48
+          },
+          {
+            "table_no": 2,
+            "level": "designated_city",
+            "rows": 20
+          }
+        ],
+        "診療実績_専門外来_届出状況3（精神病床有_地域医療支援病院）": [
+          {
+            "table_no": 3,
+            "level": "prefecture",
+            "rows": 48
+          },
+          {
+            "table_no": 3,
+            "level": "designated_city",
+            "rows": 20
+          }
+        ],
+        "診療実績_専門外来_届出状況4（精神病床有_一般病院）": [
+          {
+            "table_no": 4,
+            "level": "prefecture",
+            "rows": 48
+          },
+          {
+            "table_no": 4,
+            "level": "designated_city",
+            "rows": 20
+          }
+        ],
+        "診療実績_専門外来_届出状況5（精神病床有_精神病床のみ）": [
+          {
+            "table_no": 5,
+            "level": "prefecture",
+            "rows": 48
+          },
+          {
+            "table_no": 5,
+            "level": "designated_city",
+            "rows": 20
+          }
+        ],
+        "診療実績_専門外来_届出状況6（精神病床有_都道府県立病院等)": [
+          {
+            "table_no": 6,
+            "level": "prefecture",
+            "rows": 48
+          },
+          {
+            "table_no": 6,
+            "level": "designated_city",
+            "rows": 20
+          }
+        ],
+        "診療実績_専門外来_届出状況7（精神病床有_指定病院）": [
+          {
+            "table_no": 7,
+            "level": "prefecture",
+            "rows": 48
+          },
+          {
+            "table_no": 7,
+            "level": "designated_city",
+            "rows": 20
+          }
+        ],
+        "診療実績_専門外来_届出状況8（精神病床有_非指定病院）": [
+          {
+            "table_no": 8,
+            "level": "prefecture",
+            "rows": 48
+          },
+          {
+            "table_no": 8,
+            "level": "designated_city",
+            "rows": 20
+          }
+        ],
+        "診療実績_専門外来_届出状況9（精神病床無_全施設)": [
+          {
+            "table_no": 9,
+            "level": "prefecture",
+            "rows": 48
+          },
+          {
+            "table_no": 9,
+            "level": "designated_city",
+            "rows": 20
+          }
+        ],
+        "診療実績_専門外来_届出状況10（精神病床無_病院）": [
+          {
+            "table_no": 10,
+            "level": "prefecture",
+            "rows": 48
+          },
+          {
+            "table_no": 10,
+            "level": "designated_city",
+            "rows": 20
+          }
+        ],
+        "診療実績_専門外来_届出状況11（精神病床無_CL・診療所）": [
+          {
+            "table_no": 11,
+            "level": "prefecture",
+            "rows": 48
+          },
+          {
+            "table_no": 11,
+            "level": "designated_city",
+            "rows": 20
+          }
+        ]
+      },
+      "outcome_1y": {
+        "blocks": [
+          {
+            "level": "prefecture",
+            "rows": 48
+          },
+          {
+            "level": "designated_city",
+            "rows": 20
+          }
+        ]
+      },
+      "as_of": "令和7年6月30日時点の医療機関の実態",
+      "total_mismatches": []
+    }
+  }
+}

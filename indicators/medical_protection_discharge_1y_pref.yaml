@@ -1,0 +1,82 @@
+id: medical_protection_discharge_1y_pref
+version: 0.1.0
+status: draft
+name: 都道府県ごとの医療保護入院の1年時点の退院率
+short_description: ある月に医療保護入院した患者が、1年のうちにどれくらい退院したかを、都道府県ごとに比べる
+unit_of_analysis: prefecture
+unit_note: 都道府県（政令指定都市の分を含む）。630調査は都道府県と政令指定都市ごとの集計表で、構想区域や市区町村の値はない。
+
+numerator:
+  description: 2024年6月に医療保護入院で入院した患者のうち、1年時点までに退院した人数（公表されている1年時点の退院率×入院した患者数。どの都道府県でも整数になる）。3か月・6か月時点の人数と率、地域援助事業者の紹介があった割合も出す
+  dataset: mental_health_630_clinical_r7
+  as_of: 2024年6月入院、1年後まで
+denominator:
+  description: 2024年6月に医療保護入院で入院した患者数（全国13,861人）
+  dataset: mental_health_630_clinical_r7
+  as_of: 2024年6月
+formula: 1年時点までに退院した人数 ÷ 2024年6月に医療保護入院した患者数 × 100
+
+intent: >
+  改正医療法により、地域医療構想に精神医療が位置付けられた（地域医療構想策定ガイドライン
+  Ⅰ-３）。国のワーキンググループで精神医療の地域医療構想のガイドラインが検討されている（2026年度中に結論の予定）。WG資料は、入院期間で精神病床の機能を区分している（急性期は3か月未満、包括期は3か月以上1年未満、慢性期は1年以上）。委員の意見でも、入院後1年程度まで地域移行が進むという全国的な傾向が引用されている。同じ月に医療保護入院した患者のその後を追った値で、入院が長期化せずに退院につながっているかを、都道府県ごとに比べるための指標。
+
+why_this_denominator: >
+  入院した時点をそろえた患者の集団（2024年6月に医療保護入院した人）を分母にした。ある日の在院患者を分母にすると、すでに長く入院している人が多く含まれ、新しく入院した人がどれくらい退院するかが見えない。期間は、630調査が公表している3か月・6か月・1年のうち、慢性期（1年以上）の境目になる1年を主な値にした。
+
+interpretation: >
+  値が高いほど、医療保護入院した患者が1年のうちに退院している。低い場合は、入院が長期化している可能性がある。転院や死亡を退院に含むかは公表資料に書かれていないので、高いことがそのまま地域生活への移行を意味するとは限らない。患者数の少ない都道府県では率が大きく動く。
+
+policy_questions:
+  - 医療保護入院した患者が1年たっても退院していない割合が高い都道府県はどこか
+  - 3か月・6か月時点で退院が進んでいない都道府県はどこか
+
+caveats:
+  - 630調査（精神保健福祉資料）医療機関票の集計表（令和7年度の調査で、2024年6月に入院した患者の1年後までを集計）。
+  - 公表されているのは都道府県と政令指定都市ごとの集計だけで、医療機関ごとの値や構想区域ごとの値はない。精神医療の地域医療構想をどの単位で考えるか（都道府県か構想区域か）は国のワーキンググループで検討中。
+  - 都道府県の値には政令指定都市の分が含まれる。
+  - 2024年6月の1か月に入院した患者だけの値で、都道府県によっては数十人。年による変動が大きい。
+  - 退院率の定義（転院・死亡を含むか、入院形態が変わった人の扱い）は、630調査の定義書に書かれていない。
+  - 入院した医療機関の所在地の都道府県で数えている。患者の住所地ではない。
+  - 入院先は精神病床を有する病院。表の内訳の割合（診断、同意者、退院支援委員会など）は data/processed の outcome_1y にある。
+
+alternatives:
+  - id: psychiatric_inpatients_per_100k_pref
+    reason: ある日の在院患者の数を人口あたりで見る
+  - id: psychiatric_bed_occupancy_pref
+    reason: 精神病床の利用率と合わせて見る
+
+authors:
+  - name: H.I.
+
+script: indicators/medical_protection_discharge_1y_pref.py
+
+output:
+  area_code: pref_code
+  area_name: pref_name
+  value: discharge_rate_1y_pct
+  numerator: discharged_1y
+  denominator: admitted
+  scale: 100
+  digits: 1
+  unit: ％
+  columns:
+    - {name: pref_code, label: 都道府県コード}
+    - {name: pref_name, label: 都道府県名}
+    - {name: admitted, label: 2024年6月に医療保護入院した患者数, unit: 人}
+    - {name: discharged_3m, label: 3か月時点までに退院した人数, unit: 人}
+    - {name: discharged_6m, label: 6か月時点までに退院した人数, unit: 人}
+    - {name: discharged_1y, label: 1年時点までに退院した人数, unit: 人}
+    - {name: discharge_rate_3m_pct, label: 3か月時点の退院率, unit: ％}
+    - {name: discharge_rate_6m_pct, label: 6か月時点の退院率, unit: ％}
+    - {name: discharge_rate_1y_pct, label: 1年時点の退院率, unit: ％}
+    - {name: support_referral_pct, label: 地域援助事業者の紹介があった割合, unit: ％}
+
+references:
+  - title: 精神保健福祉資料（630調査）令和7年度 医療機関票 診療実績（国立精神・神経医療研究センター 精神保健研究所）
+    url: https://www.ncnp.go.jp/nimh/seisaku/data/630.html
+  - title: 地域医療構想策定ガイドライン（2026）Ⅰ-３ 精神医療に関する地域医療構想について
+  - title: 精神医療に関する地域医療構想の検討ワーキンググループ 資料（厚生労働省、令和8年11月）
+    url: https://www.mhlw.go.jp/content/10800000/001772794.pdf
+
+created: "2026-11-26"
+updated: "2026-11-26"

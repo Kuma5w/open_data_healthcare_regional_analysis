@@ -2,7 +2,7 @@
 
 import json
 
-from chiiki_od import catalog, paths
+from chiiki_od import catalog, paths, specs
 
 
 def test_catalog_and_search_index(tmp_path, monkeypatch):
@@ -22,3 +22,19 @@ def test_catalog_and_search_index(tmp_path, monkeypatch):
     assert cat["prefectures"]["43"] == "熊本県" and len(cat["prefectures"]) == 47
     for cid, r in cat["results"].items():
         assert cid in ids and r["path"] == f"results/{cid}.json"
+
+
+def test_hidden_cards_are_left_out_of_catalog(tmp_path, monkeypatch):
+    monkeypatch.setattr(paths, "SITE", tmp_path)
+    real = specs.load_card
+    monkeypatch.setattr(
+        specs,
+        "load_card",
+        lambda cid: {**real(cid), "hidden_from_site": {"reason": "テスト"}}
+        if cid == "homecare_offices_per_65plus"
+        else real(cid),
+    )
+    cat = catalog.build()
+    ids = {c["id"] for c in cat["indicators"]}
+    assert "homecare_offices_per_65plus" not in ids and "recovery_bed_share_koso" in ids
+    assert "homecare_offices_per_65plus" not in cat["results"]

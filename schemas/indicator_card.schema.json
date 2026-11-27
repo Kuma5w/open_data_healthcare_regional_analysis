@@ -37,6 +37,16 @@
         "deprecated"
       ]
     },
+    "hidden_from_site": {
+      "type": "object",
+      "description": "サイト（カタログ・結果を見る・質問窓口）に一時的に出さない指標に付ける。カードとスクリプトはリポジトリに残り、この欄を消すと元に戻る",
+      "required": ["reason"],
+      "additionalProperties": false,
+      "properties": {
+        "reason": {"type": "string", "description": "出さない理由（例：作成者の確認待ち）"},
+        "since": {"type": "string", "description": "出さなくなった日（YYYY-MM-DD）"}
+      }
+    },
     "name": {
       "type": "string",
       "minLength": 4

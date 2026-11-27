@@ -95,3 +95,22 @@ def test_time_series_mean_for_hospitals(tmp_path):
     assert s["kind"] == "mean"
     assert s["national"][-1] == pytest.approx(2.0)  # 4病院の該当項目数 1・4・3・0 の平均
     assert len(doc["rows"]) == 4
+
+
+def _hide(monkeypatch, card_id):
+    """card_id のカードだけ、hidden_from_site が付いているものとして読む。"""
+    real = specs.load_card
+    monkeypatch.setattr(
+        specs, "load_card", lambda cid: {**real(cid), "hidden_from_site": {"reason": "テスト"}} if cid == card_id else real(cid)
+    )
+
+
+def test_hidden_cards_stay_off_the_site(tmp_path, monkeypatch):
+    _export(tmp_path, "homecare_offices_per_65plus")
+    _hide(monkeypatch, "homecare_offices_per_65plus")
+    res = results.check(tmp_path)
+    # 結果を site/results に置いたままだと公開されるので、エラーにする
+    assert any("hidden_from_site" in e for e in res.errors)
+    # 引数なしの chiiki-od results でも作らず、結果がないことも注意しない
+    assert "homecare_offices_per_65plus" not in results.exportable()
+    assert not any(w.startswith("indicators/homecare_offices_per_65plus.yaml") for w in res.warnings)

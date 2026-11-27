@@ -1,6 +1,9 @@
 id: zaitaku_renkei_psc_hospital
 version: 0.1.1
 status: draft
+hidden_from_site:
+  reason: 作成者の確認が済むまで、サイトに出さない（千葉県の結果との照合と、病院の照合方法を作成者と相談中）
+  since: "2026-11-27"
 name: 在宅医療等連携機能の類型（P・S・C）と星取り表（病院別）
 short_description: 病院ごとに在宅医療に関わる18項目を実数の基準と比べ、P・S・Cの3類型を判定し、どの項目を満たすかを○×で示す
 unit_of_analysis: facility

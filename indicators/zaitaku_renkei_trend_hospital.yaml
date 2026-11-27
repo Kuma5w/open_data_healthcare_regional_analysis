@@ -1,6 +1,9 @@
 id: zaitaku_renkei_trend_hospital
 version: 0.1.0
 status: draft
+hidden_from_site:
+  reason: 作成者の確認が済むまで、サイトに出さない（千葉県の結果との照合と、病院の照合方法を作成者と相談中）
+  since: "2026-11-27"
 name: 在宅医療等連携機能の該当項目数の推移（病院別、FY2020〜2024）
 short_description: P・S・C判定の18項目のうち病床機能報告で毎年追える11項目について、病院ごとに満たした項目の数と○×を年度ごとに示す
 unit_of_analysis: facility

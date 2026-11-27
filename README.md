@@ -6,7 +6,7 @@
 
 サイト：https://kuma5w.github.io/open_data_healthcare_regional_analysis/
 
-> 状態（2026年11月）：データセット28、サイトに出している指標28。指標はすべて草案（`status: draft`）で、意見をもらいながら直していく段階です。サイトの「結果を見る」から地域を選んで、表・グラフ・地図・CSV・印刷用の1枚を出せます。表示の切り替えは、質問窓口に「熊本県の結果を出して」と書いてもできます。
+> 状態（2026年11月）：データセット28、指標28。指標はすべて草案（`status: draft`）で、意見をもらいながら直していく段階です。サイトの「結果を見る」から地域を選んで、表・グラフ・地図・CSV・印刷用の1枚を出せます。表示の切り替えは、質問窓口に「熊本県の結果を出して」と書いてもできます。
 
 ## はじめての方へ
 
@@ -34,8 +34,6 @@
 | 精神医療（診療実績） | [精神科救急医療体制整備事業に参画する病院数](indicators/psy_emergency_hospitals_per_1m_pref.yaml)、専門外来を持つ病院数：[児童・思春期](indicators/child_adolescent_clinics_per_1m_pref.yaml)・[依存症](indicators/addiction_clinics_per_1m_pref.yaml)・[認知症](indicators/dementia_clinics_per_1m_pref.yaml)・[うつ病](indicators/depression_clinics_per_1m_pref.yaml)・[発達障害](indicators/developmental_clinics_per_1m_pref.yaml)・[摂食障害](indicators/eating_disorder_clinics_per_1m_pref.yaml)、[医療保護入院の1年時点の退院率](indicators/medical_protection_discharge_1y_pref.yaml) | 都道府県 | 精神保健福祉資料（630調査、令和7年度）、住民基本台帳人口 |
 
 人口あたりの指標の分母（総人口・65歳以上・75歳以上・20歳未満など）と、その理由は各カードに書いてあります。`chiiki-od list` でも一覧できます。
-
-このほかに、作成者の確認が済むまでサイトに出していない指標が4つあります（カードの `hidden_from_site`。`chiiki-od list` では「サイトに出していない」と表示）。
 
 ## 3つの約束
 
@@ -134,7 +132,7 @@ df <- read_parquet("data/processed/kaigo_jigyosho_110.parquet")
 ## 作業の進め方
 
 1. 雛形：構成・指標カードの型・共通対応表（済）
-2. データの変換と指標（済。データセット28・指標32）
+2. データの変換と指標（済。データセット28・指標28）
 3. 指標カタログのサイトと解説チャットボット（済。[docs/site.md](docs/site.md)）
 4. ボタン出力：表・グラフ・CSV・印刷・再現の手順、塗り分け地図、質問窓口からの地域の指定、推移のグラフ（済）
 5. 公開して、プルリクエストの受け付けを始める（公開済み。少数の研究者に試してもらい、感想をもとに直している ← いま）

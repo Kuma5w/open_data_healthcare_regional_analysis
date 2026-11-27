@@ -71,30 +71,59 @@ def test_published_results_pass_check():
     assert results.check().errors == []
 
 
-def test_time_series_for_trend_indicators(tmp_path):
+def _trend(monkeypatch, time_stat=None):
+    """推移を持つ指標（output.time）の合成の例。年度×構想区域の分子・分母と値。"""
+    import pandas as pd
+
+    nan = float("nan")
+    rows = [
+        # 年度, 区域, 名前, 分子, 分母（値＝分子÷分母。4302 はどの年度も値がない）
+        ("FY2022", "4312", "熊本A", 2, 2), ("FY2022", "4301", "熊本B", 3, 1), ("FY2022", "1201", "千葉A", 4, 2),
+        ("FY2023", "4312", "熊本A", 0, 1), ("FY2023", "4301", "熊本B", 2, 2), ("FY2023", "1201", "千葉A", 1, 1),
+        ("FY2024", "4312", "熊本A", 5, 2), ("FY2024", "4301", "熊本B", 1, 1), ("FY2024", "1201", "千葉A", 6, 2),
+        ("FY2022", "4302", "熊本C", nan, nan), ("FY2023", "4302", "熊本C", nan, nan), ("FY2024", "4302", "熊本C", nan, nan),
+    ]
+    df = pd.DataFrame(rows, columns=["fiscal_year", "koso_kuiki_code", "koso_kuiki_name", "num", "den"])
+    df["value"] = df["num"] / df["den"]
+    out = {
+        "area_code": "koso_kuiki_code", "area_name": "koso_kuiki_name", "value": "value",
+        "numerator": "num", "denominator": "den", "scale": 1, "digits": 1, "time": "fiscal_year",
+        "columns": [{"name": c, "label": c} for c in df.columns],
+    }
+    if time_stat:
+        out["time_stat"] = time_stat
+    card = {"id": "trend_example", "name": "推移の例", "version": "0.1.0",
+            "script": "indicators/recovery_bed_share_koso.py", "output": out}
+    real = specs.load_card
+    monkeypatch.setattr(specs, "load_card", lambda cid: card if cid == "trend_example" else real(cid))
+    monkeypatch.setattr(results.runner, "execute", lambda cid, sample=False: (df.copy(), [], {}))
+
+
+def test_time_series_for_trend_indicators(tmp_path, monkeypatch):
     # 推移を持つ指標：表は最新の年度、series は年度ごとの全国・都道府県・地域の値、CSV はすべての年度
-    doc = _export(tmp_path, "zaitaku_renkei_trend_koso")
+    _trend(monkeypatch)
+    doc = _export(tmp_path, "trend_example")
     names = [c["name"] for c in doc["columns"]]
     rows = [dict(zip(names, r, strict=True)) for r in doc["rows"]]
-    assert {r["fiscal_year"] for r in rows} == {"FY2024"}
+    assert {r["fiscal_year"] for r in rows} == {"FY2024"} and len(rows) == 4
     s = doc["series"]
     assert s["time_column"] == "fiscal_year" and s["times"] == ["FY2022", "FY2023", "FY2024"]
-    assert s["kind"] == "pooled"
-    assert s["national"] == [2.5, 1.0, 2.0]  # (1+4)/2、(0+0+3)/3、(1+4+3+0)/4
-    assert s["by_pref"]["43"] == s["national"]
+    assert s["kind"] == "pooled"  # 分子・分母があれば計
+    assert s["national"] == [1.8, 0.75, 2.4]  # 9/5、3/4、12/5（値のない区域は除く）
+    assert s["by_pref"]["43"] == [1.667, 0.667, 2.0]  # 5/3、2/3、6/3
     assert s["areas"]["4312"] == [1.0, 0.0, 2.5] and s["areas"]["4302"] == [None, None, None]
     import pandas as pd
 
-    csv = pd.read_csv(tmp_path / "zaitaku_renkei_trend_koso.csv", dtype=str)
+    csv = pd.read_csv(tmp_path / "trend_example.csv", dtype=str)
     assert sorted(csv["fiscal_year"].unique()) == s["times"]
 
 
-def test_time_series_mean_for_hospitals(tmp_path):
-    doc = _export(tmp_path, "zaitaku_renkei_trend_hospital")
-    s = doc["series"]
+def test_time_series_mean(tmp_path, monkeypatch):
+    # time_stat: mean のときは、全国・都道府県の線が値の平均になる
+    _trend(monkeypatch, time_stat="mean")
+    s = _export(tmp_path, "trend_example")["series"]
     assert s["kind"] == "mean"
-    assert s["national"][-1] == pytest.approx(2.0)  # 4病院の該当項目数 1・4・3・0 の平均
-    assert len(doc["rows"]) == 4
+    assert s["national"][-1] == pytest.approx(2.167)  # 2.5・1.0・3.0 の平均
 
 
 def _hide(monkeypatch, card_id):

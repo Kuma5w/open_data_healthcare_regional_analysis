@@ -39,7 +39,8 @@ def _list(_args) -> int:
     print("指標:")
     for p in specs.card_files():
         c = specs.load_card(p.stem)
-        print(f"  {c['id']:<28} {c['name']}［{c['status']}］")
+        mark = "" if specs.on_site(c) else "（サイトに出していない）"
+        print(f"  {c['id']:<28} {c['name']}［{c['status']}］{mark}")
     return 0
 
 

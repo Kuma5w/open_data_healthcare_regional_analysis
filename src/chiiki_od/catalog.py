@@ -100,7 +100,8 @@ def _results_index(cards: list[dict]) -> dict:
 
 
 def build() -> dict:
-    cards = [specs.load_card(p.stem) for p in specs.card_files()]
+    # hidden_from_site の付いた指標は、サイト（カタログ・結果を見る・質問窓口）に出さない
+    cards = [c for c in (specs.load_card(p.stem) for p in specs.card_files()) if specs.on_site(c)]
     datasets = [_dataset_entry(specs.load_dataset(p.stem)) for p in specs.dataset_files()]
     catalog = {
         "generated_at": manifest.now(),

@@ -59,6 +59,11 @@ def load_card(card_id: str) -> dict:
     return _load_yaml(paths.INDICATORS / f"{card_id}.yaml")
 
 
+def on_site(card: dict) -> bool:
+    """サイトに出す指標か。カードに hidden_from_site があれば、カタログ・結果・質問窓口から外す。"""
+    return not card.get("hidden_from_site")
+
+
 @dataclass
 class CheckResult:
     errors: list[str] = field(default_factory=list)

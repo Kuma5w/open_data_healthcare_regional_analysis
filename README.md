@@ -6,7 +6,7 @@
 
 サイト：https://kuma5w.github.io/open_data_healthcare_regional_analysis/
 
-> 状態（2026年11月）：データセット28、指標32。指標はすべて草案（`status: draft`）で、意見をもらいながら直していく段階です。サイトの「結果を見る」から地域を選んで、表・グラフ・地図・CSV・印刷用の1枚を出せます。表示の切り替えは、質問窓口に「熊本県の結果を出して」と書いてもできます。
+> 状態（2026年11月）：データセット28、サイトに出している指標28。指標はすべて草案（`status: draft`）で、意見をもらいながら直していく段階です。サイトの「結果を見る」から地域を選んで、表・グラフ・地図・CSV・印刷用の1枚を出せます。表示の切り替えは、質問窓口に「熊本県の結果を出して」と書いてもできます。
 
 ## はじめての方へ
 
@@ -27,7 +27,6 @@
 | 分野 | 指標 | 単位 | 使うデータ |
 |---|---|---|---|
 | 病床 | [回復期病床の割合](indicators/recovery_bed_share_koso.yaml)、[75歳以上人口10万人あたり回復期病床数](indicators/recovery_beds_per_100k_75plus_koso.yaml) | 構想区域 | 病床機能報告（令和7年度）、住民基本台帳人口 |
-| 在宅医療等連携機能（作成者 D.S.） | 類型（P・S・C）の判定：[病院別](indicators/zaitaku_renkei_psc_hospital.yaml)・[構想区域別](indicators/zaitaku_renkei_psc_koso.yaml)、該当項目数の推移（FY2020〜2024）：[病院別](indicators/zaitaku_renkei_trend_hospital.yaml)・[構想区域別](indicators/zaitaku_renkei_trend_koso.yaml) | 病院（名前は伏せる）、構想区域 | 病床機能報告（令和3〜7年度）、外来機能報告（令和7年度）、地方厚生局の届出受理医療機関名簿 |
 | 医療施設 | 人口10万人あたりの[病院数](indicators/hospitals_per_100k.yaml)・[一般診療所数](indicators/general_clinics_per_100k.yaml)・[歯科診療所数](indicators/dental_clinics_per_100k.yaml)（市区町村）、同じく[病院数](indicators/hospitals_per_100k_koso.yaml)・[一般診療所数](indicators/general_clinics_per_100k_koso.yaml)・[歯科診療所数](indicators/dental_clinics_per_100k_koso.yaml)（構想区域） | 市区町村、構想区域 | 医療施設調査（令和7年）、住民基本台帳人口 |
 | 介護サービス | 65歳以上人口1万人あたり事業所数：[訪問介護](indicators/homecare_offices_per_65plus.yaml)・[訪問看護](indicators/visiting_nursing_offices_per_65plus.yaml)・[訪問リハビリテーション](indicators/visiting_rehab_offices_per_65plus.yaml)・[通所介護](indicators/day_service_offices_per_65plus.yaml)・[通所リハビリテーション](indicators/day_rehab_offices_per_65plus.yaml)・[短期入所生活介護](indicators/short_stay_offices_per_65plus.yaml) | 市区町村 | 介護サービス情報公表システム、住民基本台帳人口 |
 | 精神医療（病床・医師） | 人口10万人あたりの[精神病床数](indicators/psychiatric_beds_per_100k_pref.yaml)・[在院患者数](indicators/psychiatric_inpatients_per_100k_pref.yaml)・[精神科医師数](indicators/psychiatrists_per_100k_pref.yaml)、[精神病床の利用率](indicators/psychiatric_bed_occupancy_pref.yaml)、[措置入院受入可能病床の利用状況](indicators/involuntary_bed_use_pref.yaml) | 都道府県 | 精神保健福祉資料（630調査、令和7年度）、住民基本台帳人口 |
@@ -35,6 +34,8 @@
 | 精神医療（診療実績） | [精神科救急医療体制整備事業に参画する病院数](indicators/psy_emergency_hospitals_per_1m_pref.yaml)、専門外来を持つ病院数：[児童・思春期](indicators/child_adolescent_clinics_per_1m_pref.yaml)・[依存症](indicators/addiction_clinics_per_1m_pref.yaml)・[認知症](indicators/dementia_clinics_per_1m_pref.yaml)・[うつ病](indicators/depression_clinics_per_1m_pref.yaml)・[発達障害](indicators/developmental_clinics_per_1m_pref.yaml)・[摂食障害](indicators/eating_disorder_clinics_per_1m_pref.yaml)、[医療保護入院の1年時点の退院率](indicators/medical_protection_discharge_1y_pref.yaml) | 都道府県 | 精神保健福祉資料（630調査、令和7年度）、住民基本台帳人口 |
 
 人口あたりの指標の分母（総人口・65歳以上・75歳以上・20歳未満など）と、その理由は各カードに書いてあります。`chiiki-od list` でも一覧できます。
+
+このほかに、作成者の確認が済むまでサイトに出していない指標が4つあります（カードの `hidden_from_site`。`chiiki-od list` では「サイトに出していない」と表示）。
 
 ## 3つの約束
 

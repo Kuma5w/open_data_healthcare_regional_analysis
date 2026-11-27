@@ -224,7 +224,9 @@ def export(card_id: str, sample: bool = False, out_dir: Path | None = None) -> P
 
 
 def exportable() -> list[str]:
-    return [p.stem for p in specs.card_files() if specs.load_card(p.stem).get("output")]
+    """chiiki-od results を引数なしで実行したときに作る指標。サイトに出さない指標は除く。"""
+    cards = [specs.load_card(p.stem) for p in specs.card_files()]
+    return [c["id"] for c in cards if c.get("output") and specs.on_site(c)]
 
 
 def status(card: dict, doc: dict) -> list[str]:
@@ -280,6 +282,11 @@ def check(out_dir: Path | None = None) -> specs.CheckResult:
         if cid not in cards:
             res.errors.append(f"{where}: 指標カード indicators/{cid}.yaml がありません")
             continue
+        if not specs.on_site(cards[cid]):
+            res.errors.append(
+                f"{where}: サイトに出さない指標（hidden_from_site）の結果です。site/results に置くと公開されるので消してください"
+            )
+            continue
         if doc.get("sample"):
             res.errors.append(f"{where}: 合成サンプルの結果です。公開する結果は実データで作ってください")
         if doc.get("format") != FORMAT:
@@ -292,6 +299,8 @@ def check(out_dir: Path | None = None) -> specs.CheckResult:
         if geo:
             res.warnings += [f"{where}: {m}" for m in map_warnings(cards[cid], doc, geo)]
     for cid, c in cards.items():
+        if not specs.on_site(c):
+            continue
         if not c.get("output"):
             res.warnings.append(f"indicators/{cid}.yaml: output がないため、サイトで結果を出せません")
         elif cid not in found:

@@ -89,6 +89,14 @@ python -m http.server 8000 -d site
 
 `.github/workflows/pages.yml` が、main に変更が入るたびにサイトを作り直して公開します。使う前に一度だけ、リポジトリの Settings → Pages → Source を「GitHub Actions」にしてください。公開先は `https://kuma5w.github.io/open_data_healthcare_regional_analysis/` になります。
 
+### 検索エンジンに載せない（試用の間）
+
+いまは少数の研究者に試してもらっている段階なので、`site/index.html` の `<head>` に `<meta name="robots" content="noindex">` を入れ、Google などの検索結果に出ないようにしています。
+
+- これはアクセス制限ではありません。URL を知っている人は誰でも見られます。リポジトリも公開のままです。
+- 広く公開するときは、この行（とその上の注記）を消してください。消したあと、検索結果に出るまでには時間がかかります。
+- `robots.txt` で巡回を止める方法は使いません。巡回されないと `noindex` が読まれず、ほかのページからのリンクだけで検索結果に出ることがあるためです。
+
 ## 質問窓口の接続先
 
 「接続の設定」で選びます。設定（APIキーを含む）は、そのブラウザの localStorage にだけ保存されます。
